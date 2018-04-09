@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.racodond.sonarqube.plugin.gherkin</groupId>
     <artifactId>gherkin-its-plugin</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
   </parent>
 
   <artifactId>gherkin-its-plugin-tests</artifactId>
@@ -26,7 +26,7 @@
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>
-      <version>6.2</version>
+      <version>6.7</version>
     </dependency>
     <dependency>
       <groupId>org.easytesting</groupId>
