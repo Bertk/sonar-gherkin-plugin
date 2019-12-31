@@ -21,7 +21,7 @@ package org.sonar.plugins.gherkin.api;
 
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.BatchSide;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
@@ -29,7 +29,7 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
  * Extension point to create custom rule repository for Gherkin.
  */
 @ExtensionPoint
-@BatchSide
+@ScannerSide
 public abstract class CustomGherkinRulesDefinition implements RulesDefinition {
 
   /**

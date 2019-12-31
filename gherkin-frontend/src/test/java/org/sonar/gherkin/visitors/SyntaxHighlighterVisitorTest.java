@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
  */
 package org.sonar.gherkin.visitors;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import com.google.common.io.Files;
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,15 +28,16 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.gherkin.parser.GherkinParserBuilder;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.TreeVisitorContext;
-
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -51,24 +52,18 @@ public class SyntaxHighlighterVisitorTest {
   private File file;
   private DefaultInputFile inputFile;
   private TreeVisitorContext visitorContext;
+  private DefaultFileSystem fileSystem;
 
   @Rule
   public final TemporaryFolder tempFolder = new TemporaryFolder();
 
   @Before
   public void setUp() throws IOException {
-    DefaultFileSystem fileSystem = new DefaultFileSystem(tempFolder.getRoot());
-    fileSystem.setEncoding(Charsets.UTF_8);
-    file = tempFolder.newFile();
-    inputFile = new DefaultInputFile("moduleKey", file.getName())
-      .setLanguage("gherkin")
-      .setType(InputFile.Type.MAIN);
-    fileSystem.add(inputFile);
 
+    file = tempFolder.newFile();  
     sensorContext = SensorContextTester.create(tempFolder.getRoot());
-    sensorContext.setFileSystem(fileSystem);
+    
     visitorContext = mock(TreeVisitorContext.class);
-    highlighterVisitor = new SyntaxHighlighterVisitor(sensorContext);
     when(visitorContext.getFile()).thenReturn(file);
   }
 
@@ -154,11 +149,23 @@ public class SyntaxHighlighterVisitorTest {
   }
 
   private void highlight(String string) throws Exception {
-    inputFile.initMetadata(string);
-    Tree tree = GherkinParserBuilder.createTestParser(Charsets.UTF_8).parse(string);
+    fileSystem = new DefaultFileSystem(tempFolder.getRoot());
+    fileSystem.setEncoding(StandardCharsets.UTF_8);
+    InputFile inputFile = TestInputFileBuilder.create("moduleKey", file.getName())
+        .setLanguage("gherkin")
+        .setCharset(StandardCharsets.UTF_8)
+        .initMetadata(string)
+        .setContents(string)
+        .setType(InputFile.Type.MAIN)
+        .build();
+    fileSystem.add(inputFile);
+    sensorContext.setFileSystem(fileSystem);
+    highlighterVisitor = new SyntaxHighlighterVisitor(sensorContext);
+    
+    Tree tree = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8).parse(string);
     when(visitorContext.getTopTree()).thenReturn((GherkinDocumentTree) tree);
 
-    Files.write(string, file, Charsets.UTF_8);
+    Files.asCharSink(file, StandardCharsets.UTF_8).write(string);
     highlighterVisitor.scanTree(visitorContext);
   }
 

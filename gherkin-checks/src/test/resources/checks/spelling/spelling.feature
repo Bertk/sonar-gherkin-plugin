@@ -8,7 +8,7 @@ Feature: My feature is niice...
   Background: Scenario mistaike number 2
     Given My step sentence blabla toto
 
-  Scenario: Scenario 2 - blabla car
+  Scenario: Scenario 2 -- blabla car
     Given My given step sentence
     # Noncompliant [[sc=23;ec=31]] {{[MORFOLOGIK_RULE_EN_US] Possible spelling mistake found. Suggested correction(s): [mistake].}}
     When My when step mistaike

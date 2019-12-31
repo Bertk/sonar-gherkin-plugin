@@ -19,7 +19,7 @@
  */
 package org.sonar.gherkin.parser;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import com.google.common.io.Files;
 import org.junit.Test;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
@@ -68,7 +68,7 @@ public class GherkinDocumentTreeTest extends GherkinTreeTest {
   }
 
   private GherkinDocumentTree checkParsed(File file) throws Exception {
-    GherkinDocumentTree tree = (GherkinDocumentTree) parser().parse(Files.toString(file, Charsets.UTF_8));
+    GherkinDocumentTree tree = (GherkinDocumentTree) parser().parse(Files.toString(file, StandardCharsets.UTF_8));
     assertThat(tree).isNotNull();
     assertThat(tree.language()).isNotNull();
     return tree;

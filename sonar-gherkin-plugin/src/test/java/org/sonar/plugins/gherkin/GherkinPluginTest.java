@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +21,9 @@ package org.sonar.plugins.gherkin;
 
 import org.junit.Test;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -29,7 +32,7 @@ public class GherkinPluginTest {
 
   @Test
   public void should_get_the_right_version() {
-    Plugin.Context context = new Plugin.Context(Version.create(5, 6));
+    Plugin.Context context = new Plugin.Context(SonarRuntimeImpl.forSonarQube(Version.create(5, 6),  SonarQubeSide.SCANNER));
     new GherkinPlugin().define(context);
     assertThat(context.getSonarQubeVersion().major()).isEqualTo(5);
     assertThat(context.getSonarQubeVersion().minor()).isEqualTo(6);
@@ -37,7 +40,7 @@ public class GherkinPluginTest {
 
   @Test
   public void should_get_the_right_number_of_extensions() {
-    Plugin.Context context = new Plugin.Context(Version.create(5, 6));
+    Plugin.Context context = new Plugin.Context(SonarRuntimeImpl.forSonarQube(Version.create(5, 6),  SonarQubeSide.SCANNER));
     new GherkinPlugin().define(context);
     assertThat(context.getExtensions()).hasSize(4);
   }

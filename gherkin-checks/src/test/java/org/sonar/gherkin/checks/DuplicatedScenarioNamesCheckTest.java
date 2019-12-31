@@ -19,7 +19,7 @@
  */
 package org.sonar.gherkin.checks;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Test;
@@ -112,7 +112,7 @@ public class DuplicatedScenarioNamesCheckTest {
 
   private void scanFile(GherkinCheck check, String fileName) {
     GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) GherkinParserBuilder
-      .createTestParser(Charsets.UTF_8)
+      .createTestParser(StandardCharsets.UTF_8)
       .parse(getTestFile(fileName));
 
     GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, getTestFile(fileName));

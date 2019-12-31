@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,42 +20,24 @@
 package org.sonar.plugins.gherkin;
 
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.utils.ValidationMessages;
-
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.util.List;
 
 public class GherkinProfileTest {
 
   @Test
   public void should_create_sonarqube_way_profile() {
-    ValidationMessages validation = ValidationMessages.create();
-    GherkinProfile definition = new GherkinProfile(universalRuleFinder());
-    RulesProfile profile = definition.createProfile(validation);
+    GherkinProfile profileDef = new GherkinProfile();
+    BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
+    profileDef.define(context);
+    
+    BuiltInQualityProfilesDefinition.BuiltInQualityProfile profile = context.profile(GherkinLanguage.KEY, "SonarQube Way");
 
-    assertThat(profile.getName()).isEqualTo("SonarQube Way");
-    assertThat(profile.getLanguage()).isEqualTo("gherkin");
-    assertThat(profile.getActiveRulesByRepository("gherkin")).hasSize(36);
-    assertThat(validation.hasErrors()).isFalse();
-  }
-
-  private RuleFinder universalRuleFinder() {
-    RuleFinder ruleFinder = mock(RuleFinder.class);
-    when(ruleFinder.findByKey(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
-      @Override
-      public Rule answer(InvocationOnMock iom) throws Throwable {
-        return Rule.create((String) iom.getArguments()[0], (String) iom.getArguments()[1], (String) iom.getArguments()[1]);
-      }
-    });
-
-    return ruleFinder;
+    assertThat(profile.name()).isEqualTo("SonarQube Way");
+    assertThat(profile.language()).isEqualTo("gherkin");
+    List<BuiltInQualityProfilesDefinition.BuiltInActiveRule> activeRules = profile.rules();
+    assertThat(activeRules.size()).as("Expected number of rules in profile").isEqualTo(36);
   }
 
 }

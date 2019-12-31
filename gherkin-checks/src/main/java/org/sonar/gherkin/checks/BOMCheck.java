@@ -19,7 +19,6 @@
  */
 package org.sonar.gherkin.checks;
 
-import com.google.common.base.Charsets;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.gherkin.visitors.CharsetAwareVisitor;
@@ -29,6 +28,7 @@ import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 @Rule(
   key = "bom-utf8-files",
@@ -43,7 +43,7 @@ public class BOMCheck extends DoubleDispatchVisitorCheck implements CharsetAware
 
   @Override
   public void visitGherkinDocument(GherkinDocumentTree tree) {
-    if (Charsets.UTF_8.equals(charset) && tree.hasByteOrderMark()) {
+    if ((StandardCharsets.UTF_8).equals(charset) && tree.hasByteOrderMark()) {
       addFileIssue("Remove the Byte Order Mark (BOM).");
     }
     super.visitGherkinDocument(tree);

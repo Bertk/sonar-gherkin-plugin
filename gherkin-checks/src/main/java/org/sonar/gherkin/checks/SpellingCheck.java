@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -54,13 +54,13 @@ public class SpellingCheck extends SubscriptionVisitorCheck {
   private static final String DEFAULT_LANGUAGE = "en-US";
   private static final Set<String> SUPPORTED_LANGUAGES = ImmutableSet.of("ast-ES", "be-BY", "br-FR", "ca-ES",
     "ca-ES-valencia", "da-DK", "de", "de-AT", "de-CH", "de-DE", "de-DE-x-simple-language", "el-GR", "en", "en-AU",
-    "en-CA", "en-GB", "en-NZ", "en-US", "en-ZA", "eo", "es", "fa", "fr", "gl-ES", "is-IS", "it", "ja-JP", "km-KH",
-    "lt-LT", "ml-IN", "nl", "pl-PL", "pt", "pt-BR", "pt-PT", "ro-RO", "ru-RU", "sk-SK", "sl-SI", "sv", "ta-IN",
+    "en-CA", "en-GB", "en-NZ", DEFAULT_LANGUAGE, "en-ZA", "eo", "es", "fa", "fr", "gl-ES", "it", "ja-JP", "km-KH",
+    "ml-IN", "nl", "pl-PL", "pt", "pt-BR", "pt-PT", "ro-RO", "ru-RU", "sk-SK", "sl-SI", "sv", "ta-IN",
     "tl-PH", "uk-UA", "zh-CN");
 
   private static final String SUPPORTED_LANGUAGES_AS_STRING = "ast-ES, be-BY, br-FR, ca-ES, ca-ES-valencia, da-DK, "
     + "de, de-AT, de-CH, de-DE, de-DE-x-simple-language, el-GR, en, en-AU, en-CA, en-GB, en-NZ, en-US, en-ZA, eo, "
-    + "es, fa, fr, gl-ES, is-IS, it, ja-JP, km-KH, lt-LT, ml-IN, nl, pl-PL, pt, pt-BR, pt-PT, ro-RO, ru-RU, sk-SK, "
+    + "es, fa, fr, gl-ES, it, ja-JP, km-KH, ml-IN, nl, pl-PL, pt, pt-BR, pt-PT, ro-RO, ru-RU, sk-SK, "
     + "sl-SI, sv, ta-IN, tl-PH, uk-UA, zh-CN";
 
   private JLanguageTool languageTool;
@@ -120,7 +120,7 @@ public class SpellingCheck extends SubscriptionVisitorCheck {
   }
 
   private JLanguageTool createLanguageTool() {
-    JLanguageTool jLanguageTool = new JLanguageTool(Languages.getLanguageForShortName(language));
+    JLanguageTool jLanguageTool = new JLanguageTool(Languages.getLanguageForShortCode(language));
 
     Arrays.stream(rulesToIgnore.split(",")).forEach(jLanguageTool::disableRule);
 

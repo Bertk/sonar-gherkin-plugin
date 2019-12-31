@@ -19,7 +19,7 @@
  */
 package org.sonar.gherkin.parser;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import com.sonar.sslr.api.RecognitionException;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class GherkinGrammarTest {
   @Test(expected = RecognitionException.class)
   public void parse_error() throws Exception {
     GherkinParserBuilder
-      .createTestParser(Charsets.UTF_8)
+      .createTestParser(StandardCharsets.UTF_8)
       .parse("blabla");
   }
 

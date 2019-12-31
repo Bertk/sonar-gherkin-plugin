@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -57,6 +57,7 @@ import org.sonar.squidbridge.api.AnalysisException;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -83,7 +84,7 @@ public class GherkinSquidSensor implements Sensor {
       fileSystem.predicates().hasLanguage(GherkinLanguage.KEY));
 
     this.checks = GherkinChecks.createGherkinChecks(checkFactory)
-      .addChecks(GherkinRulesDefinition.REPOSITORY_KEY, GherkinRulesDefinition.getChecks())
+      .addChecks(GherkinRulesDefinition.REPOSITORY_KEY, Arrays.asList(GherkinRulesDefinition.getChecks()))
       .addCustomChecks(customRulesDefinition);
   }
 
@@ -105,7 +106,7 @@ public class GherkinSquidSensor implements Sensor {
     setParsingErrorCheckIfActivated(treeVisitors);
 
     ProgressReport progressReport = new ProgressReport("Report about progress of Cucumber Gherkin analyzer", TimeUnit.SECONDS.toMillis(10));
-    progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
+    progressReport.start(Lists.newArrayList(new File (fileSystem.baseDir(), fileSystem.inputFile(mainFilePredicate).filename())));
 
     issueSaver = new IssueSaver(sensorContext, checks);
     List<Issue> issues = new ArrayList<>();
@@ -127,24 +128,24 @@ public class GherkinSquidSensor implements Sensor {
   private List<Issue> analyzeFile(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors) {
     try {
       ActionParser<Tree> parser = GherkinParserBuilder.createParser(fileSystem.encoding(), getFileLanguage(inputFile));
-      GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) parser.parse(new File(inputFile.absolutePath()));
+      GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) parser.parse(new File(fileSystem.baseDir(), inputFile.filename()));
       return scanFile(inputFile, gherkinDocument, visitors);
 
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to parse file: " + inputFile.absolutePath());
+      LOG.error("Unable to parse file: " + inputFile.toString());
       LOG.error(e.getMessage());
       processRecognitionException(e, sensorContext, inputFile);
 
     } catch (Exception e) {
       checkInterrupted(e);
-      throw new AnalysisException("Unable to analyse file: " + inputFile.absolutePath(), e);
+      throw new AnalysisException("Unable to analyse file: " + inputFile.toString(), e);
     }
     return new ArrayList<>();
   }
 
   private List<Issue> scanFile(InputFile inputFile, GherkinDocumentTree gherkinDocument, List<TreeVisitor> visitors) {
-    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, inputFile.file());
+    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, new File (fileSystem.baseDir(), inputFile.filename()));
     List<Issue> issues = new ArrayList<>();
     for (TreeVisitor visitor : visitors) {
       if (visitor instanceof CharsetAwareVisitor) {
@@ -211,7 +212,7 @@ public class GherkinSquidSensor implements Sensor {
   }
 
   private String getFileLanguage(InputFile inputFile) {
-    try (BufferedReader br = new BufferedReader(new FileReader(inputFile.file()))) {
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(inputFile.inputStream()))) {
       Matcher matcher = GherkinDialectProvider.LANGUAGE_DECLARATION_PATTERN.matcher(br.readLine());
       if (matcher.find()) {
         return matcher.group(1);
@@ -219,7 +220,7 @@ public class GherkinSquidSensor implements Sensor {
         return GherkinDialectProvider.DEFAULT_LANGUAGE;
       }
     } catch (IOException e) {
-      throw new IllegalStateException("Cannot determine language of file " + inputFile.absolutePath(), e);
+      throw new IllegalStateException("Cannot determine language of file " + inputFile.toString(), e);
     }
   }
 

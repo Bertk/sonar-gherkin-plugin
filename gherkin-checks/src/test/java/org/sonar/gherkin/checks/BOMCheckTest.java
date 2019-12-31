@@ -19,7 +19,7 @@
  */
 package org.sonar.gherkin.checks;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
 
@@ -30,7 +30,7 @@ public class BOMCheckTest {
     GherkinCheckVerifier.verify(
       new BOMCheck(),
       CheckTestUtils.getTestFile("bom/utf8-with-bom.feature"),
-      Charsets.UTF_8);
+      StandardCharsets.UTF_8);
   }
 
   @Test
@@ -38,7 +38,7 @@ public class BOMCheckTest {
     GherkinCheckVerifier.verify(
       new BOMCheck(),
       CheckTestUtils.getTestFile("bom/utf8.feature"),
-      Charsets.UTF_8);
+      StandardCharsets.UTF_8);
   }
 
   @Test
@@ -46,12 +46,12 @@ public class BOMCheckTest {
     GherkinCheckVerifier.verify(
       new BOMCheck(),
       CheckTestUtils.getTestFile("bom/utf16-be.feature"),
-      Charsets.UTF_16BE);
+      StandardCharsets.UTF_16BE);
 
     GherkinCheckVerifier.verify(
       new BOMCheck(),
       CheckTestUtils.getTestFile("bom/utf16-le.feature"),
-      Charsets.UTF_16LE);
+      StandardCharsets.UTF_16LE);
   }
 
 }

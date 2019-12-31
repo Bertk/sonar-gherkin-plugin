@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,11 +20,12 @@
 package org.sonar.plugins.gherkin;
 
 import com.google.common.collect.ImmutableList;
+
+import java.util.Arrays;
+
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.gherkin.checks.*;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
-
-import java.util.Collection;
 
 public class GherkinRulesDefinition implements RulesDefinition {
 
@@ -37,13 +38,13 @@ public class GherkinRulesDefinition implements RulesDefinition {
       .createRepository(REPOSITORY_KEY, GherkinLanguage.KEY)
       .setName(REPOSITORY_NAME);
 
-    new AnnotationBasedRulesDefinition(repository, GherkinLanguage.KEY).addRuleClasses(false, getChecks());
+    new AnnotationBasedRulesDefinition(repository, GherkinLanguage.KEY).addRuleClasses(false, Arrays.asList(getChecks()));
     repository.done();
   }
 
   @SuppressWarnings("rawtypes")
-  public static Collection<Class> getChecks() {
-    return ImmutableList.of(
+  public static Class[] getChecks() {
+    return new Class[] {
       AddCommonGivenStepsToBackgroundCheck.class,
       AllowedTagsCheck.class,
       AllStepTypesInScenarioCheck.class,
@@ -90,7 +91,7 @@ public class GherkinRulesDefinition implements RulesDefinition {
       UselessTagCheck.class,
       WhenStepRegularExpressionCheck.class,
       WordingBusinessLevelCheck.class
-    );
+    };
   }
 
 }

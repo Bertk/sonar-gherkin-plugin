@@ -19,7 +19,7 @@
  */
 package org.sonar.gherkin.checks;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import com.google.common.io.Files;
 import org.junit.Rule;
 import org.junit.Test;
@@ -120,9 +120,9 @@ public class EndLineCharactersCheckTest {
   private File getTestFileWithProperEndLineCharacters(String endLineCharacter) throws Exception {
     File testFile = tempFolder.newFile();
     Files
-      .asCharSink(testFile, Charsets.UTF_8)
+      .asCharSink(testFile, StandardCharsets.UTF_8)
       .write(Files
-        .asCharSource(CheckTestUtils.getTestFile("end-line-characters.feature"), Charsets.UTF_8)
+        .asCharSource(CheckTestUtils.getTestFile("end-line-characters.feature"), StandardCharsets.UTF_8)
         .read()
         .replaceAll("\\r\\n", "\n")
         .replaceAll("\\r", "\n")

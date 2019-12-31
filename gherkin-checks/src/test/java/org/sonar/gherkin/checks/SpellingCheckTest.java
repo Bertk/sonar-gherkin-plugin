@@ -61,7 +61,7 @@ public class SpellingCheckTest {
       assertThat(e.getMessage()).isEqualTo("Check gherkin:spelling (Spelling mistakes should be fixed): "
         + "language parameter \"abc\" is not valid. Allowed values are: ast-ES, be-BY, br-FR, ca-ES, ca-ES-valencia, "
         + "da-DK, de, de-AT, de-CH, de-DE, de-DE-x-simple-language, el-GR, en, en-AU, en-CA, en-GB, en-NZ, en-US, "
-        + "en-ZA, eo, es, fa, fr, gl-ES, is-IS, it, ja-JP, km-KH, lt-LT, ml-IN, nl, pl-PL, pt, pt-BR, pt-PT, "
+        + "en-ZA, eo, es, fa, fr, gl-ES, it, ja-JP, km-KH, ml-IN, nl, pl-PL, pt, pt-BR, pt-PT, "
         + "ro-RO, ru-RU, sk-SK, sl-SI, sv, ta-IN, tl-PH, uk-UA, zh-CN");
     }
   }

@@ -35,3 +35,4 @@ log.txt
 .sonarlint
 .scannerwork
 sonarlint.json
+gherkin-frontend/doc

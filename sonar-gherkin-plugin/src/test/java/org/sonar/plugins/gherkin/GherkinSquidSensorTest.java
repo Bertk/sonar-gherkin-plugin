@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,10 +19,9 @@
  */
 package org.sonar.plugins.gherkin;
 
-import com.google.common.base.Charsets;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
@@ -32,12 +31,19 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.utils.log.*;
 import org.sonar.check.Rule;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.gherkin.checks.CommentConventionCheck;
 import org.sonar.gherkin.checks.MissingNewlineAtEndOfFileCheck;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Collection;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -45,9 +51,11 @@ import static org.mockito.Mockito.mock;
 
 public class GherkinSquidSensorTest {
 
+  private static final Logger LOGGER = Loggers.get(GherkinSquidSensorTest.class);
   private final File baseDir = new File("src/test/resources");
   private final SensorContextTester context = SensorContextTester.create(baseDir);
   private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
+  private DefaultFileSystem fileSystem;
 
   @Test
   public void should_create_a_valid_sensor_descriptor() {
@@ -61,7 +69,7 @@ public class GherkinSquidSensorTest {
   @Test
   public void should_execute_and_compute_valid_measures_on_UTF8_file() {
     String relativePath = "my-feature.feature";
-    inputFile(relativePath, Charsets.UTF_8);
+    inputFile(relativePath, StandardCharsets.UTF_8);
     createGherkinSquidSensor().execute(context);
     assertMeasure("moduleKey:" + relativePath);
   }
@@ -69,7 +77,7 @@ public class GherkinSquidSensorTest {
   @Test
   public void should_execute_and_compute_valid_measures_on_UTF8_with_BOM_file() {
     String relativePath = "my-feature-bom.feature";
-    inputFile(relativePath, Charsets.UTF_8);
+    inputFile(relativePath, StandardCharsets.UTF_8);
     createGherkinSquidSensor().execute(context);
     assertMeasure("moduleKey:" + relativePath);
   }
@@ -85,7 +93,7 @@ public class GherkinSquidSensorTest {
   @Test
   public void should_execute_and_compute_valid_measures_on_UTF8_file_french() {
     String relativePath = "my-feature-fr.feature";
-    inputFile(relativePath, Charsets.UTF_8);
+    inputFile(relativePath, StandardCharsets.UTF_8);
     createGherkinSquidSensor().execute(context);
     assertMeasureFr("moduleKey:" + relativePath);
   }
@@ -93,7 +101,7 @@ public class GherkinSquidSensorTest {
   @Test
   public void should_execute_and_compute_valid_measures_on_UTF8_with_BOM_file_french() {
     String relativePath = "my-feature-bom-fr.feature";
-    inputFile(relativePath, Charsets.UTF_8);
+    inputFile(relativePath, StandardCharsets.UTF_8);
     createGherkinSquidSensor().execute(context);
     assertMeasureFr("moduleKey:" + relativePath);
   }
@@ -108,7 +116,7 @@ public class GherkinSquidSensorTest {
 
   @Test
   public void should_execute_and_save_issues_on_UTF8_with_BOM_file() {
-    inputFile("my-feature-bom.feature", Charsets.UTF_8);
+    inputFile("my-feature-bom.feature", StandardCharsets.UTF_8);
 
     ActiveRules activeRules = (new ActiveRulesBuilder())
       .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
@@ -125,7 +133,7 @@ public class GherkinSquidSensorTest {
 
   @Test
   public void should_execute_and_save_issues_on_UTF8_file() {
-    inputFile("my-feature.feature", Charsets.UTF_8);
+    inputFile("my-feature.feature", StandardCharsets.UTF_8);
 
     ActiveRules activeRules = (new ActiveRulesBuilder())
       .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
@@ -142,7 +150,7 @@ public class GherkinSquidSensorTest {
 
   @Test
   public void should_execute_and_save_issues_on_UTF8_with_BOM_file_french() {
-    inputFile("my-feature-bom-fr.feature", Charsets.UTF_8);
+    inputFile("my-feature-bom-fr.feature", StandardCharsets.UTF_8);
 
     ActiveRules activeRules = (new ActiveRulesBuilder())
       .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
@@ -159,7 +167,7 @@ public class GherkinSquidSensorTest {
 
   @Test
   public void should_execute_and_save_issues_on_UTF8_file_french() {
-    inputFile("my-feature-fr.feature", Charsets.UTF_8);
+    inputFile("my-feature-fr.feature", StandardCharsets.UTF_8);
 
     ActiveRules activeRules = (new ActiveRulesBuilder())
       .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
@@ -176,8 +184,7 @@ public class GherkinSquidSensorTest {
 
   @Test
   public void should_raise_an_issue_because_the_parsing_error_rule_is_activated() {
-    String relativePath = "parsing-error.feature";
-    inputFile(relativePath, Charsets.UTF_8);
+    inputFile("parsing-error.feature", StandardCharsets.UTF_8);
 
     ActiveRules activeRules = (new ActiveRulesBuilder())
       .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, "S2260"))
@@ -196,8 +203,7 @@ public class GherkinSquidSensorTest {
 
   @Test
   public void should_not_raise_any_issue_because_the_parsing_error_rule_is_not_activated() {
-    String relativePath = "parsing-error.feature";
-    inputFile(relativePath, Charsets.UTF_8);
+    inputFile("parsing-error.feature", StandardCharsets.UTF_8);
 
     ActiveRules activeRules = new ActiveRulesBuilder().build();
     checkFactory = new CheckFactory(activeRules);
@@ -213,15 +219,23 @@ public class GherkinSquidSensorTest {
   }
 
   private void inputFile(String relativePath, Charset charset) {
-    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", relativePath)
-      .setModuleBaseDir(baseDir.toPath())
-      .setType(InputFile.Type.MAIN)
-      .setLanguage(GherkinLanguage.KEY);
-
-    context.fileSystem().setEncoding(charset);
-    context.fileSystem().add(inputFile);
-
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), charset));
+    fileSystem = new DefaultFileSystem(baseDir.toPath());
+    fileSystem.setEncoding(StandardCharsets.UTF_8);
+    try {
+      InputFile inputFile = TestInputFileBuilder
+          .create("moduleKey", relativePath)
+          .setCharset(charset)
+          .setLanguage(GherkinLanguage.KEY)
+          .setModuleBaseDir(baseDir.toPath())
+          .setType(InputFile.Type.MAIN)
+          .setMetadata(new FileMetadata().readMetadata(new FileReader(baseDir.toPath().resolve(relativePath).toString())))
+          .setContents(new String(Files.readAllBytes(baseDir.toPath().resolve(relativePath)), charset))
+          .build();
+      fileSystem.add(inputFile);
+      context.setFileSystem(fileSystem);
+    } catch (IOException e) {
+      LOGGER.error("inputFile create failed", e);
+    }
   }
-
+      
 }

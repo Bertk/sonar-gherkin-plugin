@@ -1,4 +1,4 @@
-# Noncompliant [[sc=27;ec=32]] {{[HUNSPELL_NO_SUGGEST_RULE] Faute de frappe possible trouvée.}}
+# Noncompliant [[sc=27;ec=32]] {{[FR_SPELLING_RULE] Faute de frappe possible trouvée. Suggested correction(s): [vélo, réel, veille, réelle, réels, réélu, vélos, veto, verso, vielle, verrou, veillé, véto, veilla, velu, vièle, Néel, hello, veld, Vertou].}}
 Feature: J'achète un joli veelo
 
   Scenario: Blabla est le nom de mon scénario

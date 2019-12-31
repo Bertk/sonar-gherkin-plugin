@@ -19,7 +19,7 @@
  */
 package org.sonar.gherkin.parser;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import com.google.common.io.Files;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.sonar.gherkin.parser.GherkinLexicalGrammar;
@@ -35,11 +35,11 @@ public abstract class GherkinTreeTest {
   private final ActionParser<Tree> parser;
 
   public GherkinTreeTest(GherkinLexicalGrammar ruleKey) {
-    parser = GherkinParserBuilder.createTestParser(Charsets.UTF_8, ruleKey);
+    parser = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8, ruleKey);
   }
 
   public GherkinTreeTest(GherkinLexicalGrammar ruleKey, String language) {
-    parser = GherkinParserBuilder.createTestParser(Charsets.UTF_8, ruleKey, language);
+    parser = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8, ruleKey, language);
   }
 
   public ActionParser<Tree> parser() {
@@ -57,7 +57,7 @@ public abstract class GherkinTreeTest {
 
   public void checkNotParsed(File file) {
     try {
-      parser.parse(Files.toString(file, Charsets.UTF_8));
+      parser.parse(Files.toString(file, StandardCharsets.UTF_8));
     } catch (Exception e) {
       return;
     }

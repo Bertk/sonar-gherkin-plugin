@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,30 +19,52 @@
  */
 package org.sonar.plugins.gherkin;
 
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.utils.ValidationMessages;
-import org.sonar.squidbridge.annotations.AnnotationBasedProfileBuilder;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-public class GherkinProfile extends ProfileDefinition {
+import org.sonar.api.server.profile.BuiltInQualityProfileAnnotationLoader;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
+
+import com.google.common.io.Resources;
+import com.google.gson.Gson;
+
+public class GherkinProfile implements BuiltInQualityProfilesDefinition {
 
   private static final String SONARQUBE_WAY_PROFILE_NAME = "SonarQube Way";
-  private final RuleFinder ruleFinder;
-
-  public GherkinProfile(RuleFinder ruleFinder) {
-    this.ruleFinder = ruleFinder;
-  }
 
   @Override
-  public RulesProfile createProfile(ValidationMessages messages) {
-    AnnotationBasedProfileBuilder annotationBasedProfileBuilder = new AnnotationBasedProfileBuilder(ruleFinder);
-    return annotationBasedProfileBuilder.build(
-      GherkinRulesDefinition.REPOSITORY_KEY,
-      SONARQUBE_WAY_PROFILE_NAME,
-      GherkinLanguage.KEY,
-      GherkinRulesDefinition.getChecks(),
-      messages);
+  public void define(Context context) {
+    NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(SONARQUBE_WAY_PROFILE_NAME, GherkinLanguage.KEY);
+
+    Profile jsonProfile = readProfile();
+    BuiltInQualityProfileAnnotationLoader annotationProfileLoader = new BuiltInQualityProfileAnnotationLoader();
+    annotationProfileLoader.load(profile, GherkinRulesDefinition.REPOSITORY_KEY, GherkinRulesDefinition.getChecks());
+    for (String key : jsonProfile.ruleKeys) {
+      profile.activateRule(GherkinRulesDefinition.REPOSITORY_KEY, key);
+    }
+
+    profile.setDefault(true);
+
+    profile.done();
   }
 
+  static Profile readProfile() {
+    URL resource = GherkinProfile.class.getResource("/org/sonar/l10n/gherkin/rules/gherkin/Sonar_way_profile.json");
+    return new Gson().fromJson(readResource(resource), Profile.class);
+  }
+
+  private static String readResource(URL resource) {
+    try {
+      return Resources.toString(resource, StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new IllegalStateException("Failed to read: " + resource, e);
+    }
+  }
+
+  static class Profile {
+    String name;
+    List<String> ruleKeys;
+  }
 }

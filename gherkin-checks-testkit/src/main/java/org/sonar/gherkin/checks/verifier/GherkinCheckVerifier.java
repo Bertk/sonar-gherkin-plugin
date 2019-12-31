@@ -19,7 +19,6 @@
  */
 package org.sonar.gherkin.checks.verifier;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -40,6 +39,7 @@ import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -70,7 +70,7 @@ public class GherkinCheckVerifier extends SubscriptionVisitorCheck {
    * @param file  File to test
    */
   public static CheckMessagesVerifier issues(GherkinCheck check, File file) {
-    return issues(check, file, Charsets.UTF_8);
+    return issues(check, file, StandardCharsets.UTF_8);
   }
 
   /**
@@ -92,9 +92,9 @@ public class GherkinCheckVerifier extends SubscriptionVisitorCheck {
    */
   public static CheckMessagesVerifier issues(GherkinCheck check, File file, String language) {
     if (check instanceof CharsetAwareVisitor) {
-      ((CharsetAwareVisitor) check).setCharset(Charsets.UTF_8);
+      ((CharsetAwareVisitor) check).setCharset(StandardCharsets.UTF_8);
     }
-    return CheckMessagesVerifier.verify(TreeCheckTest.getIssues(file.getAbsolutePath(), check, Charsets.UTF_8, language));
+    return CheckMessagesVerifier.verify(TreeCheckTest.getIssues(file.getAbsolutePath(), check, StandardCharsets.UTF_8, language));
   }
 
   /**
@@ -126,7 +126,7 @@ public class GherkinCheckVerifier extends SubscriptionVisitorCheck {
    * </pre>
    */
   public static void verify(GherkinCheck check, File file) {
-    verify(check, file, Charsets.UTF_8, GherkinDialectProvider.DEFAULT_LANGUAGE);
+    verify(check, file, StandardCharsets.UTF_8, GherkinDialectProvider.DEFAULT_LANGUAGE);
   }
 
   /**
@@ -181,7 +181,7 @@ public class GherkinCheckVerifier extends SubscriptionVisitorCheck {
    * @param language Language of the file to test.
    */
   public static void verify(GherkinCheck check, File file, String language) {
-    verify(check, file, Charsets.UTF_8, language);
+    verify(check, file, StandardCharsets.UTF_8, language);
   }
 
   private static Iterator<Issue> getActualIssues(GherkinCheck check, GherkinVisitorContext context) {
