@@ -20,13 +20,15 @@
 package org.sonar.plugins.gherkin.issuesaver;
 
 import com.google.common.base.Preconditions;
-import org.sonar.api.batch.fs.FileSystem;
+
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.gherkin.GherkinChecks;
 import org.sonar.plugins.gherkin.api.GherkinCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.*;
@@ -35,13 +37,12 @@ import java.util.Optional;
 
 public class IssueSaver {
 
+  private static final Logger LOGGER = Loggers.get(IssueSaver.class);
   private final SensorContext sensorContext;
   private final GherkinChecks checks;
-  private final FileSystem fileSystem;
 
   public IssueSaver(SensorContext sensorContext, GherkinChecks checks) {
     this.sensorContext = sensorContext;
-    this.fileSystem = sensorContext.fileSystem();
     this.checks = checks;
   }
 
@@ -53,79 +54,60 @@ public class IssueSaver {
       .findFirst();
   }
 
-  public void saveIssue(Issue issue) {
+  public void saveIssue(InputFile inputFile, Issue issue) {
+    RuleKey ruleKey = ruleKey(issue.check());
     if (issue instanceof FileIssue) {
-      saveFileIssue((FileIssue) issue);
+      saveFileIssue(inputFile, ruleKey, (FileIssue) issue);
     } else if (issue instanceof LineIssue) {
-      saveLineIssue((LineIssue) issue);
+      saveLineIssue(inputFile, ruleKey, (LineIssue) issue);
     } else {
-      savePreciseIssue((PreciseIssue) issue);
+      savePreciseIssue(inputFile, ruleKey, (PreciseIssue) issue);
     }
   }
 
-  private void savePreciseIssue(PreciseIssue issue) {
+  private void savePreciseIssue(InputFile inputFile, RuleKey ruleKey, PreciseIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
-    InputFile primaryFile = Preconditions.checkNotNull(fileSystem.inputFile(fileSystem.predicates().is(issue.primaryLocation().file())));
 
     newIssue
-      .forRule(ruleKey(issue.check()))
-      .at(newLocation(primaryFile, newIssue, issue.primaryLocation()));
+      .forRule(ruleKey)
+      .at(newLocation(inputFile, newIssue, issue.primaryLocation()));
 
     if (issue.cost() != null) {
       newIssue.gap(issue.cost());
     }
 
-    InputFile secondaryFile;
     for (IssueLocation secondary : issue.secondaryLocations()) {
-      secondaryFile = fileSystem.inputFile(fileSystem.predicates().is(secondary.file()));
-      if (secondaryFile == null) {
-        secondaryFile = primaryFile;
-      }
-      newIssue.addLocation(newLocation(secondaryFile, newIssue, secondary));
+      LOGGER.info("secondary issue location ??? : {}", secondary);
+      newIssue.addLocation(newLocation(inputFile, newIssue, secondary));
     }
 
     newIssue.save();
   }
 
-  private void saveFileIssue(FileIssue issue) {
+  private void saveFileIssue(InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
-    InputFile primaryFile = Preconditions.checkNotNull(fileSystem.inputFile(fileSystem.predicates().is(issue.file())));
 
     NewIssueLocation primaryLocation = newIssue.newLocation()
       .message(issue.message())
-      .on(primaryFile);
+      .on(inputFile);
 
-    newIssue
-      .forRule(ruleKey(issue.check()))
-      .at(primaryLocation);
-
-    if (issue.cost() != null) {
-      newIssue.gap(issue.cost());
-    }
-
-    InputFile secondaryFile;
-    for (IssueLocation secondary : issue.secondaryLocations()) {
-      secondaryFile = fileSystem.inputFile(fileSystem.predicates().is(secondary.file()));
-      if (secondaryFile == null) {
-        secondaryFile = primaryFile;
-      }
-      newIssue.addLocation(newLocation(secondaryFile, newIssue, secondary));
-    }
-
-    newIssue.save();
+    saveSingleIssue(newIssue, primaryLocation, ruleKey, issue);
   }
 
-  private void saveLineIssue(LineIssue issue) {
+  private void saveLineIssue(InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
-    InputFile primaryFile = Preconditions.checkNotNull(fileSystem.inputFile(fileSystem.predicates().is(issue.file())));
 
     NewIssueLocation primaryLocation = newIssue.newLocation()
       .message(issue.message())
-      .on(primaryFile)
-      .at(primaryFile.selectLine(issue.line()));
+      .on(inputFile)
+      .at(inputFile.selectLine(issue.line()));
 
+    saveSingleIssue(newIssue, primaryLocation, ruleKey, issue);
+  }
+  
+  private static void saveSingleIssue(NewIssue newIssue, NewIssueLocation primaryLocation, RuleKey ruleKey, Issue issue) {
     newIssue
-      .forRule(ruleKey(issue.check()))
+      .forRule(ruleKey)
       .at(primaryLocation);
 
     if (issue.cost() != null) {

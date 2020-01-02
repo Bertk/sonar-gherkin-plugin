@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.gherkin.issuesaver.crossfile;
 
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.gherkin.issuesaver.IssueSaver;
 
 public abstract class CrossFileCheckIssueSaver {
@@ -33,6 +34,6 @@ public abstract class CrossFileCheckIssueSaver {
     return issueSaver;
   }
 
-  public abstract void saveIssues();
+  public abstract void saveIssues(InputFile inputFile);
 
 }

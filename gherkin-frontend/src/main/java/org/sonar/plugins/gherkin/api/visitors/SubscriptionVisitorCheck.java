@@ -44,22 +44,22 @@ public abstract class SubscriptionVisitorCheck extends SubscriptionVisitor imple
 
   @Override
   public PreciseIssue addPreciseIssue(Tree tree, String message) {
-    return issues.addPreciseIssue(getContext().getFile(), tree, message);
+    return issues.addPreciseIssue(tree, message);
   }
 
   @Override
-  public PreciseIssue addPreciseIssue(SyntaxToken token, int startOffset, int endOffset, String message) {
-    return issues.addPreciseIssue(getContext().getFile(), token, startOffset, endOffset, message);
+  public PreciseIssue addPreciseIssue(SyntaxToken token, String message) {
+    return issues.addPreciseIssue(token, message);
   }
 
   @Override
   public FileIssue addFileIssue(String message) {
-    return issues.addFileIssue(getContext().getFile(), message);
+    return issues.addFileIssue(message);
   }
 
   @Override
   public LineIssue addLineIssue(int line, String message) {
-    return issues.addLineIssue(getContext().getFile(), line, message);
+    return issues.addLineIssue(line, message);
   }
 
   @Override

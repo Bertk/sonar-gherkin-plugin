@@ -26,7 +26,7 @@ public class TagRightLevelCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new TagRightLevelCheck(), CheckTestUtils.getTestFile("tag-right-level.feature"));
+    GherkinCheckVerifier.verify(new TagRightLevelCheck(), CheckTestUtils.getTestInputFile("tag-right-level.feature"));
   }
 
 }

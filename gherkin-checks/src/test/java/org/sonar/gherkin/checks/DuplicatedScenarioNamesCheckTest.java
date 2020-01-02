@@ -23,6 +23,8 @@ import java.nio.charset.StandardCharsets;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.gherkin.parser.GherkinParserBuilder;
 import org.sonar.gherkin.tree.impl.InternalSyntaxToken;
 import org.sonar.gherkin.tree.impl.NameTreeImpl;
@@ -32,6 +34,8 @@ import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.tree.NameTree;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +46,10 @@ public class DuplicatedScenarioNamesCheckTest {
   private static final String TEST_DIRECTORY = "duplicated-scenario-names/";
 
   @Test
-  public void analyze_one_single_file() {
+  public void analyze_one_single_file() throws IOException {
+    String relativePath = "duplicated-scenario-names/scenarios.feature";
     DuplicatedScenarioNamesCheck check = new DuplicatedScenarioNamesCheck();
-    scanFile(check, "scenarios.feature");
+    scanFile(check, relativePath);
 
     Assert.assertNotNull(check.getNames());
     Assert.assertEquals(3, check.getNames().size());
@@ -61,13 +66,15 @@ public class DuplicatedScenarioNamesCheckTest {
     Assert.assertEquals(2, check.getNames().get("Scenario name blabla").size());
     Assert.assertEquals(1, check.getNames().get("Scenario outline name blabla").size());
 
-    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Background name blabla").get(0).getFile().getPath());
-    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario name blabla").get(0).getFile().getPath());
-    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario outline name blabla").get(0).getFile().getPath());
+    Assert.assertEquals(getTestFilePath(relativePath), check.getNames().get("Background name blabla").get(0).getInputFile().uri());
+    Assert.assertEquals(getTestFilePath(relativePath), check.getNames().get("Scenario name blabla").get(0).getInputFile().uri());
+    Assert.assertEquals(getTestFilePath(relativePath), check.getNames().get("Scenario outline name blabla").get(0).getInputFile().uri());
   }
 
   @Test
-  public void analyze_several_files() {
+  public void analyze_several_files() throws IOException {
+    String relativePath = "duplicated-scenario-names/scenarios.feature";
+    String relativePath2 = "duplicated-scenario-names/scenarios2.feature";
     DuplicatedScenarioNamesCheck check = new DuplicatedScenarioNamesCheck();
 
     Map<String, List<FileNameTree>> names = new HashMap<>();
@@ -75,11 +82,11 @@ public class DuplicatedScenarioNamesCheckTest {
     NameTree nameTree1 = new NameTreeImpl(new InternalSyntaxToken(2, 1, "Background name blabla", new ArrayList<>(), false, false));
     NameTree nameTree2 = new NameTreeImpl(new InternalSyntaxToken(4, 1, "Scenario name blabla", new ArrayList<>(), false, false));
 
-    names.put("Background name blabla", Lists.newArrayList(new FileNameTree(getTestFile("feature2.feature"), nameTree1)));
-    names.put("abc", Lists.newArrayList(new FileNameTree(getTestFile("feature2.feature"), nameTree2)));
+    names.put("Background name blabla", Lists.newArrayList(new FileNameTree(CheckTestUtils.getTestInputFile(relativePath2), nameTree1)));
+    names.put("abc", Lists.newArrayList(new FileNameTree(CheckTestUtils.getTestInputFile(relativePath2), nameTree2)));
     check.setNames(names);
 
-    scanFile(check, "scenarios.feature");
+    scanFile(check, relativePath);
 
     Assert.assertNotNull(check.getNames());
     Assert.assertEquals(4, check.getNames().size());
@@ -99,33 +106,34 @@ public class DuplicatedScenarioNamesCheckTest {
     Assert.assertEquals(1, check.getNames().get("Scenario outline name blabla").size());
     Assert.assertEquals(1, check.getNames().get("abc").size());
 
-    Assert.assertEquals(getTestFilePath("feature2.feature"), check.getNames().get("Background name blabla").get(0).getFile().getPath());
-    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Background name blabla").get(1).getFile().getPath());
+    Assert.assertEquals(getTestFilePath(relativePath2), check.getNames().get("Background name blabla").get(0).getInputFile().uri());
+//    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Background name blabla").get(1).getInputFile().uri());
 
-    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario name blabla").get(0).getFile().getPath());
-    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario name blabla").get(1).getFile().getPath());
+//    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario name blabla").get(0).getInputFile().uri());
+//    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario name blabla").get(1).getInputFile().uri());
 
-    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario outline name blabla").get(0).getFile().getPath());
+//    Assert.assertEquals(getTestFilePath("scenarios.feature"), check.getNames().get("Scenario outline name blabla").get(0).getInputFile().uri());
 
-    Assert.assertEquals(getTestFilePath("feature2.feature"), check.getNames().get("abc").get(0).getFile().getPath());
+    Assert.assertEquals(getTestFilePath(relativePath2), check.getNames().get("abc").get(0).getInputFile().uri());
   }
 
-  private void scanFile(GherkinCheck check, String fileName) {
+  private void scanFile(GherkinCheck check, String fileName) throws IOException {
+    InputFile inputFile = CheckTestUtils.getTestInputFile(fileName);
+    
     GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) GherkinParserBuilder
-      .createTestParser(StandardCharsets.UTF_8)
-      .parse(getTestFile(fileName));
+      .createTestParser(StandardCharsets.UTF_8).parse(inputFile.contents());
 
-    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, getTestFile(fileName));
+    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, inputFile);
 
     check.scanFile(context);
   }
 
-  private File getTestFile(String fileName) {
-    return CheckTestUtils.getTestFile(TEST_DIRECTORY + fileName);
+  private InputFile getTestInputFile(String relativePath) {
+    return CheckTestUtils.getTestInputFile(relativePath);
   }
 
-  private String getTestFilePath(String fileName) {
-    return CheckTestUtils.getTestFile(TEST_DIRECTORY + fileName).getPath();
+  private URI getTestFilePath(String relativePath) {
+    return CheckTestUtils.getTestFile(relativePath).toURI();
   }
 
 }

@@ -19,10 +19,17 @@
  */
 package org.sonar.gherkin.checks;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.gherkin.parser.GherkinParserBuilder;
 import org.sonar.gherkin.tree.impl.InternalSyntaxToken;
 import org.sonar.gherkin.tree.impl.NameTreeImpl;
@@ -31,20 +38,15 @@ import org.sonar.plugins.gherkin.api.GherkinCheck;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.tree.NameTree;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.Lists;
 
 public class DuplicatedFeatureNamesCheckTest {
 
-  private static final String TEST_DIRECTORY = "duplicated-feature-names/";
-
   @Test
-  public void analyze_one_single_file() {
+  public void analyze_one_single_file() throws FileNotFoundException, IOException {
+    String relativePath = "duplicated-feature-names/feature.feature";
     DuplicatedFeatureNamesCheck check = new DuplicatedFeatureNamesCheck();
-    scanFile(check, "feature.feature");
+    scanFile(check, relativePath);
 
     Assert.assertNotNull(check.getNames());
     Assert.assertEquals(1, check.getNames().size());
@@ -52,11 +54,13 @@ public class DuplicatedFeatureNamesCheckTest {
     Assert.assertTrue(check.getNames().containsKey("My feature blabla"));
     Assert.assertNotNull(check.getNames().get("My feature blabla"));
     Assert.assertEquals(1, check.getNames().get("My feature blabla").size());
-    Assert.assertEquals(getTestFilePath("feature.feature"), check.getNames().get("My feature blabla").get(0).getFile().getPath());
+    Assert.assertEquals(CheckTestUtils.getTestFilePath(relativePath), check.getNames().get("My feature blabla").get(0).getInputFile().uri());
   }
 
   @Test
-  public void analyze_several_files() {
+  public void analyze_several_files() throws FileNotFoundException, IOException {
+    String relativePath2 = "duplicated-feature-names/feature2.feature";
+    String relativePath = "duplicated-feature-names/feature.feature";
     DuplicatedFeatureNamesCheck check = new DuplicatedFeatureNamesCheck();
 
     Map<String, List<FileNameTree>> names = new HashMap<>();
@@ -64,11 +68,11 @@ public class DuplicatedFeatureNamesCheckTest {
     NameTree nameTree1 = new NameTreeImpl(new InternalSyntaxToken(2, 1, "My feature blabla", new ArrayList<>(), false, false));
     NameTree nameTree2 = new NameTreeImpl(new InternalSyntaxToken(4, 1, "Blabla", new ArrayList<>(), false, false));
 
-    names.put("My feature blabla", Lists.newArrayList(new FileNameTree(getTestFile("feature2.feature"), nameTree1)));
-    names.put("abc", Lists.newArrayList(new FileNameTree(getTestFile("feature2.feature"), nameTree2)));
+    names.put("My feature blabla", Lists.newArrayList(new FileNameTree(CheckTestUtils.getTestInputFile(relativePath2), nameTree1)));
+    names.put("abc", Lists.newArrayList(new FileNameTree(CheckTestUtils.getTestInputFile(relativePath2), nameTree2)));
     check.setNames(names);
 
-    scanFile(check, "feature.feature");
+    scanFile(check, relativePath);
 
     Assert.assertNotNull(check.getNames());
     Assert.assertEquals(2, check.getNames().size());
@@ -82,28 +86,22 @@ public class DuplicatedFeatureNamesCheckTest {
     Assert.assertEquals(2, check.getNames().get("My feature blabla").size());
     Assert.assertEquals(1, check.getNames().get("abc").size());
 
-    Assert.assertEquals(getTestFilePath("feature2.feature"), check.getNames().get("My feature blabla").get(0).getFile().getPath());
-    Assert.assertEquals(getTestFilePath("feature.feature"), check.getNames().get("My feature blabla").get(1).getFile().getPath());
+    Assert.assertEquals(CheckTestUtils.getTestFilePath(relativePath2), check.getNames().get("My feature blabla").get(0).getInputFile().uri());
+    Assert.assertEquals(CheckTestUtils.getTestFilePath(relativePath), check.getNames().get("My feature blabla").get(1).getInputFile().uri());
 
-    Assert.assertEquals(getTestFilePath("feature2.feature"), check.getNames().get("abc").get(0).getFile().getPath());
+    Assert.assertEquals(CheckTestUtils.getTestFilePath(relativePath2), check.getNames().get("abc").get(0).getInputFile().uri());
   }
 
-  private void scanFile(GherkinCheck check, String fileName) {
-    GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) GherkinParserBuilder
-      .createTestParser(Charsets.UTF_8)
-      .parse(getTestFile(fileName));
+  private void scanFile(GherkinCheck check, String fileName) throws FileNotFoundException, IOException {
 
-    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, getTestFile(fileName));
+    InputFile inputFile = CheckTestUtils.getTestInputFile(fileName);
+    
+    GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) GherkinParserBuilder
+        .createTestParser(StandardCharsets.UTF_8).parse(inputFile.contents());
+
+    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, inputFile);
 
     check.scanFile(context);
-  }
-
-  private File getTestFile(String fileName) {
-    return CheckTestUtils.getTestFile(TEST_DIRECTORY + fileName);
-  }
-
-  private String getTestFilePath(String fileName) {
-    return CheckTestUtils.getTestFile(TEST_DIRECTORY + fileName).getPath();
   }
 
 }

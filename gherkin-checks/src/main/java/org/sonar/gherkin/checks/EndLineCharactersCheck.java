@@ -20,7 +20,6 @@
 package org.sonar.gherkin.checks;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.io.Files;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -78,7 +77,7 @@ public class EndLineCharactersCheck extends DoubleDispatchVisitorCheck implement
 
   private boolean fileContainsIllegalEndLineCharacters() {
     try {
-      String fileContent = Files.asCharSource(getContext().getFile(), charset).read();
+      String fileContent = getContext().getGherkinFile().contents();
       return "CR".equals(endLineCharacters) && Pattern.compile("(?s)\n").matcher(fileContent).find()
         || "LF".equals(endLineCharacters) && Pattern.compile("(?s)\r").matcher(fileContent).find()
         || "CRLF".equals(endLineCharacters) && Pattern.compile("(?s)(\r(?!\n)|(?<!\r)\n)").matcher(fileContent).find();

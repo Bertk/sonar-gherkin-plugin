@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,19 +19,18 @@
  */
 package org.sonar.gherkin.visitors;
 
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.visitors.TreeVisitorContext;
-
-import java.io.File;
 
 public class GherkinVisitorContext implements TreeVisitorContext {
 
   private final GherkinDocumentTree tree;
-  private final File file;
+  private final InputFile inputFile;
 
-  public GherkinVisitorContext(GherkinDocumentTree tree, File file) {
+  public GherkinVisitorContext(GherkinDocumentTree tree, InputFile inputFile) {
     this.tree = tree;
-    this.file = file;
+    this.inputFile = inputFile;
   }
 
   @Override
@@ -40,8 +39,10 @@ public class GherkinVisitorContext implements TreeVisitorContext {
   }
 
   @Override
-  public File getFile() {
-    return file;
+  public InputFile getGherkinFile() {
+    return inputFile;
   }
+
+
 
 }

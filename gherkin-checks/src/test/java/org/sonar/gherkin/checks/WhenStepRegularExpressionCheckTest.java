@@ -20,15 +20,14 @@
 package org.sonar.gherkin.checks;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
-
-import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class WhenStepRegularExpressionCheckTest {
 
-  private final static File FILE = CheckTestUtils.getTestFile("when-step-regular-expression.feature");
+  private final static InputFile FILE = CheckTestUtils.getTestInputFile("when-step-regular-expression.feature");
   private WhenStepRegularExpressionCheck check = new WhenStepRegularExpressionCheck();
 
   @Test

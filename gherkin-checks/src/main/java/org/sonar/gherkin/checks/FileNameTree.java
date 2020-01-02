@@ -19,22 +19,21 @@
  */
 package org.sonar.gherkin.checks;
 
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.gherkin.api.tree.NameTree;
-
-import java.io.File;
 
 public class FileNameTree {
 
-  private final File file;
+  private final InputFile inputfile;
   private final NameTree tree;
 
-  public FileNameTree(File file, NameTree tree) {
-    this.file = file;
+  public FileNameTree(InputFile inputfile, NameTree tree) {
+    this.inputfile = inputfile;
     this.tree = tree;
   }
 
-  public File getFile() {
-    return file;
+  public InputFile getInputFile() {
+    return inputfile;
   }
 
   public NameTree getName() {

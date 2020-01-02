@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.gherkin.issuesaver.crossfile;
 
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.gherkin.checks.DuplicatedFeatureNamesCheck;
 import org.sonar.gherkin.checks.FileNameTree;
 import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
@@ -37,24 +38,22 @@ public class DuplicatedFeatureNamesIssueSaver extends CrossFileCheckIssueSaver {
   }
 
   @Override
-  public void saveIssues() {
+  public void saveIssues(InputFile inputFile) {
     Optional<DuplicatedFeatureNamesCheck> check = getIssueSaver().getCheck(DuplicatedFeatureNamesCheck.class);
 
     if (check.isPresent()) {
       check.get().getNames().entrySet()
         .stream()
         .filter(entry -> isFeatureNameDuplicated(entry.getValue()))
-        .forEach(entry -> saveIssue(check.get(), entry));
+        .forEach(entry -> saveIssue(inputFile, check.get(), entry));
     }
   }
 
-  private void saveIssue(DuplicatedFeatureNamesCheck check, Map.Entry<String, List<FileNameTree>> entry) {
-    getIssueSaver().saveIssue(
-      new PreciseIssue(
-        check,
-        new IssueLocation(entry.getValue().get(0).getFile(),
-          entry.getValue().get(0).getName(),
-          buildIssueMessage(entry))));
+  private void saveIssue(InputFile inputFile, DuplicatedFeatureNamesCheck check, Map.Entry<String, List<FileNameTree>> entry) {
+    getIssueSaver().saveIssue(inputFile,
+                              new PreciseIssue(check,
+                                  new IssueLocation(entry.getValue().get(0).getName(), buildIssueMessage(entry)))
+                              );
   }
 
   private String buildIssueMessage(Map.Entry<String, List<FileNameTree>> duplicatedName) {
@@ -64,7 +63,7 @@ public class DuplicatedFeatureNamesIssueSaver extends CrossFileCheckIssueSaver {
       + "\" that is already defined in: "
       + duplicatedName.getValue()
       .stream()
-      .map(o -> o.getFile().getName())
+      .map(o -> o.getInputFile().filename())
       .distinct()
       .sorted()
       .collect(Collectors.joining(", "));
@@ -72,7 +71,7 @@ public class DuplicatedFeatureNamesIssueSaver extends CrossFileCheckIssueSaver {
 
   private boolean isFeatureNameDuplicated(List<FileNameTree> fileNameTrees) {
     return fileNameTrees.stream()
-      .map(f -> f.getFile().getAbsolutePath())
+      .map(f -> f.getInputFile().filename())
       .distinct()
       .count() > 1;
   }

@@ -26,12 +26,12 @@ public class NoFeatureCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_a_feature_is_defined() {
-    GherkinCheckVerifier.verify(new NoFeatureCheck(), CheckTestUtils.getTestFile("no-feature/feature.feature"));
+    GherkinCheckVerifier.verify(new NoFeatureCheck(), CheckTestUtils.getTestInputFile("no-feature/feature.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_no_feature_is_defined() {
-    GherkinCheckVerifier.verify(new NoFeatureCheck(), CheckTestUtils.getTestFile("no-feature/no-feature.feature"));
+    GherkinCheckVerifier.verify(new NoFeatureCheck(), CheckTestUtils.getTestInputFile("no-feature/no-feature.feature"));
   }
 
 }

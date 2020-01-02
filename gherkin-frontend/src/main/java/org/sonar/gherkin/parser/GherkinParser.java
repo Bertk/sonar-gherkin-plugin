@@ -21,6 +21,8 @@ package org.sonar.gherkin.parser;
 
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.ActionParser;
+import com.sonar.sslr.api.typed.Input;
+
 import org.sonar.plugins.gherkin.api.tree.BasicScenarioTree;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.tree.Tree;
@@ -50,6 +52,18 @@ public class GherkinParser extends ActionParser<Tree> {
     return tree;
   }
 
+  @Override
+  public Tree parse(String source) {
+    Tree tree = super.parse(source);
+    addParentLink(tree);
+
+    if (tree.is(Tree.Kind.GHERKIN_DOCUMENT)) {
+      addStepType(tree, ((GherkinDocumentTree) tree).language());
+    }
+
+    return tree;
+  }
+  
   private static Tree addParentLink(Tree parent) {
     if (!parent.isLeaf()) {
       Lists.newArrayList(parent.childrenIterator())

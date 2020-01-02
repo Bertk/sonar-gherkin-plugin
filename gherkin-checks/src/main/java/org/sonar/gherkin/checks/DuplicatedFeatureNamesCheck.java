@@ -49,9 +49,9 @@ public class DuplicatedFeatureNamesCheck extends DoubleDispatchVisitorCheck {
     NameTree nameTree = tree.name();
     if (nameTree != null) {
       if (names.containsKey(nameTree.text())) {
-        names.get(nameTree.text()).add(new FileNameTree(getContext().getFile(), nameTree));
+        names.get(nameTree.text()).add(new FileNameTree(getContext().getGherkinFile(), nameTree));
       } else {
-        names.put(nameTree.text(), Lists.newArrayList(new FileNameTree(getContext().getFile(), nameTree)));
+        names.put(nameTree.text(), Lists.newArrayList(new FileNameTree(getContext().getGherkinFile(), nameTree)));
       }
     }
   }

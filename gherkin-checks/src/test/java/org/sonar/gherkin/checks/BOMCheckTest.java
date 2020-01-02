@@ -29,29 +29,25 @@ public class BOMCheckTest {
   public void should_find_that_the_UTF8_file_starts_with_a_BOM_and_raise_an_issue() {
     GherkinCheckVerifier.verify(
       new BOMCheck(),
-      CheckTestUtils.getTestFile("bom/utf8-with-bom.feature"),
-      StandardCharsets.UTF_8);
+      CheckTestUtils.getTestInputFile("bom/utf8-with-bom.feature", StandardCharsets.UTF_8));
   }
 
   @Test
   public void should_find_that_the_UTF8_file_does_not_start_with_a_BOM_and_not_raise_any_issue() {
     GherkinCheckVerifier.verify(
       new BOMCheck(),
-      CheckTestUtils.getTestFile("bom/utf8.feature"),
-      StandardCharsets.UTF_8);
+      CheckTestUtils.getTestInputFile("bom/utf8.feature", StandardCharsets.UTF_8));
   }
 
   @Test
   public void should_find_that_the_UTF16_files_start_with_a_BOM_but_not_raise_any_issue() {
     GherkinCheckVerifier.verify(
       new BOMCheck(),
-      CheckTestUtils.getTestFile("bom/utf16-be.feature"),
-      StandardCharsets.UTF_16BE);
+      CheckTestUtils.getTestInputFile("bom/utf16-be.feature", StandardCharsets.UTF_16BE));
 
     GherkinCheckVerifier.verify(
       new BOMCheck(),
-      CheckTestUtils.getTestFile("bom/utf16-le.feature"),
-      StandardCharsets.UTF_16LE);
+      CheckTestUtils.getTestInputFile("bom/utf16-le.feature", StandardCharsets.UTF_16LE));
   }
 
 }

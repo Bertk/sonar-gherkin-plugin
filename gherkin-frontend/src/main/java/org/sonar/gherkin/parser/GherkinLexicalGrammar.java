@@ -91,20 +91,20 @@ public enum GherkinLexicalGrammar implements GrammarRuleKey {
   BOM,
   EOF;
 
-  public static LexerlessGrammarBuilder createGrammar(String language) {
+  public static LexerlessGrammarBuilder createGrammar(String naturalLanguage) {
     LexerlessGrammarBuilder b = LexerlessGrammarBuilder.create();
-    syntax(b, language);
+    syntax(b, naturalLanguage);
     b.setRootRule(GHERKIN_DOCUMENT);
     return b;
   }
 
-  private static void syntax(LexerlessGrammarBuilder b, String language) {
+  private static void syntax(LexerlessGrammarBuilder b, String naturalLanguage) {
     String whitespaceRegex = "(?<!\\\\)[\\s]*+";
     String whitespaceWithoutLineBreakRegex = "(?<!\\\\)[ \\t\\x0B\\f]*+";
     String whitespaceNotFollowedByLineBreakRegex = "(?<!\\\\)[ \\t\\x0B\\f]+(?!(\n|\r))";
     String trimmedSentence = "(\\S+|" + whitespaceNotFollowedByLineBreakRegex + ")+";
 
-    GherkinDialect dialect = GherkinDialectProvider.getDialect(language);
+    GherkinDialect dialect = GherkinDialectProvider.getDialect(naturalLanguage);
 
     Set<String> featureKeywords = dialect.getFeatureKeywords();
     Set<String> backgroundKeywords = dialect.getBackgroundKeywords();

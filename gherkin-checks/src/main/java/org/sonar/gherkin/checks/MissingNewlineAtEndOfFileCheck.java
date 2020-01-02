@@ -26,8 +26,9 @@ import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.InputStreamReader;
 
 @Rule(
   key = "empty-line-end-of-file",
@@ -40,28 +41,19 @@ public class MissingNewlineAtEndOfFileCheck extends DoubleDispatchVisitorCheck {
 
   @Override
   public void visitGherkinDocument(GherkinDocumentTree tree) {
-    try (RandomAccessFile randomAccessFile = new RandomAccessFile(getContext().getFile(), "r")) {
-      if (!endsWithNewline(randomAccessFile)) {
+    String line = "";
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(getContext().getGherkinFile().inputStream()))){
+      while (reader.ready()) {
+        line = reader.readLine();
+      }
+      if (!line.isEmpty()) {
         addFileIssue("Add an empty new line at the end of this file.");
       }
     } catch (IOException e) {
       throw new IllegalStateException("Check gherkin:" + this.getClass().getAnnotation(Rule.class).key()
-        + ": Error while reading " + getContext().getFile().getName(), e);
+        + ": Error while reading " + getContext().getGherkinFile().filename(), e);
     }
     super.visitGherkinDocument(tree);
-  }
-
-  private static boolean endsWithNewline(RandomAccessFile randomAccessFile) throws IOException {
-    if (randomAccessFile.length() < 1) {
-      return false;
-    }
-    randomAccessFile.seek(randomAccessFile.length() - 1);
-    byte[] chars = new byte[1];
-    if (randomAccessFile.read(chars) < 1) {
-      return false;
-    }
-    String ch = new String(chars);
-    return "\n".equals(ch) || "\r".equals(ch);
   }
 
 }

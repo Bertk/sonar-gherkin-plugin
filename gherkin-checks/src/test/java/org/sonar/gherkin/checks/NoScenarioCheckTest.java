@@ -26,17 +26,17 @@ public class NoScenarioCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_a_scenario_is_defined() {
-    GherkinCheckVerifier.verify(new NoScenarioCheck(), CheckTestUtils.getTestFile("no-scenario/scenario.feature"));
+    GherkinCheckVerifier.verify(new NoScenarioCheck(), CheckTestUtils.getTestInputFile("no-scenario/scenario.feature"));
   }
 
   @Test
   public void should_not_raise_any_issue_because_a_scenario_outline_is_defined() {
-    GherkinCheckVerifier.verify(new NoScenarioCheck(), CheckTestUtils.getTestFile("no-scenario/scenario-outline.feature"));
+    GherkinCheckVerifier.verify(new NoScenarioCheck(), CheckTestUtils.getTestInputFile("no-scenario/scenario-outline.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_no_scenario_is_defined() {
-    GherkinCheckVerifier.verify(new NoScenarioCheck(), CheckTestUtils.getTestFile("no-scenario/no-scenario.feature"));
+    GherkinCheckVerifier.verify(new NoScenarioCheck(), CheckTestUtils.getTestInputFile("no-scenario/no-scenario.feature"));
   }
 
 }

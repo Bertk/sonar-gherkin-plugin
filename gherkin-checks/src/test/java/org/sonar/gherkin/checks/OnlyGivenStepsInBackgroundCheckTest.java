@@ -26,12 +26,12 @@ public class OnlyGivenStepsInBackgroundCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_background_contains_only_given_steps() {
-    GherkinCheckVerifier.verify(new OnlyGivenStepsInBackgroundCheck(), CheckTestUtils.getTestFile("only-given-steps-in-background/only-given.feature"));
+    GherkinCheckVerifier.verify(new OnlyGivenStepsInBackgroundCheck(), CheckTestUtils.getTestInputFile("only-given-steps-in-background/only-given.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_background_contains_non_given_steps() {
-    GherkinCheckVerifier.verify(new OnlyGivenStepsInBackgroundCheck(), CheckTestUtils.getTestFile("only-given-steps-in-background/not-only-given.feature"));
+    GherkinCheckVerifier.verify(new OnlyGivenStepsInBackgroundCheck(), CheckTestUtils.getTestInputFile("only-given-steps-in-background/not-only-given.feature"));
   }
 
 }

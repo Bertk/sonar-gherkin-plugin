@@ -30,13 +30,13 @@ public class FileNameCheckTest {
 
   @Test
   public void should_follow_the_default_naming_convention_and_not_raise_an_issue() {
-    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("file-name/file-name-ok.feature"))
+    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("file-name/file-name-ok.feature"))
       .noMore();
   }
 
   @Test
   public void should_not_follow_the_default_naming_convention_and_raise_an_issue() {
-    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("file-name/FileNameKO.feature"))
+    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("file-name/FileNameKO.feature"))
       .next().withMessage("Rename this file to match the regular expression: ^[a-z][-A-Za-z0-9]*\\.feature$")
       .noMore();
   }
@@ -44,14 +44,14 @@ public class FileNameCheckTest {
   @Test
   public void should_follow_a_custom_naming_convention_and_not_raise_an_issue() {
     check.setFormat("^[a-z][-a-z]+\\.feature");
-    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("file-name/file-name-custom-ok.feature"))
+    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("file-name/file-name-custom-ok.feature"))
       .noMore();
   }
 
   @Test
   public void should_not_follow_a_custom_naming_convention_and_raise_an_issue() {
     check.setFormat("^[a-z]+\\.feature$");
-    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("file-name/file_name.kocustom.feature"))
+    GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("file-name/file_name.kocustom.feature"))
       .next().withMessage("Rename this file to match the regular expression: ^[a-z]+\\.feature$")
       .noMore();
   }
@@ -60,7 +60,7 @@ public class FileNameCheckTest {
   public void should_throw_an_illegal_state_exception_as_the_format_parameter_regular_expression_is_not_valid() {
     try {
       check.setFormat("(");
-      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("file-name/file-name-ok.feature")).noMore();
+      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("file-name/file-name-ok.feature")).noMore();
     } catch (IllegalStateException e) {
       assertThat(e.getMessage()).isEqualTo("Check gherkin:S1578 (File names should comply with a naming convention): " +
         "format parameter \"(\" is not a valid regular expression.");

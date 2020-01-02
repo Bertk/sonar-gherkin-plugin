@@ -20,14 +20,12 @@
 package org.sonar.gherkin.visitors;
 
 import java.nio.charset.StandardCharsets;
-import com.google.common.io.Files;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -37,7 +35,6 @@ import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.TreeVisitorContext;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -49,8 +46,7 @@ public class SyntaxHighlighterVisitorTest {
 
   private SyntaxHighlighterVisitor highlighterVisitor;
   private SensorContextTester sensorContext;
-  private File file;
-  private DefaultInputFile inputFile;
+  private InputFile inputFile;
   private TreeVisitorContext visitorContext;
   private DefaultFileSystem fileSystem;
 
@@ -60,11 +56,9 @@ public class SyntaxHighlighterVisitorTest {
   @Before
   public void setUp() throws IOException {
 
-    file = tempFolder.newFile();  
     sensorContext = SensorContextTester.create(tempFolder.getRoot());
     
-    visitorContext = mock(TreeVisitorContext.class);
-    when(visitorContext.getFile()).thenReturn(file);
+
   }
 
   @Test
@@ -149,15 +143,20 @@ public class SyntaxHighlighterVisitorTest {
   }
 
   private void highlight(String string) throws Exception {
+    File filetmp = tempFolder.newFile();  
     fileSystem = new DefaultFileSystem(tempFolder.getRoot());
     fileSystem.setEncoding(StandardCharsets.UTF_8);
-    InputFile inputFile = TestInputFileBuilder.create("moduleKey", file.getName())
+    inputFile = TestInputFileBuilder.create("moduleKey", filetmp.getName())
         .setLanguage("gherkin")
         .setCharset(StandardCharsets.UTF_8)
         .initMetadata(string)
         .setContents(string)
         .setType(InputFile.Type.MAIN)
         .build();
+
+    visitorContext = mock(TreeVisitorContext.class);
+    when(visitorContext.getGherkinFile()).thenReturn(inputFile);
+    
     fileSystem.add(inputFile);
     sensorContext.setFileSystem(fileSystem);
     highlighterVisitor = new SyntaxHighlighterVisitor(sensorContext);
@@ -165,13 +164,12 @@ public class SyntaxHighlighterVisitorTest {
     Tree tree = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8).parse(string);
     when(visitorContext.getTopTree()).thenReturn((GherkinDocumentTree) tree);
 
-    Files.asCharSink(file, StandardCharsets.UTF_8).write(string);
     highlighterVisitor.scanTree(visitorContext);
   }
 
   private void assertHighlighting(int line, int column, int length, TypeOfText type) {
     for (int i = column; i < column + length; i++) {
-      List<TypeOfText> typeOfTexts = sensorContext.highlightingTypeAt("moduleKey:" + file.getName(), line, i);
+      List<TypeOfText> typeOfTexts = sensorContext.highlightingTypeAt("moduleKey:" + inputFile.filename(), line, i);
       assertThat(typeOfTexts).hasSize(1);
       assertThat(typeOfTexts.get(0)).isEqualTo(type);
     }

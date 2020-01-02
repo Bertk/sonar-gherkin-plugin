@@ -59,7 +59,7 @@ public class WordingBusinessLevelCheck extends DoubleDispatchVisitorCheck {
       Pattern pattern = Pattern.compile(word);
       Matcher matcher = pattern.matcher(token.text());
       while (matcher.find()) {
-        addPreciseIssue(token, matcher.start(), matcher.end(), "Remove this forbidden word.");
+        addPreciseIssue(token, "Remove this forbidden word.");
       }
     }
   }

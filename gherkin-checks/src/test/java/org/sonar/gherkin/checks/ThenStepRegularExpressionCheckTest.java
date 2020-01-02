@@ -20,15 +20,14 @@
 package org.sonar.gherkin.checks;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
-
-import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class ThenStepRegularExpressionCheckTest {
 
-  private final static File FILE = CheckTestUtils.getTestFile("then-step-regular-expression.feature");
+  private final static InputFile FILE = CheckTestUtils.getTestInputFile("then-step-regular-expression.feature");
   private ThenStepRegularExpressionCheck check = new ThenStepRegularExpressionCheck();
 
   @Test

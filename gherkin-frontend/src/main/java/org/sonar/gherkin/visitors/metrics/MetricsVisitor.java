@@ -49,7 +49,7 @@ public class MetricsVisitor extends SubscriptionVisitor {
 
   @Override
   public void visitFile(Tree tree) {
-    this.inputFile = fileSystem.inputFile(fileSystem.predicates().is(getContext().getFile()));
+    this.inputFile = getContext().getGherkinFile();
   }
 
   @Override

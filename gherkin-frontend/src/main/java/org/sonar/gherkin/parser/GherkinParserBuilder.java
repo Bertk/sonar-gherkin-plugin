@@ -28,30 +28,30 @@ public class GherkinParserBuilder {
   private GherkinParserBuilder() {
   }
 
-  public static GherkinParser createParser(Charset charset, String language) {
-    return createParser(charset, GherkinLexicalGrammar.GHERKIN_DOCUMENT, language);
+  public static GherkinParser createParser(Charset charset, String naturalLanguage) {
+    return createParser(charset, GherkinLexicalGrammar.GHERKIN_DOCUMENT, naturalLanguage);
   }
 
-  public static GherkinParser createTestParser(Charset charset, GrammarRuleKey rootRule, String language) {
-    return createParser(charset, rootRule, language);
+  public static GherkinParser createTestParser(Charset charset, GrammarRuleKey rootRule, String naturalLanguage) {
+    return createParser(charset, rootRule, naturalLanguage);
   }
 
   public static GherkinParser createTestParser(Charset charset, GrammarRuleKey rootRule) {
     return createParser(charset, rootRule, GherkinDialectProvider.DEFAULT_LANGUAGE);
   }
 
-  public static GherkinParser createTestParser(Charset charset, String language) {
-    return createParser(charset, GherkinLexicalGrammar.GHERKIN_DOCUMENT, language);
+  public static GherkinParser createTestParser(Charset charset, String naturalLanguage) {
+    return createParser(charset, GherkinLexicalGrammar.GHERKIN_DOCUMENT, naturalLanguage);
   }
 
   public static GherkinParser createTestParser(Charset charset) {
     return createParser(charset, GherkinLexicalGrammar.GHERKIN_DOCUMENT, GherkinDialectProvider.DEFAULT_LANGUAGE);
   }
 
-  private static GherkinParser createParser(Charset charset, GrammarRuleKey rootRule, String language) {
+  private static GherkinParser createParser(Charset charset, GrammarRuleKey rootRule, String naturalLanguage) {
     return new GherkinParser(
       charset,
-      GherkinLexicalGrammar.createGrammar(language),
+      GherkinLexicalGrammar.createGrammar(naturalLanguage),
       GherkinGrammar.class,
       new TreeFactory(),
       new GherkinNodeBuilder(),

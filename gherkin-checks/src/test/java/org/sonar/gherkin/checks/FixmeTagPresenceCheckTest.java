@@ -26,7 +26,7 @@ public class FixmeTagPresenceCheckTest {
 
   @Test
   public void should_contain_fixme_tags_and_raise_issues() {
-    GherkinCheckVerifier.verify(new FixmeTagPresenceCheck(), CheckTestUtils.getTestFile("fixme.feature"));
+    GherkinCheckVerifier.verify(new FixmeTagPresenceCheck(), CheckTestUtils.getTestInputFile("fixme.feature"));
   }
 
 }

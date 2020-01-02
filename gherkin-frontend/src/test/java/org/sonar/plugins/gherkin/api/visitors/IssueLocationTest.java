@@ -39,12 +39,11 @@ public class IssueLocationTest {
   public void several_lines_tokens() throws Exception {
     String tokenValue = "blabla\\\nblabla...";
 
-    IssueLocation location = new IssueLocation(FILE, createToken(3, 2, tokenValue), MESSAGE);
+    IssueLocation location = new IssueLocation(createToken(3, 2, tokenValue), MESSAGE);
     assertThat(location.startLine()).isEqualTo(3);
     assertThat(location.endLine()).isEqualTo(4);
     assertThat(location.startLineOffset()).isEqualTo(2);
     assertThat(location.endLineOffset()).isEqualTo(9);
-    assertThat(location.file()).isEqualTo(FILE);
   }
 
   private Tree createToken(int line, int column, String tokenValue) {

@@ -26,22 +26,22 @@ public class DuplicatedStepsCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_no_duplicated_steps() {
-    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestFile("duplicated-steps/no-duplicate.feature"));
+    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestInputFile("duplicated-steps/no-duplicate.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_there_are_duplicated_steps_in_background() {
-    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestFile("duplicated-steps/duplicates-in-background.feature"));
+    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestInputFile("duplicated-steps/duplicates-in-background.feature"));
   }
 
   @Test
   public void should_raise_some_issues_because_there_are_duplicated_steps_in_scenarios() {
-    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestFile("duplicated-steps/duplicates-in-scenarios.feature"));
+    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestInputFile("duplicated-steps/duplicates-in-scenarios.feature"));
   }
 
   @Test
   public void should_raise_some_issues_because_there_are_duplicated_steps_in_background_and_scenarios() {
-    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestFile("duplicated-steps/duplicates-in-background-and-scenarios.feature"));
+    GherkinCheckVerifier.verify(new DuplicatedStepsCheck(), CheckTestUtils.getTestInputFile("duplicated-steps/duplicates-in-background-and-scenarios.feature"));
   }
 
 }

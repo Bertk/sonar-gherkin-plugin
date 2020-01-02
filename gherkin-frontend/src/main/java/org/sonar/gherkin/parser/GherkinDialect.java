@@ -28,10 +28,10 @@ import java.util.stream.Collectors;
 public class GherkinDialect {
 
   private final Map<String, List<String>> keywords;
-  private String language;
+  private String naturalLanguage;
 
-  public GherkinDialect(String language, Map<String, List<String>> keywords) {
-    this.language = language;
+  public GherkinDialect(String naturalLanguage, Map<String, List<String>> keywords) {
+    this.naturalLanguage = naturalLanguage;
     this.keywords = keywords;
   }
 
@@ -86,6 +86,6 @@ public class GherkinDialect {
   }
 
   public String getLanguage() {
-    return language;
+    return naturalLanguage;
   }
 }

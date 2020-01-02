@@ -26,7 +26,7 @@ public class TodoTagPresenceCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new TodoTagPresenceCheck(), CheckTestUtils.getTestFile("todo.feature"));
+    GherkinCheckVerifier.verify(new TodoTagPresenceCheck(), CheckTestUtils.getTestInputFile("todo.feature"));
   }
 
 }

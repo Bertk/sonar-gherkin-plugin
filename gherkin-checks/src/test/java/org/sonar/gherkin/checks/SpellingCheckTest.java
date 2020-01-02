@@ -30,7 +30,7 @@ public class SpellingCheckTest {
   public void should_find_some_spelling_mistakes_and_raise_some_issues_default_en_US_language() {
     SpellingCheck check = new SpellingCheck();
     check.setWordsToIgnore("blabla,toto");
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("spelling/spelling.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("spelling/spelling.feature"));
   }
 
   @Test
@@ -38,7 +38,7 @@ public class SpellingCheckTest {
     SpellingCheck check = new SpellingCheck();
     check.setWordsToIgnore("blabla,toto");
     check.setLanguage("fr");
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("spelling/spelling-fr.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("spelling/spelling-fr.feature"));
   }
 
   @Test
@@ -46,7 +46,7 @@ public class SpellingCheckTest {
     SpellingCheck check = new SpellingCheck();
     check.setWordsToIgnore("blabla,toto");
     check.setRulesToIgnore("MORFOLOGIK_RULE_EN_US,UPPERCASE_SENTENCE_START");
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("spelling/no-spelling-mistake-rule-exclusions.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("spelling/no-spelling-mistake-rule-exclusions.feature"));
   }
 
   @Test
@@ -55,7 +55,7 @@ public class SpellingCheckTest {
       SpellingCheck check = new SpellingCheck();
       check.setLanguage("abc");
 
-      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("spelling/spelling.feature")).noMore();
+      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("spelling/spelling.feature")).noMore();
 
     } catch (IllegalStateException e) {
       assertThat(e.getMessage()).isEqualTo("Check gherkin:spelling (Spelling mistakes should be fixed): "

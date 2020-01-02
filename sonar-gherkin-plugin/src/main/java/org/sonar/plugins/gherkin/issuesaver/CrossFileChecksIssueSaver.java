@@ -20,6 +20,8 @@
 package org.sonar.plugins.gherkin.issuesaver;
 
 import com.google.common.collect.ImmutableList;
+
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.gherkin.issuesaver.crossfile.CrossFileCheckIssueSaver;
 import org.sonar.plugins.gherkin.issuesaver.crossfile.DuplicatedFeatureNamesIssueSaver;
 import org.sonar.plugins.gherkin.issuesaver.crossfile.DuplicatedScenarioNamesIssueSaver;
@@ -39,13 +41,13 @@ public class CrossFileChecksIssueSaver {
     );
   }
 
-  public static void saveIssues(IssueSaver issueSaver) {
-    getCrossFileCheckIssueSavers().forEach(c -> saveIssuesOnCheck(c, issueSaver));
+  public static void saveIssues(InputFile inputFile, IssueSaver issueSaver) {
+    getCrossFileCheckIssueSavers().forEach(c -> saveIssuesOnCheck(c, issueSaver, inputFile));
   }
 
-  private static void saveIssuesOnCheck(Class<? extends CrossFileCheckIssueSaver> clazz, IssueSaver issueSaver) {
+  private static void saveIssuesOnCheck(Class<? extends CrossFileCheckIssueSaver> clazz, IssueSaver issueSaver, InputFile inputFile) {
     try {
-      clazz.getConstructor(IssueSaver.class).newInstance(issueSaver).saveIssues();
+      clazz.getConstructor(IssueSaver.class).newInstance(issueSaver).saveIssues(inputFile);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
       throw new IllegalStateException("Cannot save issues on check " + clazz.getName(), e);
     }

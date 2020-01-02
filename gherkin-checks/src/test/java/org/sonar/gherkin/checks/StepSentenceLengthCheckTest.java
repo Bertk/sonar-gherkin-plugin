@@ -26,14 +26,14 @@ public class StepSentenceLengthCheckTest {
 
   @Test
   public void test_with_default_threshold() {
-    GherkinCheckVerifier.verify(new StepSentenceLengthCheck(), CheckTestUtils.getTestFile("step-sentence-length/step-sentence-length-default-threshold.feature"));
+    GherkinCheckVerifier.verify(new StepSentenceLengthCheck(), CheckTestUtils.getTestInputFile("step-sentence-length/step-sentence-length-default-threshold.feature"));
   }
 
   @Test
   public void test_custom_threshold() {
     StepSentenceLengthCheck check = new StepSentenceLengthCheck();
     check.setThreshold(50);
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("step-sentence-length/step-sentence-length-custom-threshold.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("step-sentence-length/step-sentence-length-custom-threshold.feature"));
   }
 
 }

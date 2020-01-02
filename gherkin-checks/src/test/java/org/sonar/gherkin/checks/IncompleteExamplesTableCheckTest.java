@@ -26,7 +26,7 @@ public class IncompleteExamplesTableCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new IncompleteExamplesTableCheck(), CheckTestUtils.getTestFile("incomplete-examples-table.feature"));
+    GherkinCheckVerifier.verify(new IncompleteExamplesTableCheck(), CheckTestUtils.getTestInputFile("incomplete-examples-table.feature"));
   }
 
 }

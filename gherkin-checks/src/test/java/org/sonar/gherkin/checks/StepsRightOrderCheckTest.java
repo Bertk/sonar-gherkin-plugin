@@ -26,7 +26,7 @@ public class StepsRightOrderCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new StepsRightOrderCheck(), CheckTestUtils.getTestFile("steps-right-order.feature"));
+    GherkinCheckVerifier.verify(new StepsRightOrderCheck(), CheckTestUtils.getTestInputFile("steps-right-order.feature"));
   }
 
 }

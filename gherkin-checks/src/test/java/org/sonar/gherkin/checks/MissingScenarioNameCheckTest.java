@@ -26,7 +26,7 @@ public class MissingScenarioNameCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new MissingScenarioNameCheck(), CheckTestUtils.getTestFile("missing-scenario-name.feature"));
+    GherkinCheckVerifier.verify(new MissingScenarioNameCheck(), CheckTestUtils.getTestInputFile("missing-scenario-name.feature"));
   }
 
 }

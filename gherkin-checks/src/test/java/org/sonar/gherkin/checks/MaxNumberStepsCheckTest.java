@@ -26,19 +26,19 @@ public class MaxNumberStepsCheckTest {
 
   @Test
   public void test_with_no_background() {
-    GherkinCheckVerifier.verify(new MaxNumberStepsCheck(), CheckTestUtils.getTestFile("max-number-steps/max-number-steps-no-background.feature"));
+    GherkinCheckVerifier.verify(new MaxNumberStepsCheck(), CheckTestUtils.getTestInputFile("max-number-steps/max-number-steps-no-background.feature"));
   }
 
   @Test
   public void test_with_background() {
-    GherkinCheckVerifier.verify(new MaxNumberStepsCheck(), CheckTestUtils.getTestFile("max-number-steps/max-number-steps-background.feature"));
+    GherkinCheckVerifier.verify(new MaxNumberStepsCheck(), CheckTestUtils.getTestInputFile("max-number-steps/max-number-steps-background.feature"));
   }
 
   @Test
   public void test_custom_threshold() {
     MaxNumberStepsCheck check = new MaxNumberStepsCheck();
     check.setThreshold(5);
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("max-number-steps/max-number-steps-custom-threshold.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("max-number-steps/max-number-steps-custom-threshold.feature"));
   }
 
 }

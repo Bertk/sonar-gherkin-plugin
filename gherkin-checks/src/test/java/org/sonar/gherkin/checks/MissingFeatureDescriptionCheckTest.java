@@ -26,12 +26,12 @@ public class MissingFeatureDescriptionCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_the_feature_has_a_description() {
-    GherkinCheckVerifier.verify(new MissingFeatureDescriptionCheck(), CheckTestUtils.getTestFile("missing-feature-description/no-missing-description.feature"));
+    GherkinCheckVerifier.verify(new MissingFeatureDescriptionCheck(), CheckTestUtils.getTestInputFile("missing-feature-description/no-missing-description.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_the_feature_has_no_description() {
-    GherkinCheckVerifier.verify(new MissingFeatureDescriptionCheck(), CheckTestUtils.getTestFile("missing-feature-description/missing-description.feature"));
+    GherkinCheckVerifier.verify(new MissingFeatureDescriptionCheck(), CheckTestUtils.getTestInputFile("missing-feature-description/missing-description.feature"));
   }
 
 }

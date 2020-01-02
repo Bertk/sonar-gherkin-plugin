@@ -26,13 +26,13 @@ public class MissingNewlineAtEndOfFileCheckTest {
 
   @Test
   public void should_contain_an_empty_new_line_at_the_end_of_the_file_and_not_raise_issues() {
-    GherkinCheckVerifier.issues(new MissingNewlineAtEndOfFileCheck(), CheckTestUtils.getTestFile("new-line-end-of-file/new-line-end-of-file.feature"))
+    GherkinCheckVerifier.issues(new MissingNewlineAtEndOfFileCheck(), CheckTestUtils.getTestInputFile("new-line-end-of-file/new-line-end-of-file.feature"))
       .noMore();
   }
 
   @Test
   public void should_not_contain_an_empty_new_line_at_the_end_of_the_file_and_raise_an_issue() {
-    GherkinCheckVerifier.issues(new MissingNewlineAtEndOfFileCheck(), CheckTestUtils.getTestFile("new-line-end-of-file/no-new-line-end-of-file.feature"))
+    GherkinCheckVerifier.issues(new MissingNewlineAtEndOfFileCheck(), CheckTestUtils.getTestInputFile("new-line-end-of-file/no-new-line-end-of-file.feature"))
       .next().withMessage("Add an empty new line at the end of this file.")
       .noMore();
   }

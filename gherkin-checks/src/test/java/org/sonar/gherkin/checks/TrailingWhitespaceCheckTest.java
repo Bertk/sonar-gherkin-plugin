@@ -26,7 +26,7 @@ public class TrailingWhitespaceCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new TrailingWhitespaceCheck(), CheckTestUtils.getTestFile("trailing-whitespace.feature"));
+    GherkinCheckVerifier.verify(new TrailingWhitespaceCheck(), CheckTestUtils.getTestInputFile("trailing-whitespace.feature"));
   }
 
 }

@@ -26,26 +26,26 @@ public class MaxNumberScenariosCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_the_number_of_scenarios_is_lower_than_the_default_threshold() {
-    GherkinCheckVerifier.verify(new MaxNumberScenariosCheck(), CheckTestUtils.getTestFile("max-number-scenarios/lower-than-default-threshold.feature"));
+    GherkinCheckVerifier.verify(new MaxNumberScenariosCheck(), CheckTestUtils.getTestInputFile("max-number-scenarios/lower-than-default-threshold.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_the_number_of_scenarios_is_greater_than_the_default_threshold() {
-    GherkinCheckVerifier.verify(new MaxNumberScenariosCheck(), CheckTestUtils.getTestFile("max-number-scenarios/greater-than-default-threshold.feature"));
+    GherkinCheckVerifier.verify(new MaxNumberScenariosCheck(), CheckTestUtils.getTestInputFile("max-number-scenarios/greater-than-default-threshold.feature"));
   }
 
   @Test
   public void should_not_raise_any_issue_because_the_number_of_scenarios_is_lower_than_the_custom_threshold() {
     MaxNumberScenariosCheck check = new MaxNumberScenariosCheck();
     check.setThreshold(4);
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("max-number-scenarios/lower-than-custom-threshold.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("max-number-scenarios/lower-than-custom-threshold.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_the_number_of_scenarios_is_greater_than_the_custom_threshold() {
     MaxNumberScenariosCheck check = new MaxNumberScenariosCheck();
     check.setThreshold(4);
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("max-number-scenarios/greater-than-custom-threshold.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("max-number-scenarios/greater-than-custom-threshold.feature"));
   }
 
 }

@@ -26,7 +26,7 @@ public class WordingBusinessLevelCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new WordingBusinessLevelCheck(), CheckTestUtils.getTestFile("wording-business-level.feature"));
+    GherkinCheckVerifier.verify(new WordingBusinessLevelCheck(), CheckTestUtils.getTestInputFile("wording-business-level.feature"));
   }
 
 }

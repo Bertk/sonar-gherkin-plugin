@@ -26,7 +26,7 @@ public class MissingDataTableColumnCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new MissingDataTableColumnCheck(), CheckTestUtils.getTestFile("missing-data-table-column.feature"));
+    GherkinCheckVerifier.verify(new MissingDataTableColumnCheck(), CheckTestUtils.getTestInputFile("missing-data-table-column.feature"));
   }
 
 }

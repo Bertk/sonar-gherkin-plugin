@@ -26,32 +26,32 @@ public class IndentationCheckTest {
 
   @Test
   public void should_not_raise_any_issue_with_default_parameter_value() {
-    GherkinCheckVerifier.verify(new IndentationCheck(), CheckTestUtils.getTestFile("indentation/indentation-default-ok.feature"));
+    GherkinCheckVerifier.verify(new IndentationCheck(), CheckTestUtils.getTestInputFile("indentation/indentation-default-ok.feature"));
   }
 
   @Test
   public void should_raise_some_issues_with_default_parameter_value() {
-    GherkinCheckVerifier.verify(new IndentationCheck(), CheckTestUtils.getTestFile("indentation/indentation-default-ko.feature"));
+    GherkinCheckVerifier.verify(new IndentationCheck(), CheckTestUtils.getTestInputFile("indentation/indentation-default-ko.feature"));
   }
 
   @Test
   public void should_not_raise_any_issue_with_custom_parameter_value() {
     IndentationCheck check = new IndentationCheck();
     check.setIndentation(4);
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("indentation/indentation-custom-ok.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("indentation/indentation-custom-ok.feature"));
   }
 
   @Test
   public void should_raise_some_issues_with_custom_parameter_value() {
     IndentationCheck check = new IndentationCheck();
     check.setIndentation(4);
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("indentation/indentation-custom-ko.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("indentation/indentation-custom-ko.feature"));
   }
 
   @Test
   public void should_raise_some_issues_about_single_whitespace() {
     IndentationCheck check = new IndentationCheck();
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("indentation/indentation-single-whitespace.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("indentation/indentation-single-whitespace.feature"));
   }
 
 }

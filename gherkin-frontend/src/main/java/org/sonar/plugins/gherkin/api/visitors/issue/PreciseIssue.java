@@ -23,7 +23,6 @@ import org.sonar.plugins.gherkin.api.GherkinCheck;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,18 +60,18 @@ public class PreciseIssue implements Issue {
   public IssueLocation primaryLocation() {
     return primaryLocation;
   }
-
+  
   public List<IssueLocation> secondaryLocations() {
     return secondaryLocations;
   }
 
-  public PreciseIssue secondary(Tree tree, String message) {
-    secondaryLocations.add(new IssueLocation(primaryLocation.file(), tree, message));
+  public PreciseIssue secondary(IssueLocation secondaryLocation) {
+    secondaryLocations.add(secondaryLocation);
     return this;
   }
 
-  public PreciseIssue secondary(File file, Tree tree, String message) {
-    secondaryLocations.add(new IssueLocation(file, tree, message));
+  public PreciseIssue secondary(Tree tree, String message) {
+    secondaryLocations.add(new IssueLocation(tree, message));
     return this;
   }
 

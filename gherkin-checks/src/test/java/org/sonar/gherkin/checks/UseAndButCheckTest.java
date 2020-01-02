@@ -26,7 +26,7 @@ public class UseAndButCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new UseAndButCheck(), CheckTestUtils.getTestFile("use-and-but.feature"));
+    GherkinCheckVerifier.verify(new UseAndButCheck(), CheckTestUtils.getTestInputFile("use-and-but.feature"));
   }
 
 }

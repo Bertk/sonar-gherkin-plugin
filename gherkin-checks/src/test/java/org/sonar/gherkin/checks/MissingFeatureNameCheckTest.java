@@ -26,12 +26,12 @@ public class MissingFeatureNameCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_the_feature_has_a_name() {
-    GherkinCheckVerifier.verify(new MissingFeatureNameCheck(), CheckTestUtils.getTestFile("missing-feature-name/no-missing-name.feature"));
+    GherkinCheckVerifier.verify(new MissingFeatureNameCheck(), CheckTestUtils.getTestInputFile("missing-feature-name/no-missing-name.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_the_feature_has_no_name() {
-    GherkinCheckVerifier.verify(new MissingFeatureNameCheck(), CheckTestUtils.getTestFile("missing-feature-name/missing-name.feature"));
+    GherkinCheckVerifier.verify(new MissingFeatureNameCheck(), CheckTestUtils.getTestInputFile("missing-feature-name/missing-name.feature"));
   }
 
 }

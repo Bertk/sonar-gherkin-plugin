@@ -26,7 +26,7 @@ public class StepOfUnknownTypeCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new StepOfUnknownTypeCheck(), CheckTestUtils.getTestFile("step-of-unknown-type.feature"));
+    GherkinCheckVerifier.verify(new StepOfUnknownTypeCheck(), CheckTestUtils.getTestInputFile("step-of-unknown-type.feature"));
   }
 
 }

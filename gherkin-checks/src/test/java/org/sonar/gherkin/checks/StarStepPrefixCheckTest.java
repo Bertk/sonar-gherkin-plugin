@@ -26,7 +26,7 @@ public class StarStepPrefixCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new StarStepPrefixCheck(), CheckTestUtils.getTestFile("star-step-prefix.feature"));
+    GherkinCheckVerifier.verify(new StarStepPrefixCheck(), CheckTestUtils.getTestInputFile("star-step-prefix.feature"));
   }
 
 }

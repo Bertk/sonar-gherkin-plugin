@@ -26,7 +26,7 @@ public class OneSingleWhenPerScenarioCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new OneSingleWhenPerScenarioCheck(), CheckTestUtils.getTestFile("one-single-when-per-scenario.feature"));
+    GherkinCheckVerifier.verify(new OneSingleWhenPerScenarioCheck(), CheckTestUtils.getTestInputFile("one-single-when-per-scenario.feature"));
   }
 
 }

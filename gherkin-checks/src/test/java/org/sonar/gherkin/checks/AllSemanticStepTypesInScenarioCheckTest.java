@@ -26,12 +26,12 @@ public class AllSemanticStepTypesInScenarioCheckTest {
 
   @Test
   public void test_without_background() {
-    GherkinCheckVerifier.verify(new AllStepTypesInScenarioCheck(), CheckTestUtils.getTestFile("all-step-types-in-scenario/without-background.feature"));
+    GherkinCheckVerifier.verify(new AllStepTypesInScenarioCheck(), CheckTestUtils.getTestInputFile("all-step-types-in-scenario/without-background.feature"));
   }
 
   @Test
   public void test_with_background() {
-    GherkinCheckVerifier.verify(new AllStepTypesInScenarioCheck(), CheckTestUtils.getTestFile("all-step-types-in-scenario/with-background.feature"));
+    GherkinCheckVerifier.verify(new AllStepTypesInScenarioCheck(), CheckTestUtils.getTestInputFile("all-step-types-in-scenario/with-background.feature"));
   }
 
 }

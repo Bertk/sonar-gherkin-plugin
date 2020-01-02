@@ -57,7 +57,7 @@ public class CommentRegularExpressionCheck extends DoubleDispatchVisitorCheck {
     Pattern pattern = Pattern.compile(regularExpression);
     Matcher matcher = pattern.matcher(trivia.text());
     while (matcher.find()) {
-      addPreciseIssue(trivia, matcher.start(), matcher.end(), message);
+      addPreciseIssue(trivia, message);
     }
     super.visitComment(trivia);
   }

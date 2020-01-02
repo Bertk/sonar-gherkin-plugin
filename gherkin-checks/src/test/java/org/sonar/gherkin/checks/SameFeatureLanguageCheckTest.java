@@ -19,6 +19,7 @@
  */
 package org.sonar.gherkin.checks;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
 
@@ -30,19 +31,19 @@ public class SameFeatureLanguageCheckTest {
   public void should_be_written_in_the_default_language_and_not_raise_any_issue() {
     GherkinCheckVerifier.issues(
       new SameFeatureLanguageCheck(),
-      CheckTestUtils.getTestFile("same-feature-language/default.feature"))
+      CheckTestUtils.getTestInputFile("same-feature-language/default.feature"))
       .noMore();
   }
 
-  @Test
+  @Test 
   public void should_be_written_in_the_custom_language_and_not_raise_any_issue() {
     SameFeatureLanguageCheck check = new SameFeatureLanguageCheck();
     check.setLanguage("fr");
 
     GherkinCheckVerifier.issues(
       check,
-      CheckTestUtils.getTestFile("same-feature-language/fr.feature"),
-      "fr")
+      CheckTestUtils.getTestInputFile("same-feature-language/fr.feature"),
+        "fr")
       .noMore();
   }
 
@@ -50,8 +51,8 @@ public class SameFeatureLanguageCheckTest {
   public void should_not_be_written_in_the_default_language_and_raise_an_issue() {
     GherkinCheckVerifier.issues(
       new SameFeatureLanguageCheck(),
-      CheckTestUtils.getTestFile("same-feature-language/not-default.feature"),
-      "fr")
+      CheckTestUtils.getTestInputFile("same-feature-language/not-default.feature"),
+        "fr")
       .next().atLine(1).withMessage("Update the language definition to 'en' and translate the content of the file.")
       .noMore();
   }
@@ -63,7 +64,7 @@ public class SameFeatureLanguageCheckTest {
 
     GherkinCheckVerifier.issues(
       check,
-      CheckTestUtils.getTestFile("same-feature-language/not-fr.feature"))
+      CheckTestUtils.getTestInputFile("same-feature-language/not-fr.feature"))
       .next().withMessage("Add a 'fr' language definition and translate the content of the file.")
       .noMore();
   }
@@ -74,7 +75,7 @@ public class SameFeatureLanguageCheckTest {
       SameFeatureLanguageCheck check = new SameFeatureLanguageCheck();
       check.setLanguage("abc");
 
-      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("same-feature-language/default.feature")).noMore();
+      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("same-feature-language/default.feature")).noMore();
 
     } catch (IllegalStateException e) {
       assertThat(e.getMessage()).isEqualTo("Check gherkin:same-feature-language (Features should be written in the same language): "

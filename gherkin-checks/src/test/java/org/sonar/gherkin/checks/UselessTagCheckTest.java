@@ -26,7 +26,7 @@ public class UselessTagCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new UselessTagCheck(), CheckTestUtils.getTestFile("useless-tag.feature"));
+    GherkinCheckVerifier.verify(new UselessTagCheck(), CheckTestUtils.getTestInputFile("useless-tag.feature"));
   }
 
 }

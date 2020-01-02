@@ -23,20 +23,17 @@ import com.google.common.base.Preconditions;
 import org.sonar.plugins.gherkin.api.GherkinCheck;
 
 import javax.annotation.Nullable;
-import java.io.File;
 
 public class LineIssue implements Issue {
 
   private final GherkinCheck check;
-  private final File file;
   private Double cost;
   private final String message;
   private final int line;
 
-  public LineIssue(GherkinCheck check, File file, int line, String message) {
+  public LineIssue(GherkinCheck check, int line, String message) {
     Preconditions.checkArgument(line > 0);
     this.check = check;
-    this.file = file;
     this.message = message;
     this.line = line;
     this.cost = null;
@@ -53,10 +50,6 @@ public class LineIssue implements Issue {
   @Override
   public GherkinCheck check() {
     return check;
-  }
-
-  public File file() {
-    return file;
   }
 
   @Nullable

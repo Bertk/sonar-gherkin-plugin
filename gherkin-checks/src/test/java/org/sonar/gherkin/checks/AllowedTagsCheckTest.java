@@ -28,21 +28,21 @@ public class AllowedTagsCheckTest {
 
   @Test
   public void test_default_regular_expression() {
-    GherkinCheckVerifier.verify(new AllowedTagsCheck(), CheckTestUtils.getTestFile("allowed-tags/allowed-tags-default.feature"));
+    GherkinCheckVerifier.verify(new AllowedTagsCheck(), CheckTestUtils.getTestInputFile("allowed-tags/allowed-tags-default.feature"));
   }
 
   @Test
   public void test_custom_regular_expression() {
     AllowedTagsCheck check = new AllowedTagsCheck();
     check.setAllowedTags("mytag|yourtag");
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("allowed-tags/allowed-tags-custom.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("allowed-tags/allowed-tags-custom.feature"));
   }
 
   @Test
   public void test_composite_tags() {
     AllowedTagsCheck check = new AllowedTagsCheck();
     check.setAllowedTags("us:\\d+|uid:[a-zA-Z''-'\\s]{1,40}");
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("allowed-tags/allowed-tags-composite.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("allowed-tags/allowed-tags-composite.feature"));
   }
 
   @Test
@@ -51,7 +51,7 @@ public class AllowedTagsCheckTest {
       AllowedTagsCheck check = new AllowedTagsCheck();
       check.setAllowedTags("(");
 
-      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("allowed-tags/allowed-tags-custom.feature")).noMore();
+      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("allowed-tags/allowed-tags-custom.feature")).noMore();
 
     } catch (IllegalStateException e) {
       assertThat(e.getMessage()).isEqualTo("Check gherkin:allowed-tags (Only tags matching a regular expression should be used): "

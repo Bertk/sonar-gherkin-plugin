@@ -19,6 +19,9 @@
  */
 package org.sonar.gherkin.checks.verifier;
 
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.gherkin.parser.GherkinParserBuilder;
 import org.sonar.gherkin.visitors.GherkinVisitorContext;
 import org.sonar.plugins.gherkin.api.GherkinCheck;
@@ -29,25 +32,30 @@ import org.sonar.plugins.gherkin.api.visitors.issue.LineIssue;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
 import org.sonar.squidbridge.api.CheckMessage;
 
-import java.io.File;
-import java.nio.charset.Charset;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 class TreeCheckTest {
-
+  private static final Logger LOG = Loggers.get(TreeCheckTest.class);
   private TreeCheckTest() {
   }
 
-  public static Collection<CheckMessage> getIssues(String relativePath, GherkinCheck check, Charset charset, String language) {
-    File file = new File(relativePath);
+  public static Collection<CheckMessage> getIssues(InputFile inputFile, GherkinCheck check, String naturalLanguage) {
+    
+    GherkinDocumentTree propertiesTree;
+    try {
+      propertiesTree = (GherkinDocumentTree) GherkinParserBuilder.createTestParser(inputFile.charset(), naturalLanguage).parse(inputFile.contents());
+      GherkinVisitorContext context = new GherkinVisitorContext(propertiesTree, inputFile);
+      List<Issue> issues = check.scanFile(context);
 
-    GherkinDocumentTree propertiesTree = (GherkinDocumentTree) GherkinParserBuilder.createTestParser(charset, language).parse(file);
-    GherkinVisitorContext context = new GherkinVisitorContext(propertiesTree, file);
-    List<Issue> issues = check.scanFile(context);
-
-    return getCheckMessages(issues);
+      return getCheckMessages(issues);
+    } catch (IOException e) {
+      LOG.error("Unable to analyse file: " + inputFile.uri(), e);
+    }
+    return Collections.emptyList();
   }
 
   private static Collection<CheckMessage> getCheckMessages(List<Issue> issues) {

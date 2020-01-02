@@ -26,7 +26,7 @@ public class UnusedVariableCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new UnusedVariableCheck(), CheckTestUtils.getTestFile("unused-variable.feature"));
+    GherkinCheckVerifier.verify(new UnusedVariableCheck(), CheckTestUtils.getTestInputFile("unused-variable.feature"));
   }
 
 }

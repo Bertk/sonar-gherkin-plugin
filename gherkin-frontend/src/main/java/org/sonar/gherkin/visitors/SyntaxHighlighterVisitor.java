@@ -59,7 +59,7 @@ public class SyntaxHighlighterVisitor extends SubscriptionVisitor {
 
   @Override
   public void visitFile(Tree tree) {
-    highlighting = sensorContext.newHighlighting().onFile(fileSystem.inputFile(fileSystem.predicates().is(getContext().getFile())));
+    highlighting = sensorContext.newHighlighting().onFile(getContext().getGherkinFile());
   }
 
   @Override

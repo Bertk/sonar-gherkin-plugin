@@ -20,13 +20,20 @@
 package org.sonar.gherkin.checks;
 
 import java.nio.charset.StandardCharsets;
-import com.google.common.io.Files;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+//import com.google.common.io.Files;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
 
-import java.io.File;
+import java.io.FileReader;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -40,94 +47,92 @@ public class EndLineCharactersCheckTest {
   @Test
   public void should_find_only_crlf_and_not_raise_any_issues() throws Exception {
     check.setEndLineCharacters("CRLF");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r\n"))
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r\n")).noMore();
   }
 
   @Test
   public void should_find_only_cr_and_not_raise_any_issues() throws Exception {
     check.setEndLineCharacters("CR");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r"))
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r")).noMore();
   }
 
   @Test
   public void should_find_only_lf_and_not_raise_any_issues() throws Exception {
     check.setEndLineCharacters("LF");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\n"))
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\n")).noMore();
   }
 
   @Test
   public void crlf_should_find_lf_and_raise_issues() throws Exception {
     check.setEndLineCharacters("CRLF");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\n"))
-      .next().withMessage("Set all end-line characters to 'CRLF' in this file.")
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\n")).next()
+        .withMessage("Set all end-line characters to 'CRLF' in this file.").noMore();
   }
 
   @Test
   public void crlf_should_find_cr_and_raise_issues() throws Exception {
     check.setEndLineCharacters("CRLF");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r"))
-      .next().withMessage("Set all end-line characters to 'CRLF' in this file.")
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r")).next()
+        .withMessage("Set all end-line characters to 'CRLF' in this file.").noMore();
   }
 
   @Test
   public void cr_should_find_crlf_and_raise_issues() throws Exception {
     check.setEndLineCharacters("CR");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r\n"))
-      .next().withMessage("Set all end-line characters to 'CR' in this file.")
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r\n")).next()
+        .withMessage("Set all end-line characters to 'CR' in this file.").noMore();
   }
 
   @Test
   public void cr_should_find_lf_and_raise_issues() throws Exception {
     check.setEndLineCharacters("CR");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\n"))
-      .next().withMessage("Set all end-line characters to 'CR' in this file.")
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\n")).next()
+        .withMessage("Set all end-line characters to 'CR' in this file.").noMore();
   }
 
   @Test
   public void lf_should_find_crlf_and_raise_issues() throws Exception {
     check.setEndLineCharacters("LF");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r\n"))
-      .next().withMessage("Set all end-line characters to 'LF' in this file.")
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r\n")).next()
+        .withMessage("Set all end-line characters to 'LF' in this file.").noMore();
   }
 
   @Test
   public void lf_should_find_cr_and_raise_issues() throws Exception {
     check.setEndLineCharacters("LF");
-    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r"))
-      .next().withMessage("Set all end-line characters to 'LF' in this file.")
-      .noMore();
+    GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r")).next()
+        .withMessage("Set all end-line characters to 'LF' in this file.").noMore();
   }
 
   @Test
-  public void should_throw_an_illegal_state_exception_as_the_endLineCharacters_parameter_is_not_valid() throws Exception {
+  public void should_throw_an_illegal_state_exception_as_the_endLineCharacters_parameter_is_not_valid()
+      throws Exception {
     try {
       check.setEndLineCharacters("abc");
       GherkinCheckVerifier.issues(check, getTestFileWithProperEndLineCharacters("\r")).noMore();
     } catch (IllegalStateException e) {
-      assertThat(e.getMessage()).isEqualTo("Check gherkin:end-line-characters (End-line characters should be consistent): "
-        + "endLineCharacters parameter is not valid.\nActual: 'abc'\nExpected: 'CR' or 'CRLF' or 'LF'");
+      assertThat(e.getMessage())
+          .isEqualTo("Check gherkin:end-line-characters (End-line characters should be consistent): "
+              + "endLineCharacters parameter is not valid.\nActual: 'abc'\nExpected: 'CR' or 'CRLF' or 'LF'");
     }
   }
 
-  private File getTestFileWithProperEndLineCharacters(String endLineCharacter) throws Exception {
-    File testFile = tempFolder.newFile();
-    Files
-      .asCharSink(testFile, StandardCharsets.UTF_8)
-      .write(Files
-        .asCharSource(CheckTestUtils.getTestFile("end-line-characters.feature"), StandardCharsets.UTF_8)
-        .read()
-        .replaceAll("\\r\\n", "\n")
-        .replaceAll("\\r", "\n")
-        .replaceAll("\\n", endLineCharacter));
-    return testFile;
+  private InputFile getTestFileWithProperEndLineCharacters(String endLineCharacter) throws Exception {
+    String relativePath = "end-line-characters.feature";
+    Path basedir = Paths.get("src/test/resources/checks/");
+    String contents = new String(Files.readAllBytes(basedir.resolve(relativePath)), StandardCharsets.UTF_8)
+        .replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n").replaceAll("\\n", endLineCharacter);
+
+    InputFile testInputFile = TestInputFileBuilder
+        .create("moduleKey", basedir.resolve(relativePath).toFile().getAbsolutePath())
+        .setCharset(StandardCharsets.UTF_8)
+        .setLanguage("gherkin")
+        .setModuleBaseDir(basedir)
+        .setType(InputFile.Type.MAIN)
+        .setMetadata(new FileMetadata().readMetadata(new FileReader(basedir.resolve(relativePath).toString())))
+        .setContents(contents)
+        .build();
+    return testInputFile;
   }
 
 }

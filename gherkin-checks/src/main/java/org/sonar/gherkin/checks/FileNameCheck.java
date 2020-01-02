@@ -50,7 +50,7 @@ public class FileNameCheck extends DoubleDispatchVisitorCheck {
 
   @Override
   public void visitGherkinDocument(GherkinDocumentTree tree) {
-    if (!getContext().getFile().getName().matches(format)) {
+    if (!getContext().getGherkinFile().filename().matches(format)) {
       addFileIssue("Rename this file to match the regular expression: " + format);
     }
     super.visitGherkinDocument(tree);

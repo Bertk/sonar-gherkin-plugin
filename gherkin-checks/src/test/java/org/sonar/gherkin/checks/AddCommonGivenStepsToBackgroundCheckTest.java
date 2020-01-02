@@ -26,22 +26,22 @@ public class AddCommonGivenStepsToBackgroundCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_no_common_given_steps_to_add_to_background() {
-    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestFile("add-common-given-steps-to-background/no-background-to-create.feature"));
+    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestInputFile("add-common-given-steps-to-background/no-background-to-create.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_there_are_common_given_steps_to_add_to_a_background_to_create() {
-    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestFile("add-common-given-steps-to-background/background-to-create.feature"));
+    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestInputFile("add-common-given-steps-to-background/background-to-create.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_there_are_common_given_steps_to_add_to_the_existing_background() {
-    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestFile("add-common-given-steps-to-background/steps-to-add-to-background.feature"));
+    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestInputFile("add-common-given-steps-to-background/steps-to-add-to-background.feature"));
   }
 
   @Test
   public void should_raise_an_issue_because_there_are_common_given_steps_to_add_to_the_existing_background_but_only_given_steps() {
-    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestFile("add-common-given-steps-to-background/only-given-steps-to-add-to-background.feature"));
+    GherkinCheckVerifier.verify(new AddCommonGivenStepsToBackgroundCheck(), CheckTestUtils.getTestInputFile("add-common-given-steps-to-background/only-given-steps-to-add-to-background.feature"));
   }
 
 }

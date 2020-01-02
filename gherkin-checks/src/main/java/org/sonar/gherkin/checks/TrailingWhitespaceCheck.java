@@ -19,7 +19,6 @@
  */
 package org.sonar.gherkin.checks;
 
-import com.google.common.io.Files;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.gherkin.visitors.CharsetAwareVisitor;
@@ -28,8 +27,11 @@ import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -47,12 +49,14 @@ public class TrailingWhitespaceCheck extends DoubleDispatchVisitorCheck implemen
 
   @Override
   public void visitGherkinDocument(GherkinDocumentTree tree) {
-    List<String> lines;
-    try {
-      lines = Files.readLines(getContext().getFile(), charset);
+    List<String> lines = new ArrayList<>();
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(getContext().getGherkinFile().inputStream()))){
+      while (reader.ready()) {
+        lines.add(reader.readLine());
+      }
     } catch (IOException e) {
       throw new IllegalStateException("Check gherking:" + this.getClass().getAnnotation(Rule.class).key()
-        + ": Error while reading " + getContext().getFile().getName(), e);
+        + ": Error while reading " + getContext().getGherkinFile().filename(), e);
     }
     for (int i = 0; i < lines.size(); i++) {
       String line = lines.get(i);

@@ -19,9 +19,8 @@
  */
 package org.sonar.plugins.gherkin.api.visitors;
 
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
-
-import java.io.File;
 
 public interface TreeVisitorContext {
 
@@ -33,6 +32,5 @@ public interface TreeVisitorContext {
   /**
    * @return the current file
    */
-  File getFile();
-  String getFilename();
+  InputFile getGherkinFile();
 }

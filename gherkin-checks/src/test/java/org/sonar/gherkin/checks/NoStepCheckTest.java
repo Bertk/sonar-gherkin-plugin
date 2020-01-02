@@ -26,12 +26,12 @@ public class NoStepCheckTest {
 
   @Test
   public void should_not_raise_any_issue_because_all_scenarios_define_steps() {
-    GherkinCheckVerifier.verify(new NoStepCheck(), CheckTestUtils.getTestFile("no-step/steps.feature"));
+    GherkinCheckVerifier.verify(new NoStepCheck(), CheckTestUtils.getTestInputFile("no-step/steps.feature"));
   }
 
   @Test
   public void should_raise_some_issues_because_some_scenarios_do_not_define_any_step() {
-    GherkinCheckVerifier.verify(new NoStepCheck(), CheckTestUtils.getTestFile("no-step/no-step.feature"));
+    GherkinCheckVerifier.verify(new NoStepCheck(), CheckTestUtils.getTestInputFile("no-step/no-step.feature"));
   }
 
 }

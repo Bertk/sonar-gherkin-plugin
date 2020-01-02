@@ -115,10 +115,10 @@ public class GherkinSquidSensor implements Sensor {
     try {
       for (InputFile inputFile : fileSystem.inputFiles(mainFilePredicate)) {
         issues.addAll(analyzeFile(sensorContext, inputFile, treeVisitors));
+        saveSingleFileIssues(inputFile, issues);
+        saveCrossFileIssues(inputFile);
         progressReport.nextFile();
       }
-      saveSingleFileIssues(issues);
-      saveCrossFileIssues();
       success = true;
     } finally {
       stopProgressReport(progressReport, success);
@@ -128,7 +128,7 @@ public class GherkinSquidSensor implements Sensor {
   private List<Issue> analyzeFile(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors) {
     try {
       ActionParser<Tree> parser = GherkinParserBuilder.createParser(fileSystem.encoding(), getFileLanguage(inputFile));
-      GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) parser.parse(new File(fileSystem.baseDir(), inputFile.filename()));
+      GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) parser.parse(inputFile.contents());
       return scanFile(inputFile, gherkinDocument, visitors);
 
     } catch (RecognitionException e) {
@@ -145,7 +145,7 @@ public class GherkinSquidSensor implements Sensor {
   }
 
   private List<Issue> scanFile(InputFile inputFile, GherkinDocumentTree gherkinDocument, List<TreeVisitor> visitors) {
-    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, new File (fileSystem.baseDir(), inputFile.filename()));
+    GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, inputFile);
     List<Issue> issues = new ArrayList<>();
     for (TreeVisitor visitor : visitors) {
       if (visitor instanceof CharsetAwareVisitor) {
@@ -161,14 +161,14 @@ public class GherkinSquidSensor implements Sensor {
     return issues;
   }
 
-  private void saveSingleFileIssues(List<Issue> issues) {
+  private void saveSingleFileIssues(InputFile inputFile, List<Issue> issues) {
     for (Issue issue : issues) {
-      issueSaver.saveIssue(issue);
+      issueSaver.saveIssue(inputFile, issue);
     }
   }
 
-  private void saveCrossFileIssues() {
-    CrossFileChecksIssueSaver.saveIssues(issueSaver);
+  private void saveCrossFileIssues(InputFile inputFile) {
+    CrossFileChecksIssueSaver.saveIssues(inputFile, issueSaver );
   }
 
   private void processRecognitionException(RecognitionException e, SensorContext sensorContext, InputFile inputFile) {

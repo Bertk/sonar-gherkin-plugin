@@ -26,14 +26,14 @@ public class TabCharacterCheckTest {
 
   @Test
   public void should_find_tab_characters_and_raise_an_issue() {
-    GherkinCheckVerifier.issues(new TabCharacterCheck(), CheckTestUtils.getTestFile("tab-character/tab-character.feature"))
+    GherkinCheckVerifier.issues(new TabCharacterCheck(), CheckTestUtils.getTestInputFile("tab-character/tab-character.feature"))
       .next().withMessage("Replace all tab characters in this file by sequences of whitespaces.")
       .noMore();
   }
 
   @Test
   public void should_not_find_tab_characters_and_not_raise_an_issue() {
-    GherkinCheckVerifier.issues(new TabCharacterCheck(), CheckTestUtils.getTestFile("tab-character/no-tab-character.feature"))
+    GherkinCheckVerifier.issues(new TabCharacterCheck(), CheckTestUtils.getTestInputFile("tab-character/no-tab-character.feature"))
       .noMore();
   }
 

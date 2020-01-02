@@ -30,31 +30,31 @@ public class TagNameCheckTest {
 
   @Test
   public void all_tags_should_follow_the_default_naming_convention_and_not_raise_any_issue() {
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("tag-name/tag-name-ok.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("tag-name/tag-name-ok.feature"));
   }
 
   @Test
   public void some_tags_should_not_follow_the_default_naming_convention_and_raise_some_issues() {
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("tag-name/tag-name-ko.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("tag-name/tag-name-ko.feature"));
   }
 
   @Test
   public void all_tags_should_follow_a_custom_naming_convention_and_not_raise_any_issue() {
     check.setFormat("^[a-z][-a-z]*$");
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("tag-name/tag-name-custom-ok.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("tag-name/tag-name-custom-ok.feature"));
   }
 
   @Test
   public void some_tags_should_not_follow_a_custom_naming_convention_and_raise_some_issues() {
     check.setFormat("^[a-z]+$");
-    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestFile("tag-name/tag-name-custom-ko.feature"));
+    GherkinCheckVerifier.verify(check, CheckTestUtils.getTestInputFile("tag-name/tag-name-custom-ko.feature"));
   }
 
   @Test
   public void should_throw_an_illegal_state_exception_as_the_format_parameter_regular_expression_is_not_valid() {
     try {
       check.setFormat("(");
-      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestFile("tag-name/tag-name-ok.feature")).noMore();
+      GherkinCheckVerifier.issues(check, CheckTestUtils.getTestInputFile("tag-name/tag-name-ok.feature")).noMore();
     } catch (IllegalStateException e) {
       assertThat(e.getMessage()).isEqualTo("Check gherkin:tag-naming-convention (Tags should comply with a naming convention): " +
         "format parameter \"(\" is not a valid regular expression.");

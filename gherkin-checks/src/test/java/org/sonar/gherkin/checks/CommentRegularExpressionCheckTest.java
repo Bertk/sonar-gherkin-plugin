@@ -20,15 +20,14 @@
 package org.sonar.gherkin.checks;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
-
-import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class CommentRegularExpressionCheckTest {
 
-  private final static File FILE = CheckTestUtils.getTestFile("comment-regular-expression.feature");
+  private final static InputFile FILE = CheckTestUtils.getTestInputFile("comment-regular-expression.feature");
   private CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
 
   @Test

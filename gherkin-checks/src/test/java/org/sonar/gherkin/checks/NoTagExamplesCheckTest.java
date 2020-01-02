@@ -26,7 +26,7 @@ public class NoTagExamplesCheckTest {
 
   @Test
   public void test() {
-    GherkinCheckVerifier.verify(new NoTagExamplesCheck(), CheckTestUtils.getTestFile("no-tag-examples.feature"));
+    GherkinCheckVerifier.verify(new NoTagExamplesCheck(), CheckTestUtils.getTestInputFile("no-tag-examples.feature"));
   }
 
 }
