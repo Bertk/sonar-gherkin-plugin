@@ -42,6 +42,7 @@ import java.util.regex.Pattern;
 public class EndLineCharactersCheck extends DoubleDispatchVisitorCheck implements CharsetAwareVisitor {
 
   private static final String DEFAULT_FORMAT = "LF";
+  @SuppressWarnings("unused")
   private Charset charset;
 
   @RuleProperty(

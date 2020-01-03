@@ -19,8 +19,6 @@
  */
 package org.sonar.plugins.gherkin;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.Arrays;
 
 import org.sonar.api.server.rule.RulesDefinition;

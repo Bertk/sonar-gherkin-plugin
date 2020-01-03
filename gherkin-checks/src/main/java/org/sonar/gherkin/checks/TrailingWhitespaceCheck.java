@@ -45,6 +45,7 @@ import java.util.regex.Pattern;
 public class TrailingWhitespaceCheck extends DoubleDispatchVisitorCheck implements CharsetAwareVisitor {
 
   private static final String WHITESPACE = "\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}";
+  @SuppressWarnings("unused")
   private Charset charset;
 
   @Override

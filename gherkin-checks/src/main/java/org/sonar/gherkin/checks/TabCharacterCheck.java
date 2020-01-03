@@ -44,6 +44,7 @@ import java.util.List;
 @ActivatedByDefault
 public class TabCharacterCheck extends SubscriptionVisitorCheck implements CharsetAwareVisitor {
 
+  @SuppressWarnings("unused")
   private Charset charset;
 
   @Override

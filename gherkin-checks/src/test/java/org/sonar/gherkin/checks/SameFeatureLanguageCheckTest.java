@@ -19,7 +19,6 @@
  */
 package org.sonar.gherkin.checks;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
 

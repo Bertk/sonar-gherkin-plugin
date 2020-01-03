@@ -21,26 +21,29 @@ package org.sonar.gherkin.visitors.metrics;
 
 import java.nio.charset.StandardCharsets;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.gherkin.parser.GherkinParserBuilder;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 
-import java.io.File;
+import TestUtils.TestUtils;
+
+import java.io.IOException;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class MetricsTest {
 
   @Test
-  public void metrics_UTF8_file() {
-    String path = "src/test/resources/metrics/metrics.feature";
-    Tree tree = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8).parse(new File(path));
+  public void metrics_UTF8_file() throws IOException {
+    InputFile inputFile = TestUtils.getTestInputFile("metrics/metrics.feature", StandardCharsets.UTF_8);
+    Tree tree = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8).parse(inputFile.contents());
     assertMetrics(tree);
   }
 
   @Test
-  public void metrics_UTF8_file_with_BOM() {
-    String path = "src/test/resources/metrics/metrics-bom.feature";
-    Tree tree = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8).parse(new File(path));
+  public void metrics_UTF8_file_with_BOM() throws IOException {
+    InputFile inputFile = TestUtils.getTestInputFile("metrics/metrics-bom.feature", StandardCharsets.UTF_8);
+    Tree tree = GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8).parse(inputFile.contents());
     assertMetrics(tree);
   }
 

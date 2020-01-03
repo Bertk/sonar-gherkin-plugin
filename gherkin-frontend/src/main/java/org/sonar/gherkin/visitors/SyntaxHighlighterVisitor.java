@@ -20,7 +20,6 @@
 package org.sonar.gherkin.visitors;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
@@ -34,12 +33,10 @@ import java.util.List;
 public class SyntaxHighlighterVisitor extends SubscriptionVisitor {
 
   private final SensorContext sensorContext;
-  private final FileSystem fileSystem;
   private NewHighlighting highlighting;
 
   public SyntaxHighlighterVisitor(SensorContext sensorContext) {
     this.sensorContext = sensorContext;
-    fileSystem = sensorContext.fileSystem();
   }
 
   @Override

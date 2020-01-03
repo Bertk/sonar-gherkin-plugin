@@ -51,7 +51,7 @@ import org.sonar.plugins.gherkin.api.visitors.TreeVisitor;
 import org.sonar.plugins.gherkin.api.visitors.issue.Issue;
 import org.sonar.plugins.gherkin.issuesaver.CrossFileChecksIssueSaver;
 import org.sonar.plugins.gherkin.issuesaver.IssueSaver;
-import org.sonar.squidbridge.ProgressReport;
+//import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
 import javax.annotation.Nullable;
@@ -105,23 +105,23 @@ public class GherkinSquidSensor implements Sensor {
 
     setParsingErrorCheckIfActivated(treeVisitors);
 
-    ProgressReport progressReport = new ProgressReport("Report about progress of Cucumber Gherkin analyzer", TimeUnit.SECONDS.toMillis(10));
-    progressReport.start(Lists.newArrayList(new File (fileSystem.baseDir(), fileSystem.inputFile(mainFilePredicate).filename())));
+//    ProgressReport progressReport = new ProgressReport("Report about progress of Cucumber Gherkin analyzer", TimeUnit.SECONDS.toMillis(10));
+//    progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
     issueSaver = new IssueSaver(sensorContext, checks);
     List<Issue> issues = new ArrayList<>();
 
-    boolean success = false;
+//    boolean success = false;
     try {
       for (InputFile inputFile : fileSystem.inputFiles(mainFilePredicate)) {
         issues.addAll(analyzeFile(sensorContext, inputFile, treeVisitors));
         saveSingleFileIssues(inputFile, issues);
         saveCrossFileIssues(inputFile);
-        progressReport.nextFile();
+//        progressReport.nextFile();
       }
-      success = true;
+//      success = true;
     } finally {
-      stopProgressReport(progressReport, success);
+//      stopProgressReport(progressReport, success);
     }
   }
 
@@ -196,13 +196,13 @@ public class GherkinSquidSensor implements Sensor {
     }
   }
 
-  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
-    if (success) {
-      progressReport.stop();
-    } else {
-      progressReport.cancel();
-    }
-  }
+//  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
+//    if (success) {
+//      progressReport.stop();
+//    } else {
+//      progressReport.cancel();
+//    }
+//  }
 
   private static void checkInterrupted(Exception e) {
     Throwable cause = Throwables.getRootCause(e);

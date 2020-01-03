@@ -35,13 +35,6 @@ public class IssueLocation {
     this(tree, tree, message);
   }
 
-//  public IssueLocation(SyntaxToken token, int offsetStart, int offsetEnd, @Nullable String message) {
-//    this.message = message;
-//    this.firstToken = token;
-//    this.startLineOffset = token.column() + offsetStart;
-//    this.endLineOffset = token.column() + offsetEnd;
-//  }
-
   public IssueLocation(Tree firstTree, Tree lastTree, @Nullable String message) {
     this.message = message;
     firstToken = ((GherkinTree) firstTree).getFirstToken();

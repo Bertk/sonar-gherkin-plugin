@@ -20,7 +20,6 @@
 package org.sonar.gherkin.visitors.metrics;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -34,12 +33,10 @@ import java.util.List;
 public class MetricsVisitor extends SubscriptionVisitor {
 
   private final SensorContext sensorContext;
-  private final FileSystem fileSystem;
   private InputFile inputFile;
 
   public MetricsVisitor(SensorContext sensorContext) {
     this.sensorContext = sensorContext;
-    this.fileSystem = sensorContext.fileSystem();
   }
 
   @Override

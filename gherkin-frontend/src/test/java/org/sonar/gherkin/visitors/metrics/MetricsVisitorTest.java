@@ -20,60 +20,47 @@
 package org.sonar.gherkin.visitors.metrics;
 
 import java.nio.charset.StandardCharsets;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.gherkin.parser.GherkinParserBuilder;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.visitors.TreeVisitorContext;
 
+import TestUtils.TestUtils;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MetricsVisitorTest {
 
-  @Test
+  @Test @Ignore("relocate test to sonar-gherkin-plugin project")
   public void verify_metrics() throws IOException {
-//    File moduleBaseDir = new File("src/test/resources/metrics/");
-//    File file = new File(moduleBaseDir, "metrics.feature");
-//    String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
-//
-//    SensorContextTester context = SensorContextTester.create(moduleBaseDir);
-//
-//    if (file.exists())
-//    {
-//    DefaultInputFile inputFile = TestInputFileBuilder.create("moduleKey", "metrics.feature")
-//                                                          .setLanguage("gherkin")
-//                                                          .setType(InputFile.Type.MAIN)
-//                                                          .setCharset(StandardCharsets.UTF_8)
-//                                                          .setModuleBaseDir(moduleBaseDir.toPath())
-//                                                          .initMetadata(content)
-//                                                          .build();
-//    
-//    context.fileSystem().add(inputFile);
-//
-//    MetricsVisitor metricsVisitor = new MetricsVisitor(context);
-//
-//    TreeVisitorContext treeVisitorContext = mock(TreeVisitorContext.class);
-//    when(treeVisitorContext.getFile()).thenReturn(inputFile.file());
-//    when(treeVisitorContext.getTopTree()).thenReturn((GherkinDocumentTree) GherkinParserBuilder.createTestParser(Charsets.UTF_8).parse(inputFile.file()));
-//
-//    metricsVisitor.scanTree(treeVisitorContext);
-//    }
-//    String componentKey = "moduleKey:metrics.feature";
-//    assertThat(context.measure(componentKey, CoreMetrics.NCLOC).value()).isEqualTo(22);
-//    assertThat(context.measure(componentKey, CoreMetrics.STATEMENTS).value()).isEqualTo(10);
-//    assertThat(context.measure(componentKey, CoreMetrics.COMMENT_LINES).value()).isEqualTo(2);
-//    assertThat(context.measure(componentKey, CoreMetrics.FUNCTIONS).value()).isEqualTo(4);
-//    assertThat(context.measure(componentKey, CoreMetrics.CLASSES).value()).isEqualTo(1);
+    File moduleBaseDir = new File("src/test/resources/metrics/");
+    InputFile inputFile = TestUtils.getTestInputFile("metrics/metrics.feature", StandardCharsets.UTF_8);
+    
+    SensorContextTester context = SensorContextTester.create(moduleBaseDir);
+    context.fileSystem().add(inputFile);
+    MetricsVisitor metricsVisitor = new MetricsVisitor(context);
+
+    TreeVisitorContext treeVisitorContext = mock(TreeVisitorContext.class);
+    when(treeVisitorContext.getGherkinFile()).thenReturn(inputFile);
+    when(treeVisitorContext.getTopTree()).thenReturn((GherkinDocumentTree) GherkinParserBuilder.createTestParser(StandardCharsets.UTF_8).parse(inputFile.contents()));
+
+    metricsVisitor.scanTree(treeVisitorContext);
+    
+    String key = "moduleKey:metrics.feature";
+    assertThat(context.measure(key, CoreMetrics.NCLOC).value()).isEqualTo(22);
+    assertThat(context.measure(key, CoreMetrics.STATEMENTS).value()).isEqualTo(10);
+    assertThat(context.measure(key, CoreMetrics.COMMENT_LINES).value()).isEqualTo(2);
+    assertThat(context.measure(key, CoreMetrics.FUNCTIONS).value()).isEqualTo(4);
+    assertThat(context.measure(key, CoreMetrics.CLASSES).value()).isEqualTo(1);
   }
 
 }

@@ -335,11 +335,11 @@ public class GherkinCheckVerifier extends SubscriptionVisitorCheck {
         .stream()
         .map(IssueLocation::startLine)
         .collect(Collectors.toList()));
-//    } else if (issue instanceof FileIssue) {
-//      result.addAll(((FileIssue) issue).secondaryLocations()
-//        .stream()
-//        .map(IssueLocation::startLine)
-//        .collect(Collectors.toList()));
+    } else if (issue instanceof FileIssue) {
+      result.addAll(((FileIssue) issue).secondaryLocations()
+        .stream()
+        .map(IssueLocation::startLine)
+        .collect(Collectors.toList()));
     }
     return Ordering.natural().sortedCopy(result);
   }

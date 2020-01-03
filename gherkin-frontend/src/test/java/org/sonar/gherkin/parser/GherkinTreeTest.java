@@ -20,13 +20,12 @@
 package org.sonar.gherkin.parser;
 
 import java.nio.charset.StandardCharsets;
-import com.google.common.io.Files;
 import com.sonar.sslr.api.typed.ActionParser;
+
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.gherkin.parser.GherkinLexicalGrammar;
 import org.sonar.gherkin.parser.GherkinParserBuilder;
 import org.sonar.plugins.gherkin.api.tree.Tree;
-
-import java.io.File;
 
 import static org.junit.Assert.fail;
 
@@ -55,9 +54,9 @@ public abstract class GherkinTreeTest {
     fail("Did not throw a RecognitionException as expected.");
   }
 
-  public void checkNotParsed(File file) {
+  public void checkNotParsed(InputFile inputFile) {
     try {
-      parser.parse(Files.toString(file, StandardCharsets.UTF_8));
+      parser.parse(inputFile.contents());
     } catch (Exception e) {
       return;
     }

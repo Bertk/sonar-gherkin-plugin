@@ -27,11 +27,9 @@ import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
 import org.sonar.plugins.gherkin.api.visitors.issue.LineIssue;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
 
-import java.io.File;
 import java.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 public class IssueTest {
 
@@ -39,7 +37,6 @@ public class IssueTest {
   };
   private static final String MESSAGE = "message";
   private static final InternalSyntaxToken TOKEN = new InternalSyntaxToken(5, 1, "value", Collections.emptyList(), false, false);
-  private static final File FILE = mock(File.class);
 
   @Test
   public void test_file_issue() throws Exception {
@@ -48,19 +45,17 @@ public class IssueTest {
     assertThat(fileIssue.check()).isEqualTo(CHECK);
     assertThat(fileIssue.cost()).isNull();
     assertThat(fileIssue.message()).isEqualTo(MESSAGE);
-    //assertThat(fileIssue.file()).isEqualTo(FILE);
 
     fileIssue.cost(42);
     assertThat(fileIssue.cost()).isEqualTo(42);
 
-//    fileIssue.secondary(FILE, TOKEN, "secondary message");
-//    assertThat(fileIssue.secondaryLocations()).hasSize(1);
-//    assertThat(fileIssue.secondaryLocations().get(0).message()).isEqualTo("secondary message");
-//    assertThat(fileIssue.secondaryLocations().get(0).file()).isEqualTo(FILE);
-//
-//    fileIssue.secondary(TOKEN, "new secondary message");
-//    assertThat(fileIssue.secondaryLocations()).hasSize(2);
-//    assertThat(fileIssue.secondaryLocations().get(1).message()).isEqualTo("new secondary message");
+    fileIssue.secondary(TOKEN, "secondary message");
+    assertThat(fileIssue.secondaryLocations()).hasSize(1);
+    assertThat(fileIssue.secondaryLocations().get(0).message()).isEqualTo("secondary message");
+
+    fileIssue.secondary(TOKEN, "new secondary message");
+    assertThat(fileIssue.secondaryLocations()).hasSize(2);
+    assertThat(fileIssue.secondaryLocations().get(1).message()).isEqualTo("new secondary message");
   }
 
   @Test
@@ -71,7 +66,6 @@ public class IssueTest {
     assertThat(lineIssue.cost()).isNull();
     assertThat(lineIssue.message()).isEqualTo(MESSAGE);
     assertThat(lineIssue.line()).isEqualTo(42);
-    //assertThat(lineIssue.file()).isEqualTo(FILE);
 
     lineIssue.cost(42);
     assertThat(lineIssue.cost()).isEqualTo(42);
@@ -104,7 +98,6 @@ public class IssueTest {
     preciseIssue.secondary(TOKEN, "secondary message");
     assertThat(preciseIssue.secondaryLocations()).hasSize(1);
     assertThat(preciseIssue.secondaryLocations().get(0).message()).isEqualTo("secondary message");
-    //assertThat(preciseIssue.secondaryLocations().get(0).file()).isEqualTo(FILE);
 
     preciseIssue.secondary(TOKEN, "new secondary message");
     assertThat(preciseIssue.secondaryLocations()).hasSize(2);

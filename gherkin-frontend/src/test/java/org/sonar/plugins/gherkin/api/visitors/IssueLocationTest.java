@@ -24,15 +24,12 @@ import org.sonar.gherkin.tree.impl.InternalSyntaxToken;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
 
-import java.io.File;
 import java.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 public class IssueLocationTest {
 
-  private static final File FILE = mock(File.class);
   private static final String MESSAGE = "message";
 
   @Test

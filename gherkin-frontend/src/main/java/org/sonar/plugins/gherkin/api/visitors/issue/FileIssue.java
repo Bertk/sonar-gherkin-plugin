@@ -20,6 +20,10 @@
 package org.sonar.plugins.gherkin.api.visitors.issue;
 
 import org.sonar.plugins.gherkin.api.GherkinCheck;
+import org.sonar.plugins.gherkin.api.tree.Tree;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -28,11 +32,13 @@ public class FileIssue implements Issue {
   private final GherkinCheck check;
   private Double cost;
   private final String message;
+  private final List<IssueLocation> secondaryLocations;
 
   public FileIssue(GherkinCheck check, String message) {
     this.check = check;
     this.message = message;
     this.cost = null;
+    this.secondaryLocations = new ArrayList<>();
   }
 
   public String message() {
@@ -56,4 +62,17 @@ public class FileIssue implements Issue {
     return this;
   }
 
+  public List<IssueLocation> secondaryLocations() {
+    return secondaryLocations;
+  }
+
+  public FileIssue secondary(IssueLocation secondaryLocation) {
+    secondaryLocations.add(secondaryLocation);
+    return this;
+  }
+
+  public FileIssue secondary(Tree tree, String message) {
+    secondaryLocations.add(new IssueLocation(tree, message));
+    return this;
+  } 
 }
