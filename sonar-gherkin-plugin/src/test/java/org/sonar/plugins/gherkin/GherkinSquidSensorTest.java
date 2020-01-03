@@ -26,6 +26,7 @@ import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -117,12 +118,7 @@ public class GherkinSquidSensorTest {
   public void should_execute_and_save_issues_on_UTF8_with_BOM_file() {
     inputFile("my-feature-bom.feature", StandardCharsets.UTF_8);
 
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, MissingNewlineAtEndOfFileCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .build();
+    ActiveRules activeRules = createActiveRuleSet();
     checkFactory = new CheckFactory(activeRules);
 
     createGherkinSquidSensor().execute(context);
@@ -130,16 +126,25 @@ public class GherkinSquidSensorTest {
     assertThat(context.allIssues()).hasSize(3);
   }
 
+  private ActiveRules createActiveRuleSet() {
+    ActiveRules activeRules = (new ActiveRulesBuilder())
+      .addRule(new NewActiveRule.Builder()
+                                .setName(CommentConventionCheck.class.getAnnotation(Rule.class).name())
+                                .setRuleKey(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
+                                .build())
+      .addRule(new NewActiveRule.Builder()
+                                .setName(MissingNewlineAtEndOfFileCheck.class.getAnnotation(Rule.class).name())
+                                .setRuleKey(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, MissingNewlineAtEndOfFileCheck.class.getAnnotation(Rule.class).key()))
+                                .build())
+      .build();
+    return activeRules;
+  }
+
   @Test
   public void should_execute_and_save_issues_on_UTF8_file() {
     inputFile("my-feature.feature", StandardCharsets.UTF_8);
 
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, MissingNewlineAtEndOfFileCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .build();
+    ActiveRules activeRules = createActiveRuleSet();
     checkFactory = new CheckFactory(activeRules);
 
     createGherkinSquidSensor().execute(context);
@@ -151,12 +156,7 @@ public class GherkinSquidSensorTest {
   public void should_execute_and_save_issues_on_UTF8_with_BOM_file_french() {
     inputFile("my-feature-bom-fr.feature", StandardCharsets.UTF_8);
 
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, MissingNewlineAtEndOfFileCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .build();
+    ActiveRules activeRules = createActiveRuleSet();
     checkFactory = new CheckFactory(activeRules);
 
     createGherkinSquidSensor().execute(context);
@@ -168,12 +168,7 @@ public class GherkinSquidSensorTest {
   public void should_execute_and_save_issues_on_UTF8_file_french() {
     inputFile("my-feature-fr.feature", StandardCharsets.UTF_8);
 
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, CommentConventionCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, MissingNewlineAtEndOfFileCheck.class.getAnnotation(Rule.class).key()))
-      .activate()
-      .build();
+    ActiveRules activeRules = createActiveRuleSet();
     checkFactory = new CheckFactory(activeRules);
 
     createGherkinSquidSensor().execute(context);
@@ -184,12 +179,12 @@ public class GherkinSquidSensorTest {
   @Test
   public void should_raise_an_issue_because_the_parsing_error_rule_is_activated() {
     inputFile("parsing-error.feature", StandardCharsets.UTF_8);
-
     ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, "S2260"))
-      .activate()
-      .build();
-
+        .addRule(new NewActiveRule.Builder()
+                                  .setName("S2260")
+                                  .setRuleKey(RuleKey.of(GherkinRulesDefinition.REPOSITORY_KEY, "S2260"))
+                                  .build())
+        .build();
     checkFactory = new CheckFactory(activeRules);
 
     context.setActiveRules(activeRules);

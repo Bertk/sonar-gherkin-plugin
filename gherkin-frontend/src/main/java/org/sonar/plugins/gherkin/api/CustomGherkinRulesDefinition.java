@@ -21,7 +21,7 @@ package org.sonar.plugins.gherkin.api;
 
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.ScannerSide;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
