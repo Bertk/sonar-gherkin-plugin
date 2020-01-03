@@ -23,21 +23,18 @@ import com.google.common.annotations.VisibleForTesting;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.TagTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@GherkinRule
 @Rule(
   key = "tag-naming-convention",
   name = "Tags should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.TAG})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
 public class TagNameCheck extends DoubleDispatchVisitorCheck {
 
   private static final String DEFAULT = "^[a-z][-a-z0-9]*$";

@@ -21,25 +21,22 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.FeatureDeclarationTree;
 import org.sonar.plugins.gherkin.api.tree.TagTree;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@GherkinRule
 @Rule(
   key = "useless-tag",
   name = "Useless tags should be removed",
   priority = Priority.MINOR,
   tags = {Tags.TAG, Tags.UNUSED})
-@SqaleConstantRemediation("2min")
-@ActivatedByDefault
 public class UselessTagCheck extends DoubleDispatchVisitorCheck {
 
   private Set<String> featureTags;

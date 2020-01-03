@@ -22,19 +22,18 @@ package org.sonar.gherkin.checks;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@GherkinRule
 @Rule(
   key = "then-step-regular-expression",
   name = "Then steps should follow a regular expression",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("10min")
 public class ThenStepRegularExpressionCheck extends DoubleDispatchVisitorCheck {
 
   private static final String DEFAULT_REGULAR_EXPRESSION = ".*";

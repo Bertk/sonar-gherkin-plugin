@@ -21,20 +21,18 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.BackgroundTree;
 import org.sonar.plugins.gherkin.api.tree.ScenarioOutlineTree;
 import org.sonar.plugins.gherkin.api.tree.ScenarioTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "no-step",
   name = "Scenarios that do not define any step should be removed",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
 public class NoStepCheck extends DoubleDispatchVisitorCheck {
 
   @Override

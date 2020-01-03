@@ -39,6 +39,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.sonarsource.analyzer-commons</groupId>
+			<artifactId>sonar-analyzer-commons</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
@@ -75,6 +79,12 @@
 							<shadedArtifactAttached>false</shadedArtifactAttached>
 							<minimizeJar>false</minimizeJar>
 							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<artifactSet>
+								<excludes>
+									<exclude>com.google.code.findbugs</exclude>
+									<exclude>org.mockito:mockito-all</exclude>
+								</excludes>
+							</artifactSet>
 						</configuration>
 					</execution>
 				</executions>

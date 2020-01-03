@@ -23,22 +23,23 @@ import com.google.common.annotations.VisibleForTesting;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.TagTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@GherkinRule
 @Rule(
   key = "allowed-tags",
   name = "Only tags matching a regular expression should be used",
   priority = Priority.MINOR,
   tags = {Tags.TAG, Tags.CONVENTION})
-@SqaleConstantRemediation("5min")
 public class AllowedTagsCheck extends DoubleDispatchVisitorCheck {
 
   private static final String DEFAULT = "smoke|nrt";
+
 
   @RuleProperty(
     key = "allowedTags",

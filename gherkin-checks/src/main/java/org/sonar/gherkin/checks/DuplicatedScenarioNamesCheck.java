@@ -24,24 +24,21 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.BasicScenarioTree;
 import org.sonar.plugins.gherkin.api.tree.NameTree;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.SubscriptionVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@GherkinRule
 @Rule(
   key = "duplicated-scenario-names",
   name = "Scenarios should have a unique name",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL, Tags.READABILITY})
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
 public class DuplicatedScenarioNamesCheck extends SubscriptionVisitorCheck {
 
   private Map<String, List<FileNameTree>> names = new HashMap<>();

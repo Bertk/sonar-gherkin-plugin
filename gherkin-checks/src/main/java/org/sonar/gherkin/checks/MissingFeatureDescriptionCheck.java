@@ -21,16 +21,16 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.FeatureDeclarationTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "missing-feature-description",
   name = "Features should have a description",
   priority = Priority.INFO,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("10min")
 public class MissingFeatureDescriptionCheck extends DoubleDispatchVisitorCheck {
 
   @Override

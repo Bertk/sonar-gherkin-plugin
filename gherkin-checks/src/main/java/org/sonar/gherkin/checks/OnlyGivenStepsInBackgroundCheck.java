@@ -21,19 +21,17 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.BackgroundTree;
 import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "only-given-steps-in-background",
   name = "Non-Given steps should be moved out of Background",
   priority = Priority.CRITICAL,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("15min")
-@ActivatedByDefault
 public class OnlyGivenStepsInBackgroundCheck extends DoubleDispatchVisitorCheck {
 
   @Override

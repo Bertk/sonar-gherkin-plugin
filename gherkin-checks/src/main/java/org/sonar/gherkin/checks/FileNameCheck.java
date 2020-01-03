@@ -23,21 +23,19 @@ import com.google.common.annotations.VisibleForTesting;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@GherkinRule
 @Rule(
   key = "S1578",
   name = "File names should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
+
 public class FileNameCheck extends DoubleDispatchVisitorCheck {
 
   private static final String DEFAULT = "^[a-z][-A-Za-z0-9]*\\.feature$";

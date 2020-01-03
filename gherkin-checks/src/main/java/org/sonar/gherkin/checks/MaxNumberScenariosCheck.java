@@ -23,18 +23,16 @@ import com.google.common.annotations.VisibleForTesting;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.FeatureTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "max-number-scenarios",
   name = "Features should not contain too many scenarios",
   priority = Priority.MAJOR,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("30min")
-@ActivatedByDefault
 public class MaxNumberScenariosCheck extends DoubleDispatchVisitorCheck {
 
   private static final int DEFAULT = 12;

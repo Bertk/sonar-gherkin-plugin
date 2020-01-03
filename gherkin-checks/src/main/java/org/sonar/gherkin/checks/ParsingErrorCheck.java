@@ -21,16 +21,14 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "S2260",
   name = "Gherkin parser failure",
   priority = Priority.CRITICAL,
   tags = {Tags.BUG})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
 public class ParsingErrorCheck extends DoubleDispatchVisitorCheck {
 }

@@ -20,6 +20,7 @@
 package org.sonar.plugins.gherkin.issuesaver.crossfile;
 
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.gherkin.checks.DuplicatedScenarioNamesCheck;
 import org.sonar.gherkin.checks.FileNameTree;
 import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
@@ -38,19 +39,19 @@ public class DuplicatedScenarioNamesIssueSaver extends CrossFileCheckIssueSaver 
   }
 
   @Override
-  public void saveIssues(InputFile inputFile) {
+  public void saveIssues(SensorContext sensorContext, InputFile inputFile) {
     Optional<DuplicatedScenarioNamesCheck> check = getIssueSaver().getCheck(DuplicatedScenarioNamesCheck.class);
 
     if (check.isPresent()) {
       check.get().getNames().entrySet()
         .stream()
         .filter(entry -> isScenarioNameDuplicated(entry.getValue()))
-        .forEach(entry -> saveIssue(inputFile, check.get(), entry));
+        .forEach(entry -> saveIssue(sensorContext, inputFile, check.get(), entry));
     }
   }
 
-  private void saveIssue(InputFile inputFile, DuplicatedScenarioNamesCheck check, Map.Entry<String, List<FileNameTree>> entry) {
-    getIssueSaver().saveIssue(inputFile,
+  private void saveIssue(SensorContext sensorContext, InputFile inputFile, DuplicatedScenarioNamesCheck check, Map.Entry<String, List<FileNameTree>> entry) {
+    getIssueSaver().saveFileIssues(sensorContext, inputFile,
                               new PreciseIssue(check,
                                                new IssueLocation(entry.getValue().get(0).getName(), buildIssueMessage(entry)))
                               );

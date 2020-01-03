@@ -21,23 +21,20 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.NameTree;
 import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@GherkinRule
 @Rule(
   key = "wording-business-level",
   name = "Wording should remain at business level",
   priority = Priority.MAJOR,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
 public class WordingBusinessLevelCheck extends DoubleDispatchVisitorCheck {
 
   protected static final String[] FORBIDDEN_WORDS = {"checkbox", "click", "drop-down list", "dropdown list", "field", "fill in the form", "radio button"};

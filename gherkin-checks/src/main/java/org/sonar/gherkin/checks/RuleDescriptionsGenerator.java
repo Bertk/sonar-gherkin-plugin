@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -31,16 +32,14 @@ import java.util.stream.Collectors;
 
 public class RuleDescriptionsGenerator {
 
-  private static final String UTF_8 = "UTF-8";
-
   private final Map<String, String> tags = ImmutableMap.<String, String>builder()
     .put("[[allForbiddenWords]]", generateForbiddenWordsHtmlTable())
     .build();
 
   public void generateHtmlRuleDescription(String templatePath, String outputPath) {
     try (OutputStream fileOutputStream = new FileOutputStream(outputPath)) {
-      Writer writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, UTF_8));
-      writer.write(replaceTags(FileUtils.readFileToString(new File(templatePath), UTF_8)));
+      Writer writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8));
+      writer.write(replaceTags(FileUtils.readFileToString(new File(templatePath), "UTF-8")));
       writer.flush();
       writer.close();
     } catch (IOException e) {

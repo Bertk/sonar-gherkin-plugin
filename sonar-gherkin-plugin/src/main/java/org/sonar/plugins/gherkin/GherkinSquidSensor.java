@@ -23,6 +23,8 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -51,17 +53,21 @@ import org.sonar.plugins.gherkin.api.visitors.TreeVisitor;
 import org.sonar.plugins.gherkin.api.visitors.issue.Issue;
 import org.sonar.plugins.gherkin.issuesaver.CrossFileChecksIssueSaver;
 import org.sonar.plugins.gherkin.issuesaver.IssueSaver;
-//import org.sonar.squidbridge.ProgressReport;
+import org.sonarsource.analyzer.commons.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
 import javax.annotation.Nullable;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+@ScannerSide
 public class GherkinSquidSensor implements Sensor {
 
   private static final Logger LOG = Loggers.get(GherkinSquidSensor.class);
@@ -103,25 +109,29 @@ public class GherkinSquidSensor implements Sensor {
     treeVisitors.add(new SyntaxHighlighterVisitor(sensorContext));
     treeVisitors.add(new MetricsVisitor(sensorContext));
 
+    Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
+    Collection<String> files = StreamSupport.stream(inputFiles.spliterator(), false)
+        .map(InputFile::toString)
+        .collect(Collectors.toList());
+    
+    ProgressReport progressReport = new ProgressReport("Report about progress of Cucumber Gherkin analyzer", TimeUnit.SECONDS.toMillis(10));
+    progressReport.start(files);
+
     setParsingErrorCheckIfActivated(treeVisitors);
-
-//    ProgressReport progressReport = new ProgressReport("Report about progress of Cucumber Gherkin analyzer", TimeUnit.SECONDS.toMillis(10));
-//    progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
-
-    issueSaver = new IssueSaver(sensorContext, checks);
+    issueSaver = new IssueSaver(checks);
     List<Issue> issues = new ArrayList<>();
 
-//    boolean success = false;
+    boolean success = false;
     try {
       for (InputFile inputFile : fileSystem.inputFiles(mainFilePredicate)) {
         issues.addAll(analyzeFile(sensorContext, inputFile, treeVisitors));
-        saveSingleFileIssues(inputFile, issues);
-        saveCrossFileIssues(inputFile);
-//        progressReport.nextFile();
+        saveSingleFileIssues(sensorContext, inputFile, issues);
+        saveCrossFileIssues(sensorContext, inputFile);
+        progressReport.nextFile();
       }
-//      success = true;
+      success = true;
     } finally {
-//      stopProgressReport(progressReport, success);
+      stopProgressReport(progressReport, success);
     }
   }
 
@@ -129,7 +139,7 @@ public class GherkinSquidSensor implements Sensor {
     try {
       ActionParser<Tree> parser = GherkinParserBuilder.createParser(fileSystem.encoding(), getFileLanguage(inputFile));
       GherkinDocumentTree gherkinDocument = (GherkinDocumentTree) parser.parse(inputFile.contents());
-      return scanFile(inputFile, gherkinDocument, visitors);
+      return scanFile(sensorContext, inputFile, gherkinDocument, visitors);
 
     } catch (RecognitionException e) {
       checkInterrupted(e);
@@ -139,14 +149,15 @@ public class GherkinSquidSensor implements Sensor {
 
     } catch (Exception e) {
       checkInterrupted(e);
-      throw new AnalysisException("Unable to analyse file: " + inputFile.toString(), e);
+      throw new AnalysisException("Unable to analyse file: " + inputFile.uri(), e);
     }
     return new ArrayList<>();
   }
 
-  private List<Issue> scanFile(InputFile inputFile, GherkinDocumentTree gherkinDocument, List<TreeVisitor> visitors) {
+  private List<Issue> scanFile(SensorContext sensorContext, InputFile inputFile, GherkinDocumentTree gherkinDocument, List<TreeVisitor> visitors) {
     GherkinVisitorContext context = new GherkinVisitorContext(gherkinDocument, inputFile);
     List<Issue> issues = new ArrayList<>();
+    
     for (TreeVisitor visitor : visitors) {
       if (visitor instanceof CharsetAwareVisitor) {
         ((CharsetAwareVisitor) visitor).setCharset(fileSystem.encoding());
@@ -161,14 +172,14 @@ public class GherkinSquidSensor implements Sensor {
     return issues;
   }
 
-  private void saveSingleFileIssues(InputFile inputFile, List<Issue> issues) {
+  private void saveSingleFileIssues(SensorContext sensorContext, InputFile inputFile, List<Issue> issues) {
     for (Issue issue : issues) {
-      issueSaver.saveIssue(inputFile, issue);
+      issueSaver.saveFileIssues(sensorContext, inputFile, issue);
     }
   }
 
-  private void saveCrossFileIssues(InputFile inputFile) {
-    CrossFileChecksIssueSaver.saveIssues(inputFile, issueSaver );
+  private void saveCrossFileIssues(SensorContext sensorContext, InputFile inputFile) {
+    CrossFileChecksIssueSaver.saveIssues(sensorContext, inputFile, issueSaver );
   }
 
   private void processRecognitionException(RecognitionException e, SensorContext sensorContext, InputFile inputFile) {
@@ -196,13 +207,13 @@ public class GherkinSquidSensor implements Sensor {
     }
   }
 
-//  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
-//    if (success) {
-//      progressReport.stop();
-//    } else {
-//      progressReport.cancel();
-//    }
-//  }
+  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
+    if (success) {
+      progressReport.stop();
+    } else {
+      progressReport.cancel();
+    }
+  }
 
   private static void checkInterrupted(Exception e) {
     Throwable cause = Throwables.getRootCause(e);

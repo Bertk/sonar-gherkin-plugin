@@ -23,18 +23,16 @@ import com.google.common.annotations.VisibleForTesting;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "step-sentence-length",
   name = "Step sentences should not be too long",
   priority = Priority.MAJOR,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
 public class StepSentenceLengthCheck extends DoubleDispatchVisitorCheck {
 
   private static final int DEFAULT_LENGTH = 100;

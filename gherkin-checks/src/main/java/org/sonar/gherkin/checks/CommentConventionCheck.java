@@ -21,18 +21,16 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.SyntaxTrivia;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "comment-convention",
   name = "All comments should be formatted consistently",
   priority = Priority.MINOR,
   tags = {Tags.READABILITY})
-@SqaleConstantRemediation("2min")
-@ActivatedByDefault
 public class CommentConventionCheck extends DoubleDispatchVisitorCheck {
 
   @Override

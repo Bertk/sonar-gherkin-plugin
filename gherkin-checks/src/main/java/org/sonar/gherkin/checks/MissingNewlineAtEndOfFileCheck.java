@@ -21,22 +21,19 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+@GherkinRule
 @Rule(
   key = "empty-line-end-of-file",
   name = "Files should contain an empty new line at the end",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("1min")
-@ActivatedByDefault
 public class MissingNewlineAtEndOfFileCheck extends DoubleDispatchVisitorCheck {
 
   @Override

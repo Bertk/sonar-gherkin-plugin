@@ -21,25 +21,22 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.*;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@GherkinRule
 @Rule(
   key = "tag-right-level",
   name = "Tags should be defined at the right level",
   priority = Priority.MINOR,
   tags = {Tags.TAG, Tags.READABILITY})
-@SqaleConstantRemediation("2min")
-@ActivatedByDefault
 public class TagRightLevelCheck extends DoubleDispatchVisitorCheck {
 
   private PrefixTree featurePrefix;

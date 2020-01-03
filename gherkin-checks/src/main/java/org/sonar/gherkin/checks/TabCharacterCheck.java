@@ -22,12 +22,10 @@ package org.sonar.gherkin.checks;
 import com.google.common.collect.ImmutableList;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.gherkin.visitors.CharsetAwareVisitor;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.SubscriptionVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,13 +33,12 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+@GherkinRule
 @Rule(
   key = "tab-character",
   name = "Tabulation characters should not be used",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("2min")
-@ActivatedByDefault
 public class TabCharacterCheck extends SubscriptionVisitorCheck implements CharsetAwareVisitor {
 
   @SuppressWarnings("unused")

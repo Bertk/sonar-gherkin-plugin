@@ -17,28 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.gherkin.checks;
+package org.sonar.gherkin.checks.annotations;
 
-import org.sonar.check.Priority;
-import org.sonar.check.Rule;
-import org.sonar.gherkin.checks.annotations.GherkinRule;
-import org.sonar.plugins.gherkin.api.tree.StepTree;
-import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@GherkinRule
-@Rule(
-  key = "step-of-unknown-type",
-  name = "Steps of unknown type should not be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.DESIGN})
-public class StepOfUnknownTypeCheck extends DoubleDispatchVisitorCheck {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 
-  @Override
-  public void visitStep(StepTree tree) {
-    if (tree.semanticType() == StepTree.SemanticStepType.UNKNOWN) {
-      addPreciseIssue(tree.prefix(), "Update the prefix of this unknown type step.");
-    }
-    super.visitStep(tree);
-  }
+public @interface GherkinRule {
 
 }

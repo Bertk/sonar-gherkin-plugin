@@ -21,22 +21,21 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.*;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@GherkinRule
 @Rule(
   key = "add-common-given-steps-to-background",
   name = "Common Given steps should be added to Background",
   priority = Priority.MAJOR,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("15min")
-@ActivatedByDefault
+
 public class AddCommonGivenStepsToBackgroundCheck extends DoubleDispatchVisitorCheck {
 
   private final List<List<StepTree>> allSteps = new ArrayList<>();

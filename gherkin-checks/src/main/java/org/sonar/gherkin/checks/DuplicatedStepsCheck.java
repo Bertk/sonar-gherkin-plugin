@@ -23,25 +23,22 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.*;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@GherkinRule
 @Rule(
   key = "duplicated-steps",
   name = "Duplicated steps should be removed",
   priority = Priority.CRITICAL,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("15min")
-@ActivatedByDefault
 public class DuplicatedStepsCheck extends DoubleDispatchVisitorCheck {
 
   private Map<String, List<StepTree>> backgroundStepsBySentence = new HashMap<>();

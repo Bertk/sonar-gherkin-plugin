@@ -21,18 +21,16 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "star-step-prefix",
   name = "Star (*) step prefixes should not be used",
   priority = Priority.MAJOR,
   tags = {Tags.READABILITY})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
 public class StarStepPrefixCheck extends DoubleDispatchVisitorCheck {
 
   @Override

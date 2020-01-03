@@ -21,22 +21,20 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.ScenarioOutlineTree;
 import org.sonar.plugins.gherkin.api.tree.ScenarioTree;
 import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 import java.util.List;
 
+@GherkinRule
 @Rule(
   key = "use-and-but",
   name = "And and But prefixes should be used instead of redundant Given/When/Then prefixes",
   priority = Priority.MINOR,
   tags = {Tags.READABILITY})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
 public class UseAndButCheck extends DoubleDispatchVisitorCheck {
 
   @Override

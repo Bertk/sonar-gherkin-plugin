@@ -21,12 +21,10 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.gherkin.visitors.CharsetAwareVisitor;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,13 +33,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@GherkinRule
 @Rule(
   key = "S1131",
   name = "Lines should not end with trailing whitespaces",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("1min")
-@ActivatedByDefault
 public class TrailingWhitespaceCheck extends DoubleDispatchVisitorCheck implements CharsetAwareVisitor {
 
   private static final String WHITESPACE = "\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}";

@@ -24,22 +24,19 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.*;
 import org.sonar.plugins.gherkin.api.visitors.SubscriptionVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
+@GherkinRule
 @Rule(
   key = "indentation",
   name = "Source code should be properly indented",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.READABILITY})
-@SqaleConstantRemediation("2min")
-@ActivatedByDefault
 public class IndentationCheck extends SubscriptionVisitorCheck {
 
   private static final int DEFAULT = 2;

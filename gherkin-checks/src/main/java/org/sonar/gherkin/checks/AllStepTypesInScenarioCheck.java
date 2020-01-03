@@ -21,23 +21,20 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.*;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@GherkinRule
 @Rule(
   key = "all-step-types-in-scenario",
   name = "Scenarios should define at least one of each Given/When/Then step type",
   priority = Priority.CRITICAL,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("15min")
-@ActivatedByDefault
 public class AllStepTypesInScenarioCheck extends DoubleDispatchVisitorCheck {
 
   private List<StepTree> backgroundSteps = new ArrayList<>();

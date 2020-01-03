@@ -21,24 +21,21 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.ExamplesTree;
 import org.sonar.plugins.gherkin.api.tree.ScenarioOutlineTree;
 import org.sonar.plugins.gherkin.api.tree.TableTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@GherkinRule
 @Rule(
   key = "missing-data-table-column",
   name = "Missing data table columns should be added",
   priority = Priority.CRITICAL,
   tags = {Tags.BUG})
-@SqaleConstantRemediation("15min")
-@ActivatedByDefault
 public class MissingDataTableColumnCheck extends DoubleDispatchVisitorCheck {
 
   @Override

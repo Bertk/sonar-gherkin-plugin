@@ -21,17 +21,17 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.ExamplesTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "no-tag-examples",
   name = "Tags should not be set on Examples",
   priority = Priority.MINOR,
   tags = {Tags.READABILITY, Tags.TAG})
-@SqaleConstantRemediation("2min")
 public class NoTagExamplesCheck extends DoubleDispatchVisitorCheck {
 
   @Override

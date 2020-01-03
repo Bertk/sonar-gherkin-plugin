@@ -23,23 +23,20 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.FeatureDeclarationTree;
 import org.sonar.plugins.gherkin.api.tree.NameTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@GherkinRule
 @Rule(
   key = "duplicated-feature-names",
   name = "Features should have a unique name",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL, Tags.DESIGN})
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
 public class DuplicatedFeatureNamesCheck extends DoubleDispatchVisitorCheck {
 
   private Map<String, List<FileNameTree>> names = new HashMap<>();

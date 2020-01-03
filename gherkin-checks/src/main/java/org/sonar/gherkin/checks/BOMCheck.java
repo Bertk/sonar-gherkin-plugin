@@ -21,22 +21,19 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.gherkin.visitors.CharsetAwareVisitor;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+@GherkinRule
 @Rule(
   key = "bom-utf8-files",
   name = "Byte Order Mark (BOM) should not be used for UTF-8 files",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
 public class BOMCheck extends DoubleDispatchVisitorCheck implements CharsetAwareVisitor {
 
   private Charset charset;

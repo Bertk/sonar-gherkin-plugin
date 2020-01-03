@@ -21,15 +21,13 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 
+@GherkinRule
 @Rule(
   key = "S1135",
   name = "\"TODO\" tags should be handled",
   priority = Priority.INFO)
-@SqaleConstantRemediation("15min")
-@ActivatedByDefault
 public class TodoTagPresenceCheck extends CommentContainsPatternChecker {
 
   public TodoTagPresenceCheck() {

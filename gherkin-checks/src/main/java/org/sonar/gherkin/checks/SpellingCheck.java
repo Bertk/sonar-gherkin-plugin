@@ -28,24 +28,23 @@ import org.languagetool.rules.spelling.SpellingCheckRule;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.DescriptionTree;
 import org.sonar.plugins.gherkin.api.tree.LiteralTree;
 import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.SubscriptionVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@GherkinRule
 @Rule(
   key = "spelling",
   name = "Spelling mistakes should be fixed",
   priority = Priority.INFO,
   tags = {Tags.READABILITY})
-@SqaleConstantRemediation("2min")
 public class SpellingCheck extends SubscriptionVisitorCheck {
 
   private static final String DEFAULT_WORDS_TO_IGNORE = "";

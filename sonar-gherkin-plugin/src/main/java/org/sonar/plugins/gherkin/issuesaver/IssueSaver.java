@@ -38,11 +38,9 @@ import java.util.Optional;
 public class IssueSaver {
 
   private static final Logger LOGGER = Loggers.get(IssueSaver.class);
-  private final SensorContext sensorContext;
   private final GherkinChecks checks;
 
-  public IssueSaver(SensorContext sensorContext, GherkinChecks checks) {
-    this.sensorContext = sensorContext;
+  public IssueSaver(GherkinChecks checks) {
     this.checks = checks;
   }
 
@@ -54,18 +52,18 @@ public class IssueSaver {
       .findFirst();
   }
 
-  public void saveIssue(InputFile inputFile, Issue issue) {
+  public void saveFileIssues(SensorContext sensorContext, InputFile inputFile, Issue issue) {
     RuleKey ruleKey = ruleKey(issue.check());
     if (issue instanceof FileIssue) {
-      saveFileIssue(inputFile, ruleKey, (FileIssue) issue);
+      saveFileIssue(sensorContext, inputFile, ruleKey, (FileIssue) issue);
     } else if (issue instanceof LineIssue) {
-      saveLineIssue(inputFile, ruleKey, (LineIssue) issue);
+      saveLineIssue(sensorContext, inputFile, ruleKey, (LineIssue) issue);
     } else {
-      savePreciseIssue(inputFile, ruleKey, (PreciseIssue) issue);
+      savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue) issue);
     }
   }
 
-  private void savePreciseIssue(InputFile inputFile, RuleKey ruleKey, PreciseIssue issue) {
+  private void savePreciseIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, PreciseIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
 
     newIssue
@@ -84,7 +82,7 @@ public class IssueSaver {
     newIssue.save();
   }
 
-  private void saveFileIssue(InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
+  private void saveFileIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
 
     NewIssueLocation primaryLocation = newIssue.newLocation()
@@ -94,7 +92,7 @@ public class IssueSaver {
     saveSingleIssue(newIssue, primaryLocation, ruleKey, issue);
   }
 
-  private void saveLineIssue(InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
+  private void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
 
     NewIssueLocation primaryLocation = newIssue.newLocation()

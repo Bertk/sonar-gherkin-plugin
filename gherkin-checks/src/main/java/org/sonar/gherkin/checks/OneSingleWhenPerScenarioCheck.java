@@ -22,24 +22,21 @@ package org.sonar.gherkin.checks;
 import com.google.common.collect.ImmutableList;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.BasicScenarioTree;
 import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.SubscriptionVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+@GherkinRule
 @Rule(
   key = "one-single-when-per-scenario",
   name = "There should be one single When step per scenario",
   priority = Priority.MAJOR,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("15min")
-@ActivatedByDefault
 public class OneSingleWhenPerScenarioCheck extends SubscriptionVisitorCheck {
 
   @Override

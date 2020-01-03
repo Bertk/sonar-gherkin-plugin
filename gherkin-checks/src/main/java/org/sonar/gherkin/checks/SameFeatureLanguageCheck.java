@@ -24,19 +24,18 @@ import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.gherkin.parser.GherkinDialectProvider;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-
 import java.util.Set;
 
+@GherkinRule
 @Rule(
   key = "same-feature-language",
   name = "Features should be written in the same language",
   priority = Priority.MAJOR,
   tags = {Tags.DESIGN})
-@SqaleConstantRemediation("30min")
 public class SameFeatureLanguageCheck extends DoubleDispatchVisitorCheck {
 
   private static final String DEFAULT_LANGUAGE = GherkinDialectProvider.DEFAULT_LANGUAGE;

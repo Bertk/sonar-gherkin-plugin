@@ -21,18 +21,16 @@ package org.sonar.gherkin.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.gherkin.checks.annotations.GherkinRule;
 import org.sonar.plugins.gherkin.api.tree.FeatureTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
+@GherkinRule
 @Rule(
   key = "no-scenario",
   name = "Features that do not define any scenario should be removed",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL, Tags.DESIGN})
-@SqaleConstantRemediation("5min")
-@ActivatedByDefault
 public class NoScenarioCheck extends DoubleDispatchVisitorCheck {
 
   @Override
