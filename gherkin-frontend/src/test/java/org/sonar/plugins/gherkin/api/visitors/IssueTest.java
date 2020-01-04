@@ -43,7 +43,7 @@ public class IssueTest {
     FileIssue fileIssue = new FileIssue(CHECK, MESSAGE);
 
     assertThat(fileIssue.check()).isEqualTo(CHECK);
-    assertThat(fileIssue.cost()).isNull();
+    assertThat(fileIssue.cost()).isEqualTo(0.0);
     assertThat(fileIssue.message()).isEqualTo(MESSAGE);
 
     fileIssue.cost(42);
@@ -63,7 +63,7 @@ public class IssueTest {
     LineIssue lineIssue = new LineIssue(CHECK, 42, MESSAGE);
 
     assertThat(lineIssue.check()).isEqualTo(CHECK);
-    assertThat(lineIssue.cost()).isNull();
+    assertThat(lineIssue.cost()).isEqualTo(0.0);
     assertThat(lineIssue.message()).isEqualTo(MESSAGE);
     assertThat(lineIssue.line()).isEqualTo(42);
 
@@ -82,7 +82,7 @@ public class IssueTest {
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, primaryLocation);
 
     assertThat(preciseIssue.check()).isEqualTo(CHECK);
-    assertThat(preciseIssue.cost()).isNull();
+    assertThat(preciseIssue.cost()).isEqualTo(0.0);
     assertThat(preciseIssue.primaryLocation()).isEqualTo(primaryLocation);
     assertThat(preciseIssue.secondaryLocations()).isEmpty();
 

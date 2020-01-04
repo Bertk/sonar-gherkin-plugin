@@ -25,12 +25,12 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class RuleDescriptionsGenerator {
     .build();
 
   public void generateHtmlRuleDescription(String templatePath, String outputPath) {
-    try (OutputStream fileOutputStream = new FileOutputStream(outputPath)) {
+    try (OutputStream fileOutputStream = java.nio.file.Files.newOutputStream(Paths.get(outputPath))) {
       Writer writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8));
       writer.write(replaceTags(FileUtils.readFileToString(new File(templatePath), "UTF-8")));
       writer.flush();

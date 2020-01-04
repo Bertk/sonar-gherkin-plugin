@@ -68,7 +68,7 @@
 		<license.mailto>david.racodon@gmail.com</license.mailto>
 		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 		<sonar.artifact.path>target/${project.artifactId}-${project.version}.jar</sonar.artifact.path>
-		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/site/jacoco</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.coverage.jacoco.xmlReportPaths>target\site\jacoco\jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<!-- version settings -->
 		<analyzer-commons.version>1.11.0.541</analyzer-commons.version>
 		<commons-lang.version>2.6</commons-lang.version>

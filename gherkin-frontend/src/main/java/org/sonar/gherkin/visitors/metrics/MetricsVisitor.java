@@ -67,7 +67,7 @@ public class MetricsVisitor extends SubscriptionVisitor {
     saveMetricOnFile(CoreMetrics.CLASSES, classesVisitor.getNumberOfClasses());
   }
 
-  private <T extends Serializable> void saveMetricOnFile(Metric metric, T value) {
+  private <T extends Serializable> void saveMetricOnFile(Metric<T> metric, T value) {
     sensorContext.<T>newMeasure()
       .withValue(value)
       .forMetric(metric)

@@ -37,7 +37,7 @@ public class FileIssue implements Issue {
   public FileIssue(GherkinCheck check, String message) {
     this.check = check;
     this.message = message;
-    this.cost = null;
+    this.cost = 0.0;
     this.secondaryLocations = new ArrayList<>();
   }
 
@@ -64,11 +64,6 @@ public class FileIssue implements Issue {
 
   public List<IssueLocation> secondaryLocations() {
     return secondaryLocations;
-  }
-
-  public FileIssue secondary(IssueLocation secondaryLocation) {
-    secondaryLocations.add(secondaryLocation);
-    return this;
   }
 
   public FileIssue secondary(Tree tree, String message) {

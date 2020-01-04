@@ -125,7 +125,7 @@ public class IndentationCheck extends SubscriptionVisitorCheck {
         break;
 
       default:
-        throw new IllegalStateException("Unsupported Descriptionable: " + tree.toString());
+        throw new IllegalStateException("Unsupported Descriptionable: " + tree);
     }
 
     checkDescriptionLinesIndentation(((Descriptionable) tree).description(), expectedIndentation);
@@ -157,7 +157,7 @@ public class IndentationCheck extends SubscriptionVisitorCheck {
         break;
 
       default:
-        throw new IllegalStateException("Unsupported PrefixTree: " + tree.toString());
+        throw new IllegalStateException("Unsupported PrefixTree: " + tree);
     }
 
     checkIndentation(tree.keyword(), expectedIndentation);
@@ -182,7 +182,7 @@ public class IndentationCheck extends SubscriptionVisitorCheck {
         break;
 
       default:
-        throw new IllegalStateException("Unsupported Taggable: " + tree.toString());
+        throw new IllegalStateException("Unsupported Taggable: " + tree);
     }
 
     checkTagsIndentation(((Taggable) tree).tags(), expectedIndentation);

@@ -36,7 +36,7 @@ public class LineIssue implements Issue {
     this.check = check;
     this.message = message;
     this.line = line;
-    this.cost = null;
+    this.cost = 0.0;
   }
 
   public String message() {

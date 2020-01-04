@@ -70,7 +70,7 @@ public class Issues {
   }
 
   public void reset() {
-    issueList = new ArrayList<>();
+    issueList.clear();
   }
 
 }

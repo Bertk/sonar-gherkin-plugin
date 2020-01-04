@@ -58,12 +58,18 @@ public class IssueSaver {
 
   public void saveFileIssues(SensorContext sensorContext, InputFile inputFile, Issue issue) {
     RuleKey ruleKey = ruleKey(issue.check());
-    if (issue instanceof FileIssue) {
-      saveFileIssue(sensorContext, inputFile, ruleKey, (FileIssue) issue);
-    } else if (issue instanceof LineIssue) {
-      saveLineIssue(sensorContext, inputFile, ruleKey, (LineIssue) issue);
-    } else {
-      savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue) issue);
+    try {
+      if (issue instanceof FileIssue) {
+        saveFileIssue(sensorContext, inputFile, ruleKey, (FileIssue) issue);
+      } else if (issue instanceof LineIssue) {
+        saveLineIssue(sensorContext, inputFile, ruleKey, (LineIssue) issue);
+      } else {
+        savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue) issue);
+      }
+    } catch (IllegalArgumentException ex) {
+      LOGGER.warn(ex.getMessage());
+      LOGGER.info("InputFile: {}", inputFile.toString());
+      LOGGER.info("Checker: {}", ruleKey);
     }
   }
 

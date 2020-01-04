@@ -253,16 +253,16 @@ public class GherkinCheckVerifier extends SubscriptionVisitorCheck {
       String value = param.substring(equalIndex + 1);
 
       if ("effortToFix".equalsIgnoreCase(name)) {
-        issue.effortToFix(Integer.valueOf(value));
+        issue.effortToFix(Integer.parseInt(value));
 
       } else if ("sc".equalsIgnoreCase(name)) {
-        issue.startColumn(Integer.valueOf(value));
+        issue.startColumn(Integer.parseInt(value));
 
       } else if ("sl".equalsIgnoreCase(name)) {
         issue.startLine(lineValue(issue.line() - 1, value));
 
       } else if ("ec".equalsIgnoreCase(name)) {
-        issue.endColumn(Integer.valueOf(value));
+        issue.endColumn(Integer.parseInt(value));
 
       } else if ("el".equalsIgnoreCase(name)) {
         issue.endLine(lineValue(issue.line(), value));

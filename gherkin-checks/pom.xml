@@ -14,7 +14,7 @@
 	<name>SonarQube Cucumber Gherkin Analyzer :: Checks</name>
 	
 	<properties>
-<!-- 		<sonar.sources>pom.xml,src/main/java,src/main/resources,src/test/resources</sonar.sources> -->
+        <sonar.sources>pom.xml,src/main/java,src/main/resources,src/test/resources</sonar.sources>
 	</properties>
 
 		

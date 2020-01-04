@@ -53,7 +53,7 @@ public class GherkinNodeBuilder implements NodeBuilder {
   public Object createTerminal(Input input, int startIndex, int endIndex, List<Trivia> trivias, TokenType type) {
     char[] fileChars = input.input();
     boolean hasByteOrderMark = fileChars.length > 0 && fileChars[0] == BYTE_ORDER_MARK;
-    boolean isEof = GenericTokenType.EOF.equals(type);
+    boolean isEof = GenericTokenType.EOF == type;
     LineColumnValue lineColumnValue = tokenPosition(input, startIndex, endIndex);
     return new InternalSyntaxToken(
       lineColumnValue.line,

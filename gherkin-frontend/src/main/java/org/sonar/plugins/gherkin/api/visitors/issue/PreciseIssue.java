@@ -37,7 +37,7 @@ public class PreciseIssue implements Issue {
     this.check = check;
     this.primaryLocation = primaryLocation;
     this.secondaryLocations = new ArrayList<>();
-    this.cost = null;
+    this.cost = 0.0;
   }
 
   @Override
@@ -63,11 +63,6 @@ public class PreciseIssue implements Issue {
   
   public List<IssueLocation> secondaryLocations() {
     return secondaryLocations;
-  }
-
-  public PreciseIssue secondary(IssueLocation secondaryLocation) {
-    secondaryLocations.add(secondaryLocation);
-    return this;
   }
 
   public PreciseIssue secondary(Tree tree, String message) {

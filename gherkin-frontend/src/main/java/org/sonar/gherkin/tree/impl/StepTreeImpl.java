@@ -148,7 +148,7 @@ public class StepTreeImpl extends GherkinTree implements StepTree {
         table = (TableTree) data;
         docString = null;
       } else {
-        throw new IllegalStateException("Unsupported data tree: " + data.toString());
+        throw new IllegalStateException("Unsupported data tree: " + data);
       }
     } else {
       docString = null;
