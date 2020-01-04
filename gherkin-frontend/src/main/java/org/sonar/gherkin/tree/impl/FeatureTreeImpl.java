@@ -20,7 +20,14 @@
 package org.sonar.gherkin.tree.impl;
 
 import com.google.common.collect.Iterators;
-import org.sonar.plugins.gherkin.api.tree.*;
+
+import org.sonar.plugins.gherkin.api.tree.BackgroundTree;
+import org.sonar.plugins.gherkin.api.tree.BasicScenarioTree;
+import org.sonar.plugins.gherkin.api.tree.FeatureDeclarationTree;
+import org.sonar.plugins.gherkin.api.tree.FeatureTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioOutlineTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioTree;
+import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
 import javax.annotation.Nullable;
@@ -41,7 +48,7 @@ public class FeatureTreeImpl extends GherkinTree implements FeatureTree {
     this.background = background;
 
     if (allScenarios != null) {
-      this.allScenarios = allScenarios;
+      this.allScenarios = new ArrayList<>(allScenarios);
     } else {
       this.allScenarios = new ArrayList<>();
     }

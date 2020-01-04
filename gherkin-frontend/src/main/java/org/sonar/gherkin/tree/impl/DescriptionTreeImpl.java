@@ -24,6 +24,7 @@ import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class DescriptionTreeImpl extends GherkinTree implements DescriptionTree 
   private final String text;
 
   public DescriptionTreeImpl(List<SyntaxToken> descriptionLines) {
-    this.desriptionLines = descriptionLines;
+    this.desriptionLines = new ArrayList<>(descriptionLines);
     this.text = descriptionLines.stream().map(SyntaxToken::text).collect(Collectors.joining("\n"));
   }
 

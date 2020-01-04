@@ -20,7 +20,15 @@
 package org.sonar.gherkin.tree.impl;
 
 import com.google.common.collect.Iterators;
-import org.sonar.plugins.gherkin.api.tree.*;
+import org.sonar.plugins.gherkin.api.tree.DescriptionTree;
+import org.sonar.plugins.gherkin.api.tree.ExamplesTree;
+import org.sonar.plugins.gherkin.api.tree.NameTree;
+import org.sonar.plugins.gherkin.api.tree.PrefixTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioOutlineTree;
+import org.sonar.plugins.gherkin.api.tree.StepTree;
+import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
+import org.sonar.plugins.gherkin.api.tree.TagTree;
+import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
 import javax.annotation.Nullable;
@@ -35,7 +43,7 @@ public class ScenarioOutlineTreeImpl extends AbstractBasicScenarioTreeImpl imple
 
   public ScenarioOutlineTreeImpl(@Nullable List<TagTree> tags, PrefixTree prefix, SyntaxToken colon, @Nullable NameTree name, @Nullable DescriptionTree description, @Nullable List<StepTree> steps, List<ExamplesTree> examples) {
     super(prefix, colon, name, description, steps);
-    this.examples = examples;
+    this.examples = new ArrayList<>(examples);
     this.tags = tags != null ? tags : new ArrayList<>();
   }
 

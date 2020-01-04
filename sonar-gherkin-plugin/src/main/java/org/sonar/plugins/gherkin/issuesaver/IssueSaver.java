@@ -31,7 +31,11 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.gherkin.GherkinChecks;
 import org.sonar.plugins.gherkin.api.GherkinCheck;
-import org.sonar.plugins.gherkin.api.visitors.issue.*;
+import org.sonar.plugins.gherkin.api.visitors.issue.FileIssue;
+import org.sonar.plugins.gherkin.api.visitors.issue.Issue;
+import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
+import org.sonar.plugins.gherkin.api.visitors.issue.LineIssue;
+import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
 
 import java.util.Optional;
 

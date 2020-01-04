@@ -37,7 +37,11 @@ import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
 import org.sonar.plugins.gherkin.api.tree.SyntaxTrivia;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.SubscriptionVisitorCheck;
-import org.sonar.plugins.gherkin.api.visitors.issue.*;
+import org.sonar.plugins.gherkin.api.visitors.issue.FileIssue;
+import org.sonar.plugins.gherkin.api.visitors.issue.Issue;
+import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
+import org.sonar.plugins.gherkin.api.visitors.issue.LineIssue;
+import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
 import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
 import javax.annotation.Nullable;

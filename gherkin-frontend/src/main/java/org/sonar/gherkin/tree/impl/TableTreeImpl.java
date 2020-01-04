@@ -25,6 +25,7 @@ import org.sonar.plugins.gherkin.api.tree.TableTree;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +38,7 @@ public class TableTreeImpl extends GherkinTree implements TableTree {
 
   public TableTreeImpl(List<SyntaxToken> rows) {
     Preconditions.checkArgument(!rows.isEmpty());
-    this.rows = rows;
+    this.rows = new ArrayList<>(rows);
     this.headers = Arrays
       .stream(rows.get(0).text().substring(1, rows.get(0).text().length() - 1).split("\\|"))
       .map(String::trim)

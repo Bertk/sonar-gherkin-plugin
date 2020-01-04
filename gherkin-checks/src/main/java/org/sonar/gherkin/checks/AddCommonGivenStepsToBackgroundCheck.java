@@ -22,7 +22,11 @@ package org.sonar.gherkin.checks;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.gherkin.checks.annotations.GherkinRule;
-import org.sonar.plugins.gherkin.api.tree.*;
+import org.sonar.plugins.gherkin.api.tree.FeatureTree;
+import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioOutlineTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioTree;
+import org.sonar.plugins.gherkin.api.tree.StepTree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitorCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
 

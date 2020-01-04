@@ -57,7 +57,11 @@ import org.sonarsource.analyzer.commons.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
 import javax.annotation.Nullable;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

@@ -24,6 +24,7 @@ import org.sonar.plugins.gherkin.api.tree.SyntaxTrivia;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class InternalSyntaxToken extends GherkinTree implements SyntaxToken {
 
   public InternalSyntaxToken(int line, int column, String value, List<SyntaxTrivia> trivias, boolean isEOF, boolean isBOM) {
     this.value = value;
-    this.trivias = trivias;
+    this.trivias = new ArrayList<>(trivias);
     this.line = line;
     this.column = column;
     this.isEOF = isEOF;

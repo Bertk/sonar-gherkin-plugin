@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class GherkinDialect {
 
   private final Map<String, List<String>> keywords;
-  private String naturalLanguage;
+  private final String naturalLanguage;
 
   public GherkinDialect(String naturalLanguage, Map<String, List<String>> keywords) {
     this.naturalLanguage = naturalLanguage;

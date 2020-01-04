@@ -21,7 +21,11 @@ package org.sonar.gherkin.tree.impl;
 
 import com.google.common.collect.Iterators;
 import org.sonar.gherkin.parser.GherkinDialectProvider;
-import org.sonar.plugins.gherkin.api.tree.*;
+import org.sonar.plugins.gherkin.api.tree.FeatureTree;
+import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
+import org.sonar.plugins.gherkin.api.tree.LanguageDeclarationTree;
+import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
+import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
 import javax.annotation.Nullable;

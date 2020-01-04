@@ -20,10 +20,55 @@
 package org.sonar.gherkin.parser;
 
 import com.sonar.sslr.api.typed.Optional;
-import org.sonar.gherkin.tree.impl.*;
-import org.sonar.plugins.gherkin.api.tree.*;
 
 import java.util.List;
+
+import org.sonar.gherkin.tree.impl.BackgroundPrefixTreeImpl;
+import org.sonar.gherkin.tree.impl.BackgroundTreeImpl;
+import org.sonar.gherkin.tree.impl.DescriptionTreeImpl;
+import org.sonar.gherkin.tree.impl.DocStringTreeImpl;
+import org.sonar.gherkin.tree.impl.ExamplesPrefixTreeImpl;
+import org.sonar.gherkin.tree.impl.ExamplesTreeImpl;
+import org.sonar.gherkin.tree.impl.FeatureDeclarationTreeImpl;
+import org.sonar.gherkin.tree.impl.FeaturePrefixTreeImpl;
+import org.sonar.gherkin.tree.impl.FeatureTreeImpl;
+import org.sonar.gherkin.tree.impl.GherkinDocumentTreeImpl;
+import org.sonar.gherkin.tree.impl.LanguageDeclarationTreeImpl;
+import org.sonar.gherkin.tree.impl.NameTreeImpl;
+import org.sonar.gherkin.tree.impl.ScenarioOutlinePrefixTreeImpl;
+import org.sonar.gherkin.tree.impl.ScenarioOutlineTreeImpl;
+import org.sonar.gherkin.tree.impl.ScenarioPrefixTreeImpl;
+import org.sonar.gherkin.tree.impl.ScenarioTreeImpl;
+import org.sonar.gherkin.tree.impl.StepPrefixTreeImpl;
+import org.sonar.gherkin.tree.impl.StepSentenceTreeImpl;
+import org.sonar.gherkin.tree.impl.StepTreeImpl;
+import org.sonar.gherkin.tree.impl.TableTreeImpl;
+import org.sonar.gherkin.tree.impl.TagTreeImpl;
+import org.sonar.plugins.gherkin.api.tree.BackgroundPrefixTree;
+import org.sonar.plugins.gherkin.api.tree.BackgroundTree;
+import org.sonar.plugins.gherkin.api.tree.BasicScenarioTree;
+import org.sonar.plugins.gherkin.api.tree.DescriptionTree;
+import org.sonar.plugins.gherkin.api.tree.DocStringTree;
+import org.sonar.plugins.gherkin.api.tree.ExamplesPrefixTree;
+import org.sonar.plugins.gherkin.api.tree.ExamplesTree;
+import org.sonar.plugins.gherkin.api.tree.FeatureDeclarationTree;
+import org.sonar.plugins.gherkin.api.tree.FeaturePrefixTree;
+import org.sonar.plugins.gherkin.api.tree.FeatureTree;
+import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
+import org.sonar.plugins.gherkin.api.tree.LanguageDeclarationTree;
+import org.sonar.plugins.gherkin.api.tree.NameTree;
+import org.sonar.plugins.gherkin.api.tree.PrefixTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioOutlinePrefixTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioOutlineTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioPrefixTree;
+import org.sonar.plugins.gherkin.api.tree.ScenarioTree;
+import org.sonar.plugins.gherkin.api.tree.StepPrefixTree;
+import org.sonar.plugins.gherkin.api.tree.StepSentenceTree;
+import org.sonar.plugins.gherkin.api.tree.StepTree;
+import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
+import org.sonar.plugins.gherkin.api.tree.TableTree;
+import org.sonar.plugins.gherkin.api.tree.TagTree;
+import org.sonar.plugins.gherkin.api.tree.Tree;
 
 public class TreeFactory {
 

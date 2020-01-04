@@ -22,6 +22,8 @@ package org.sonar.gherkin.checks.verifier;
 import com.google.common.primitives.Ints;
 
 import javax.annotation.Nullable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 class TestIssue {
@@ -78,7 +80,7 @@ class TestIssue {
   }
 
   public TestIssue secondary(List<Integer> secondaryLines) {
-    this.secondaryLines = secondaryLines;
+    this.secondaryLines = new ArrayList<>(secondaryLines);
     return this;
   }
 

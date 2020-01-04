@@ -20,7 +20,15 @@
 package org.sonar.gherkin.tree.impl;
 
 import com.google.common.collect.Iterators;
-import org.sonar.plugins.gherkin.api.tree.*;
+
+import org.sonar.plugins.gherkin.api.tree.DescriptionTree;
+import org.sonar.plugins.gherkin.api.tree.ExamplesTree;
+import org.sonar.plugins.gherkin.api.tree.NameTree;
+import org.sonar.plugins.gherkin.api.tree.PrefixTree;
+import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
+import org.sonar.plugins.gherkin.api.tree.TableTree;
+import org.sonar.plugins.gherkin.api.tree.TagTree;
+import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
 import javax.annotation.Nullable;

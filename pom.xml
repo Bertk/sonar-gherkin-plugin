@@ -66,12 +66,18 @@
 		<license.title>SonarQube Cucumber Gherkin Analyzer</license.title>
 		<license.owner>David RACODON</license.owner>
 		<license.mailto>david.racodon@gmail.com</license.mailto>
-		<commons-lang.version>2.6</commons-lang.version>
-		<sonar.version>7.9</sonar.version>
+		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+		<sonar.artifact.path>target/${project.artifactId}-${project.version}.jar</sonar.artifact.path>
+		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/site/jacoco</sonar.coverage.jacoco.xmlReportPaths>
+		<!-- version settings -->
 		<analyzer-commons.version>1.11.0.541</analyzer-commons.version>
-		<sslr.version>1.23</sslr.version>
-		<sslr-squid-bridge.version>2.6.1</sslr-squid-bridge.version>
+		<commons-lang.version>2.6</commons-lang.version>
 		<gson.version>2.8.6</gson.version>
+		<sonar.version>7.9</sonar.version>
+		<sslr-squid-bridge.version>2.6.1</sslr-squid-bridge.version>
+		<sslr.version>1.23</sslr.version>
+        <surefire.plugin.version>2.12.2</surefire.plugin.version>
+		<jacoco.plugin.version>0.8.5</jacoco.plugin.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -195,7 +201,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.12</version>
+				<version>4.13</version>
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -260,7 +266,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -271,21 +276,32 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
-				<configuration>
-					<destFile>${sonar.jacoco.reportPath}</destFile>
-					<append>true</append>
-				</configuration>
+				<version>${jacoco.plugin.version}</version>
 				<executions>
 					<execution>
-						<id>agent</id>
+						<id>default-prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>default-report</id>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.plugin.version}</version><!--$NO-MVN-MAN-VER$-->
+				<configuration>
+					<systemPropertyVariables>
+						<jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
@@ -302,7 +318,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -316,7 +331,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.1.1</version><!--$NO-MVN-MAN-VER$-->
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -356,35 +371,6 @@
 			<modules>
 				<module>its</module>
 			</modules>
-		</profile>
-		<profile>
-			<id>coverage-per-test</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<!-- Minimal supported version is 2.4 -->
-						<version>2.22.0</version>
-						<configuration>
-							<properties>
-								<property>
-									<name>listener</name>
-									<value>org.sonar.java.jacoco.JUnitListener</value>
-								</property>
-							</properties>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-			<dependencies>
-				<dependency>
-					<groupId>org.sonarsource.java</groupId>
-					<artifactId>sonar-jacoco-listeners</artifactId>
-					<version>5.14.0.18788</version>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
 		</profile>
 	</profiles>
 

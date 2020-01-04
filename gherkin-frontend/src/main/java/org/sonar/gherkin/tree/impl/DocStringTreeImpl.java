@@ -42,7 +42,7 @@ public class DocStringTreeImpl extends GherkinTree implements DocStringTree {
     this.contentType = contentType;
 
     if (data != null) {
-      this.data = data;
+      this.data = new ArrayList<>(data);
     } else {
       this.data = new ArrayList<>();
     }

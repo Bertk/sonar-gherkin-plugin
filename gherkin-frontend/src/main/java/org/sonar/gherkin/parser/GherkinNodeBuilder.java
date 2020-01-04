@@ -19,7 +19,11 @@
  */
 package org.sonar.gherkin.parser;
 
-import com.sonar.sslr.api.*;
+import com.sonar.sslr.api.GenericTokenType;
+import com.sonar.sslr.api.Rule;
+import com.sonar.sslr.api.Token;
+import com.sonar.sslr.api.TokenType;
+import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.api.typed.Input;
 import com.sonar.sslr.api.typed.NodeBuilder;
 import org.sonar.gherkin.tree.impl.InternalSyntaxSpacing;
