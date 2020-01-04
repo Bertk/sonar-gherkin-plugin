@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -37,12 +38,8 @@ public class GherkinDialectProvider {
 
   static {
     Gson gson = new Gson();
-    try {
-      Reader dialects = new InputStreamReader(GherkinDialectProvider.class.getResourceAsStream("/org/sonar/gherkin/parser/gherkin-languages.json"), "UTF-8");
-      DIALECTS = gson.fromJson(dialects, Map.class);
-    } catch (UnsupportedEncodingException e) {
-      throw new IllegalStateException("Error while reading gherkin-languages.json file", e);
-    }
+    Reader dialects = new InputStreamReader(GherkinDialectProvider.class.getResourceAsStream("/org/sonar/gherkin/parser/gherkin-languages.json"), StandardCharsets.UTF_8);
+    DIALECTS = gson.fromJson(dialects, Map.class);
   }
 
   private GherkinDialectProvider() {

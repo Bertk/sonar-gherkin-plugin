@@ -30,7 +30,7 @@ import java.util.Set;
 
 public class LinesOfCodeVisitor extends SubscriptionVisitor {
 
-  private Set<Integer> linesOfCode = Sets.newHashSet();
+  private final Set<Integer> linesOfCode = Sets.newHashSet();
 
   public LinesOfCodeVisitor(Tree tree) {
     linesOfCode.clear();

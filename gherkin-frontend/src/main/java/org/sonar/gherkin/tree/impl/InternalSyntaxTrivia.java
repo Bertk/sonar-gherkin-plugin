@@ -32,7 +32,7 @@ public class InternalSyntaxTrivia extends GherkinTree implements SyntaxTrivia {
 
   private final String comment;
   private final int column;
-  private int startLine;
+  private final int startLine;
   private int endLine;
   private int endColumn;
 

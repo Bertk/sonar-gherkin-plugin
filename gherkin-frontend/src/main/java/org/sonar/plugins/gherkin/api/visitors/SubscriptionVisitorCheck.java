@@ -32,7 +32,7 @@ import java.util.List;
 
 public abstract class SubscriptionVisitorCheck extends SubscriptionVisitor implements GherkinCheck {
 
-  private Issues issues = new Issues(this);
+  private final Issues issues = new Issues(this);
 
   @Override
   public List<Issue> scanFile(TreeVisitorContext context) {

@@ -28,10 +28,10 @@ import java.util.List;
 
 public class PreciseIssue implements Issue {
 
-  private GherkinCheck check;
+  private final GherkinCheck check;
   private Double cost;
-  private IssueLocation primaryLocation;
-  private List<IssueLocation> secondaryLocations;
+  private final IssueLocation primaryLocation;
+  private final List<IssueLocation> secondaryLocations;
 
   public PreciseIssue(GherkinCheck check, IssueLocation primaryLocation) {
     this.check = check;

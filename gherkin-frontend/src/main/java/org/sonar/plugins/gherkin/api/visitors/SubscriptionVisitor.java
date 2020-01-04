@@ -74,7 +74,7 @@ public abstract class SubscriptionVisitor implements TreeVisitor {
     if (isSubscribed) {
       visitNode(tree);
     }
-    visitChildren(tree);
+    visitChildren((GherkinTree) tree);
     if (isSubscribed) {
       leaveNode(tree);
     }
@@ -84,8 +84,7 @@ public abstract class SubscriptionVisitor implements TreeVisitor {
     return nodesToVisit.contains(tree.getKind());
   }
 
-  private void visitChildren(Tree tree) {
-    GherkinTree gherkinTree = (GherkinTree) tree;
+  private void visitChildren(GherkinTree gherkinTree) {
 
     if (!gherkinTree.isLeaf()) {
       for (Iterator<Tree> iter = gherkinTree.childrenIterator(); iter.hasNext(); ) {

@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class GherkinChecks {
 
   private final CheckFactory checkFactory;
-  private Set<Checks<GherkinCheck>> checksByRepository = Sets.newHashSet();
+  private final Set<Checks<GherkinCheck>> checksByRepository = Sets.newHashSet();
 
   private GherkinChecks(CheckFactory checkFactory) {
     this.checkFactory = checkFactory;

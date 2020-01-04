@@ -34,7 +34,7 @@ import java.util.List;
 public class Issues {
 
   private List<Issue> issueList;
-  private GherkinCheck check;
+  private final GherkinCheck check;
 
   public Issues(GherkinCheck check) {
     this.check = check;

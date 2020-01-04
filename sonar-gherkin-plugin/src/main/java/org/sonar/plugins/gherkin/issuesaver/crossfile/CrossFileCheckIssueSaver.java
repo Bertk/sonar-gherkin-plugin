@@ -25,7 +25,7 @@ import org.sonar.plugins.gherkin.issuesaver.IssueSaver;
 
 public abstract class CrossFileCheckIssueSaver {
 
-  private IssueSaver issueSaver;
+  private final IssueSaver issueSaver;
 
   public CrossFileCheckIssueSaver(IssueSaver issueSaver) {
     this.issueSaver = issueSaver;
