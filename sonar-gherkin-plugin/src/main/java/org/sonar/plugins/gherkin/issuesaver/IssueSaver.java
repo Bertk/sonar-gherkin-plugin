@@ -68,8 +68,10 @@ public class IssueSaver {
       }
     } catch (IllegalArgumentException ex) {
       LOGGER.warn(ex.getMessage());
-      LOGGER.info("InputFile: {}", inputFile.toString());
-      LOGGER.info("Checker: {}", ruleKey);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("InputFile: {}", inputFile.toString());
+        LOGGER.debug("Checker: {}", ruleKey);
+      }
     }
   }
 
@@ -85,7 +87,9 @@ public class IssueSaver {
     }
 
     for (IssueLocation secondary : issue.secondaryLocations()) {
-      LOGGER.info("secondary issue location ??? : {}", secondary);
+      if (LOGGER.isTraceEnabled()) {
+        LOGGER.trace("secondary issue location ??? : {}", secondary.toString());
+      }
       newIssue.addLocation(newLocation(inputFile, newIssue, secondary));
     }
 
@@ -100,6 +104,14 @@ public class IssueSaver {
       .on(inputFile);
 
     saveSingleIssue(newIssue, primaryLocation, ruleKey, issue);
+
+//    InputFile secondaryFile;
+//    for (IssueLocation secondary : issue.secondaryLocations()) {
+//      secondaryFile = fileSystem.inputFile(fileSystem.predicates().is(secondary.file()));
+//      if (secondaryFile == null) {
+//        secondaryFile = primaryFile;
+//      }
+//      newIssue.addLocation(newLocation(secondaryFile, newIssue, secondary));
   }
 
   private void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {

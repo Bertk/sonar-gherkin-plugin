@@ -108,6 +108,8 @@ public class SpellingCheck extends SubscriptionVisitorCheck {
       languageTool.check(text)
         .forEach(m -> addPreciseIssue(
           token,
+          m.getFromPos(),
+          m.getToPos(),
           "[" + m.getRule().getId() + "] " + m.getMessage() + "."
             + (!m.getSuggestedReplacements().isEmpty() ? " Suggested correction(s): " + m.getSuggestedReplacements() + "." : "")));
 

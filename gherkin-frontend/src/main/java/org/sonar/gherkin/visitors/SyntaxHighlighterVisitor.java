@@ -23,6 +23,8 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.gherkin.tree.impl.InternalSyntaxToken;
 import org.sonar.plugins.gherkin.api.tree.LanguageDeclarationTree;
 import org.sonar.plugins.gherkin.api.tree.NameTree;
@@ -38,6 +40,7 @@ import java.util.List;
 
 public class SyntaxHighlighterVisitor extends SubscriptionVisitor {
 
+  private static final Logger LOGGER = Loggers.get(SyntaxHighlighterVisitor.class);
   private final SensorContext sensorContext;
   private NewHighlighting highlighting;
 
@@ -63,6 +66,9 @@ public class SyntaxHighlighterVisitor extends SubscriptionVisitor {
   @Override
   public void visitFile(Tree tree) {
     highlighting = sensorContext.newHighlighting().onFile(getContext().getGherkinFile());
+    if (LOGGER.isTraceEnabled()) {
+      LOGGER.trace("Visitor highlight processes: {}", getContext().getGherkinFile().uri());
+    }
   }
 
   @Override

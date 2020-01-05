@@ -48,8 +48,8 @@ public abstract class DoubleDispatchVisitorCheck extends DoubleDispatchVisitor i
   }
 
   @Override
-  public PreciseIssue addPreciseIssue(SyntaxToken token, String message) {
-    return issues.addPreciseIssue(token, message);
+  public PreciseIssue addPreciseIssue(SyntaxToken token, int startOffset, int endOffset, String message) {
+    return issues.addPreciseIssue(token, startOffset, endOffset, message);
   }
 
   @Override

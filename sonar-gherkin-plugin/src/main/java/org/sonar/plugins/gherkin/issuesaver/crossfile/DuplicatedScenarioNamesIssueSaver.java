@@ -72,7 +72,7 @@ public class DuplicatedScenarioNamesIssueSaver extends CrossFileCheckIssueSaver 
 
   private boolean isScenarioNameDuplicated(List<FileNameTree> fileNameTrees) {
     return fileNameTrees.stream()
-      .map(f -> f.getInputFile().filename())
+      .map(f -> f.getInputFile().uri())
       .distinct()
       .count() > 1;
   }

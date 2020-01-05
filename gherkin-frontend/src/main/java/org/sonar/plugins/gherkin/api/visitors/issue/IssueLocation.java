@@ -28,17 +28,31 @@ import javax.annotation.Nullable;
 public class IssueLocation {
 
   private final String message;
-  private final SyntaxToken firstToken;
-  private final SyntaxToken lastToken;
+  private int startLine;
+  private int startLineOffset;
+  private int endLine;
+  private int endLineOffset;
 
   public IssueLocation(Tree tree, @Nullable String message) {
     this(tree, tree, message);
   }
 
+  public IssueLocation(SyntaxToken token, int offsetStart, int offsetEnd, @Nullable String message) {
+    this.message = message;
+    this.startLine = token.line();
+    this.endLine = token.line();
+    this.startLineOffset = token.column() + offsetStart;
+    this.endLineOffset = token.column() + offsetEnd;
+  }
+  
   public IssueLocation(Tree firstTree, Tree lastTree, @Nullable String message) {
     this.message = message;
-    firstToken = ((GherkinTree) firstTree).getFirstToken();
-    lastToken = ((GherkinTree) lastTree).getLastToken();
+    SyntaxToken firstToken = ((GherkinTree) firstTree).getFirstToken();
+    SyntaxToken lastToken = ((GherkinTree) lastTree).getLastToken();
+    this.startLine = firstToken.line();
+    this.startLineOffset = firstToken.column();
+    this.endLine = lastToken.endLine();
+    this.endLineOffset = lastToken.endColumn();
   }
 
   @Nullable
@@ -47,19 +61,19 @@ public class IssueLocation {
   }
 
   public int startLine() {
-    return firstToken.line();
+    return startLine;
   }
 
   public int startLineOffset() {
-    return firstToken.column();
+    return startLineOffset;
   }
 
   public int endLine() {
-    return lastToken.endLine();
+    return endLine;
   }
 
   public int endLineOffset() {
-    return lastToken.endColumn();
+    return endLineOffset;
   }
 
 }

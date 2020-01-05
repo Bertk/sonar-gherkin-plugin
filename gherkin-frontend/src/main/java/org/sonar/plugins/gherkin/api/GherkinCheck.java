@@ -33,7 +33,7 @@ public interface GherkinCheck {
 
   PreciseIssue addPreciseIssue(Tree tree, String message);
 
-  PreciseIssue addPreciseIssue(SyntaxToken token, String message);
+  PreciseIssue addPreciseIssue(SyntaxToken token, int startOffset, int endOffset, String message);
 
   FileIssue addFileIssue(String message);
 

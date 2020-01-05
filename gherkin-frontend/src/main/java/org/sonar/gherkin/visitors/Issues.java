@@ -47,8 +47,8 @@ public class Issues {
     return issue;
   }
 
-  public PreciseIssue addPreciseIssue(SyntaxToken token, String message) {
-    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(token, message));
+  public PreciseIssue addPreciseIssue(SyntaxToken token, int startOffset, int endOffset, String message) {
+    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(token, startOffset, endOffset, message));
     issueList.add(issue);
     return issue;
   }
