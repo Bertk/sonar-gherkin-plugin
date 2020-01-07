@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,16 +19,28 @@
  */
 package org.sonar.gherkin.checks;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.gherkin.checks.verifier.GherkinCheckVerifier;
 
-import java.io.File;
+import java.nio.file.Paths;
 
 public class ForbiddenTagCheckTest {
 
+  private static InputFile inputFile;
+  
+  @Before
+  public void PrepareInputFile() {
+        inputFile =    new TestInputFileBuilder("moduleKey", "src/test/resources/checks/forbidden-tag.feature")
+        .setModuleBaseDir(Paths.get("src/test/resources/checks/"))
+        .build();
+  }
+
   @Test
   public void test() {
-    GherkinCheckVerifier.issues(new ForbiddenTagCheck(), new File("src/test/resources/checks/forbidden-tag.feature"))
+    GherkinCheckVerifier.issues(new ForbiddenTagCheck(), inputFile)
       .next().atLine(1).withMessage("Remove this usage of the forbidden \"bar\" tag.")
       .next().atLine(4).withMessage("Remove this usage of the forbidden \"foo\" tag.")
       .noMore();

@@ -1,6 +1,6 @@
 /*
  * SonarQube Cucumber Gherkin Analyzer
- * Copyright (C) 2016-2017 David RACODON
+ * Copyright (C) 2016-2019 David RACODON
  * david.racodon@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,23 +21,28 @@ package org.sonar.gherkin;
 
 import org.junit.Test;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarEdition;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class MyGherkinCustomRulesPluginTest {
 
+  public static final Version LTS_VERSION = Version.create(7, 9);
+  
   @Test
   public void should_get_the_right_version() {
-    Plugin.Context context = new Plugin.Context(Version.create(5, 6));
+    Plugin.Context context = new Plugin.Context(SonarRuntimeImpl.forSonarQube(LTS_VERSION,  SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
     new MyGherkinCustomRulesPlugin().define(context);
-    assertThat(context.getSonarQubeVersion().major()).isEqualTo(5);
-    assertThat(context.getSonarQubeVersion().minor()).isEqualTo(6);
+    assertThat(context.getSonarQubeVersion().major()).isEqualTo(7);
+    assertThat(context.getSonarQubeVersion().minor()).isEqualTo(9);
   }
 
   @Test
   public void should_get_the_right_number_of_extensions() {
-    Plugin.Context context = new Plugin.Context(Version.create(5, 6));
+    Plugin.Context context = new Plugin.Context(SonarRuntimeImpl.forSonarQube(LTS_VERSION,  SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
     new MyGherkinCustomRulesPlugin().define(context);
     assertThat(context.getExtensions()).hasSize(1);
   }
