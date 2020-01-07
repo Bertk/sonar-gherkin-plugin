@@ -56,7 +56,7 @@ public class IssueSaver {
       .findFirst();
   }
 
-  public void saveFileIssues(SensorContext sensorContext, InputFile inputFile, Issue issue) {
+  public void saveIssues(SensorContext sensorContext, InputFile inputFile, Issue issue) {
     RuleKey ruleKey = ruleKey(issue.check());
     try {
       if (issue instanceof FileIssue) {

@@ -61,7 +61,7 @@ public abstract class SubscriptionVisitorCheck extends SubscriptionVisitor imple
   public LineIssue addLineIssue(int line, String message) {
     return issues.addLineIssue(line, message);
   }
-
+  
   @Override
   public void validateParameters() {
     // Default behavior: do nothing

@@ -54,7 +54,7 @@ import org.sonar.plugins.gherkin.api.visitors.issue.Issue;
 import org.sonar.plugins.gherkin.issuesaver.CrossFileChecksIssueSaver;
 import org.sonar.plugins.gherkin.issuesaver.IssueSaver;
 import org.sonarsource.analyzer.commons.ProgressReport;
-import org.sonar.squidbridge.api.AnalysisException;
+//import org.sonar.squidbridge.api.AnalysisException;
 
 import javax.annotation.Nullable;
 
@@ -178,7 +178,7 @@ public class GherkinSquidSensor implements Sensor {
 
   private void saveSingleFileIssues(SensorContext sensorContext, InputFile inputFile, List<Issue> issues) {
     for (Issue issue : issues) {
-      issueSaver.saveFileIssues(sensorContext, inputFile, issue);
+      issueSaver.saveIssues(sensorContext, inputFile, issue);
     }
   }
 
@@ -238,5 +238,10 @@ public class GherkinSquidSensor implements Sensor {
       throw new IllegalStateException("Cannot determine language of file " + inputFile.toString(), e);
     }
   }
-
+  
+  static class AnalysisException extends RuntimeException {
+    AnalysisException(String message, Throwable cause) {
+      super(message, cause);
+    }
+  }
 }

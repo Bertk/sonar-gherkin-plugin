@@ -38,9 +38,9 @@ public interface GherkinCheck {
   FileIssue addFileIssue(String message);
 
   LineIssue addLineIssue(int line, String message);
-
+  
   List<Issue> scanFile(TreeVisitorContext context);
-
+  
   void validateParameters();
-
+  
 }

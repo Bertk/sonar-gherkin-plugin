@@ -51,10 +51,12 @@ public class DuplicatedFeatureNamesIssueSaver extends CrossFileCheckIssueSaver {
   }
 
   private void saveIssue(SensorContext sensorContext, InputFile inputFile, DuplicatedFeatureNamesCheck check, Map.Entry<String, List<FileNameTree>> entry) {
-    getIssueSaver().saveFileIssues(sensorContext, inputFile,
-                              new PreciseIssue(check,
-                                  new IssueLocation(entry.getValue().get(0).getName(), buildIssueMessage(entry)))
-                              );
+    getIssueSaver().saveIssues(sensorContext, inputFile,
+                              new PreciseIssue(
+                                check,
+                                  new IssueLocation(
+                                   entry.getValue().get(0).getName(), 
+                                   buildIssueMessage(entry))));
   }
 
   private String buildIssueMessage(Map.Entry<String, List<FileNameTree>> duplicatedName) {
