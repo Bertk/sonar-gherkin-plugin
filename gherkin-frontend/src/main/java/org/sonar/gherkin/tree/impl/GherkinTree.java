@@ -86,4 +86,15 @@ public abstract class GherkinTree implements Tree {
     } while (child == null);
     return ((GherkinTree) child).getFirstToken();
   }
+  
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    Iterator<Tree> children = childrenIterator();
+    while (children.hasNext()) {
+      sb.append(children.next());
+      sb.append(" ");
+    }
+    return sb.toString();
+  }
 }

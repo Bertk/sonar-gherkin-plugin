@@ -21,6 +21,9 @@ package org.sonar.gherkin.parser;
 
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.ActionParser;
+
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.gherkin.api.tree.BasicScenarioTree;
 import org.sonar.plugins.gherkin.api.tree.GherkinDocumentTree;
 import org.sonar.plugins.gherkin.api.tree.Tree;
@@ -32,6 +35,7 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 public class GherkinParser extends ActionParser<Tree> {
+  private static final Logger LOGGER = Loggers.get(GherkinParser.class);
 
   public GherkinParser(Charset charset, LexerlessGrammarBuilder grammarBuilder, Class<GherkinGrammar> grammarClass,
                        TreeFactory treeFactory, GherkinNodeBuilder nodeBuilder, GrammarRuleKey rootRule) {
@@ -40,6 +44,7 @@ public class GherkinParser extends ActionParser<Tree> {
 
   @Override
   public Tree parse(File file) {
+    LOGGER.warn("Do not use 'File' anymore - replace this with 'InputFile.contents'. File name {}", file.getAbsoluteFile());
     Tree tree = super.parse(file);
     addParentLink(tree);
 

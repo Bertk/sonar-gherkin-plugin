@@ -35,6 +35,6 @@ public abstract class CrossFileCheckIssueSaver {
     return issueSaver;
   }
 
-  public abstract void saveIssues(SensorContext sensorContext, InputFile inputFile);
+  public abstract void saveIssues(InputFile inputFile);
 
 }

@@ -22,18 +22,22 @@ package org.sonar.plugins.gherkin.api.visitors.issue;
 import com.google.common.base.Preconditions;
 import org.sonar.plugins.gherkin.api.GherkinCheck;
 
+import java.net.URI;
+
 import javax.annotation.Nullable;
 
 public class LineIssue implements Issue {
 
   private final GherkinCheck check;
+  private final URI uri;
   private Double cost;
   private final String message;
   private final int line;
 
-  public LineIssue(GherkinCheck check, int line, String message) {
+  public LineIssue(URI uri, GherkinCheck check, int line, String message) {
     Preconditions.checkArgument(line > 0);
     this.check = check;
+    this.uri = uri;
     this.message = message;
     this.line = line;
     this.cost = 0.0;
@@ -45,6 +49,10 @@ public class LineIssue implements Issue {
 
   public int line() {
     return line;
+  }
+  
+  public URI uri() {
+    return uri;
   }
 
   @Override

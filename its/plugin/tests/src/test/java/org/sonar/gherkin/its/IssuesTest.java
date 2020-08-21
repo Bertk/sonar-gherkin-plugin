@@ -22,6 +22,7 @@ package org.sonar.gherkin.its;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import org.junit.Test;
+import org.sonar.wsclient.SonarClient;
 import org.sonar.wsclient.issue.Issue;
 import org.sonar.wsclient.issue.IssueQuery;
 
@@ -53,7 +54,7 @@ public class IssuesTest {
 
   @Test
   public void issue_for_rule_allowed_tags() {
-    List<Issue> issues = orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create()).list();
+    List<Issue> issues = SonarClient.create(orchestrator.getServer().getUrl()).issueClient().find(IssueQuery.create()).list();
 
     assertThat(issues).hasSize(2);
 

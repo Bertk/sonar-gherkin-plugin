@@ -23,6 +23,7 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.sonar.wsclient.SonarClient;
 import org.sonar.wsclient.issue.Issue;
 import org.sonar.wsclient.issue.IssueClient;
 import org.sonar.wsclient.issue.IssueQuery;
@@ -53,7 +54,7 @@ public class CustomRulesTest {
     Tests.setProfile("gherkin-custom-rules-profile", PROJECT_KEY);
     orchestrator.executeBuild(build);
 
-    issueClient = orchestrator.getServer().wsClient().issueClient();
+    issueClient = SonarClient.create(orchestrator.getServer().getUrl()).issueClient();
   }
 
   @Test

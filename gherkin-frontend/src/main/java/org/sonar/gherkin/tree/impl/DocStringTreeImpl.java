@@ -27,6 +27,7 @@ import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class DocStringTreeImpl extends GherkinTree implements DocStringTree {
     if (data != null) {
       this.data = new ArrayList<>(data);
     } else {
-      this.data = new ArrayList<>();
+      this.data = Collections.emptyList();
     }
 
     this.suffix = suffix;

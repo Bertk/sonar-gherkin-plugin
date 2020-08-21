@@ -44,22 +44,22 @@ public abstract class DoubleDispatchVisitorCheck extends DoubleDispatchVisitor i
 
   @Override
   public PreciseIssue addPreciseIssue(Tree tree, String message) {
-    return issues.addPreciseIssue(tree, message);
+    return issues.addPreciseIssue(getContext().getGherkinFile().uri(), tree, message);
   }
 
   @Override
   public PreciseIssue addPreciseIssue(SyntaxToken token, int startOffset, int endOffset, String message) {
-    return issues.addPreciseIssue(token, startOffset, endOffset, message);
+    return issues.addPreciseIssue(getContext().getGherkinFile().uri(), token, startOffset, endOffset, message);
   }
 
   @Override
   public FileIssue addFileIssue(String message) {
-    return issues.addFileIssue(message);
+    return issues.addFileIssue(getContext().getGherkinFile().uri(), message);
   }
 
   @Override
   public LineIssue addLineIssue(int line, String message) {
-    return issues.addLineIssue(line, message);
+    return issues.addLineIssue(getContext().getGherkinFile().uri(), line, message);
   }
 
   @Override

@@ -23,21 +23,25 @@ import org.sonar.gherkin.tree.impl.GherkinTree;
 import org.sonar.plugins.gherkin.api.tree.SyntaxToken;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 
+import java.net.URI;
+
 import javax.annotation.Nullable;
 
 public class IssueLocation {
 
+  private final URI uri;
   private final String message;
   private int startLine;
   private int startLineOffset;
   private int endLine;
   private int endLineOffset;
 
-  public IssueLocation(Tree tree, @Nullable String message) {
-    this(tree, tree, message);
+  public IssueLocation(URI uri, Tree tree, @Nullable String message) {
+    this(uri, tree, tree, message);
   }
 
-  public IssueLocation(SyntaxToken token, int offsetStart, int offsetEnd, @Nullable String message) {
+  public IssueLocation(URI uri, SyntaxToken token, int offsetStart, int offsetEnd, @Nullable String message) {
+    this.uri = uri;
     this.message = message;
     this.startLine = token.line();
     this.endLine = token.line();
@@ -45,7 +49,8 @@ public class IssueLocation {
     this.endLineOffset = token.column() + offsetEnd;
   }
   
-  public IssueLocation(Tree firstTree, Tree lastTree, @Nullable String message) {
+  public IssueLocation(URI uri, Tree firstTree, Tree lastTree, @Nullable String message) {
+    this.uri = uri;
     this.message = message;
     SyntaxToken firstToken = ((GherkinTree) firstTree).getFirstToken();
     SyntaxToken lastToken = ((GherkinTree) lastTree).getLastToken();
@@ -53,6 +58,10 @@ public class IssueLocation {
     this.startLineOffset = firstToken.column();
     this.endLine = lastToken.endLine();
     this.endLineOffset = lastToken.endColumn();
+  }
+
+  public URI uri() {
+    return uri;
   }
 
   @Nullable

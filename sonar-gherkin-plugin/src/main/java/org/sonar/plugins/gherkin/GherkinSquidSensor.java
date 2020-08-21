@@ -65,6 +65,7 @@ import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -122,7 +123,7 @@ public class GherkinSquidSensor implements Sensor {
     progressReport.start(files);
 
     setParsingErrorCheckIfActivated(treeVisitors);
-    issueSaver = new IssueSaver(checks);
+    issueSaver = new IssueSaver(sensorContext, checks);
     List<Issue> issues = new ArrayList<>();
 
     boolean success = false;
@@ -155,7 +156,7 @@ public class GherkinSquidSensor implements Sensor {
       checkInterrupted(e);
       throw new AnalysisException("Unable to analyse file: " + inputFile.uri(), e);
     }
-    return new ArrayList<>();
+    return Collections.emptyList();
   }
 
   private List<Issue> scanFile(SensorContext sensorContext, InputFile inputFile, GherkinDocumentTree gherkinDocument, List<TreeVisitor> visitors) {
@@ -178,12 +179,12 @@ public class GherkinSquidSensor implements Sensor {
 
   private void saveSingleFileIssues(SensorContext sensorContext, InputFile inputFile, List<Issue> issues) {
     for (Issue issue : issues) {
-      issueSaver.saveIssues(sensorContext, inputFile, issue);
+      issueSaver.saveIssues(inputFile, issue);
     }
   }
 
   private void saveCrossFileIssues(SensorContext sensorContext, InputFile inputFile) {
-    CrossFileChecksIssueSaver.saveIssues(sensorContext, inputFile, issueSaver );
+    CrossFileChecksIssueSaver.saveIssues(inputFile, issueSaver );
   }
 
   private void processRecognitionException(RecognitionException e, SensorContext sensorContext, InputFile inputFile) {

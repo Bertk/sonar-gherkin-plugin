@@ -28,6 +28,7 @@ import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
 import org.sonar.plugins.gherkin.api.visitors.issue.LineIssue;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,26 +42,26 @@ public class Issues {
     this.issueList = new ArrayList<>();
   }
 
-  public PreciseIssue addPreciseIssue(Tree tree, String message) {
-    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(tree, message));
+  public PreciseIssue addPreciseIssue(URI uri, Tree tree, String message) {
+    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(uri, tree, message));
     issueList.add(issue);
     return issue;
   }
 
-  public PreciseIssue addPreciseIssue(SyntaxToken token, int startOffset, int endOffset, String message) {
-    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(token, startOffset, endOffset, message));
+  public PreciseIssue addPreciseIssue(URI uri, SyntaxToken token, int startOffset, int endOffset, String message) {
+    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(uri, token, startOffset, endOffset, message));
     issueList.add(issue);
     return issue;
   }
 
-  public FileIssue addFileIssue(String message) {
-    FileIssue issue = new FileIssue(check, message);
+  public FileIssue addFileIssue(URI uri, String message) {
+    FileIssue issue = new FileIssue(uri, check, message);
     issueList.add(issue);
     return issue;
   }
 
-  public LineIssue addLineIssue(int line, String message) {
-    LineIssue issue = new LineIssue(check, line, message);
+  public LineIssue addLineIssue(URI uri, int line, String message) {
+    LineIssue issue = new LineIssue(uri, check, line, message);
     issueList.add(issue);
     return issue;
   }

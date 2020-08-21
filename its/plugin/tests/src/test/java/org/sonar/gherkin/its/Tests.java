@@ -67,7 +67,7 @@ public class Tests {
   @CheckForNull
   static WsMeasures.Measure getMeasure(String componentKey, String metricKey) {
     WsMeasures.ComponentWsResponse response = newWsClient().measures().component(new ComponentWsRequest()
-      .setComponentKey(componentKey)
+      .setComponent(componentKey)
       .setMetricKeys(Collections.singletonList(metricKey)));
     List<WsMeasures.Measure> measures = response.getComponent().getMeasuresList();
     return measures.size() == 1 ? measures.get(0) : null;

@@ -42,9 +42,11 @@ import java.util.Optional;
 public class IssueSaver {
 
   private static final Logger LOGGER = Loggers.get(IssueSaver.class);
+  private final SensorContext sensorContext;
   private final GherkinChecks checks;
 
-  public IssueSaver(GherkinChecks checks) {
+  public IssueSaver(SensorContext sensorContext, GherkinChecks checks) {
+    this.sensorContext = sensorContext;
     this.checks = checks;
   }
 
@@ -56,26 +58,26 @@ public class IssueSaver {
       .findFirst();
   }
 
-  public void saveIssues(SensorContext sensorContext, InputFile inputFile, Issue issue) {
+  public void saveIssues(InputFile inputFile, Issue issue) {
     RuleKey ruleKey = ruleKey(issue.check());
     try {
       if (issue instanceof FileIssue) {
-        saveFileIssue(sensorContext, inputFile, ruleKey, (FileIssue) issue);
+        saveFileIssue(inputFile, ruleKey, (FileIssue) issue);
       } else if (issue instanceof LineIssue) {
-        saveLineIssue(sensorContext, inputFile, ruleKey, (LineIssue) issue);
+        saveLineIssue(inputFile, ruleKey, (LineIssue) issue);
       } else {
-        savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue) issue);
+        savePreciseIssue(inputFile, ruleKey, (PreciseIssue) issue);
       }
     } catch (IllegalArgumentException ex) {
       LOGGER.warn(ex.getMessage());
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("InputFile: {}", inputFile.toString());
-        LOGGER.debug("Checker: {}", ruleKey);
-      }
+//      if (LOGGER.isDebugEnabled()) {
+        LOGGER.info("InputFile: {}", inputFile.toString());
+        LOGGER.info("Checker: {}", ruleKey);
+//      }
     }
   }
 
-  private void savePreciseIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, PreciseIssue issue) {
+  private void savePreciseIssue(InputFile inputFile, RuleKey ruleKey, PreciseIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
 
     newIssue
@@ -96,7 +98,7 @@ public class IssueSaver {
     newIssue.save();
   }
 
-  private void saveFileIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
+  private void saveFileIssue(InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
 
     NewIssueLocation primaryLocation = newIssue.newLocation()
@@ -114,7 +116,7 @@ public class IssueSaver {
 //      newIssue.addLocation(newLocation(secondaryFile, newIssue, secondary));
   }
 
-  private void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
+  private void saveLineIssue(InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
     NewIssue newIssue = sensorContext.newIssue();
 
     NewIssueLocation primaryLocation = newIssue.newLocation()

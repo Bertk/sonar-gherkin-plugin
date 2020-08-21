@@ -69,6 +69,7 @@ public class SyntaxHighlighterVisitor extends SubscriptionVisitor {
     if (LOGGER.isTraceEnabled()) {
       LOGGER.trace("Visitor highlight processes: {}", getContext().getGherkinFile().uri());
     }
+    LOGGER.info("Visitor highlight processes: {}", getContext().getGherkinFile().uri());
   }
 
   @Override

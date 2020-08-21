@@ -42,13 +42,13 @@ public class CrossFileChecksIssueSaver {
     );
   }
 
-  public static void saveIssues(SensorContext sensorContext, InputFile inputFile, IssueSaver issueSaver) {
-    getCrossFileCheckIssueSavers().forEach(c -> saveIssuesOnCheck(sensorContext, c, issueSaver, inputFile));
+  public static void saveIssues(InputFile inputFile, IssueSaver issueSaver) {
+    getCrossFileCheckIssueSavers().forEach(c -> saveIssuesOnCheck(c, issueSaver, inputFile));
   }
 
-  private static void saveIssuesOnCheck(SensorContext sensorContext, Class<? extends CrossFileCheckIssueSaver> clazz, IssueSaver issueSaver, InputFile inputFile) {
+  private static void saveIssuesOnCheck(Class<? extends CrossFileCheckIssueSaver> clazz, IssueSaver issueSaver, InputFile inputFile) {
     try {
-      clazz.getConstructor(IssueSaver.class).newInstance(issueSaver).saveIssues(sensorContext, inputFile);
+      clazz.getConstructor(IssueSaver.class).newInstance(issueSaver).saveIssues(inputFile);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
       throw new IllegalStateException("Cannot save issues on check " + clazz.getName(), e);
     }

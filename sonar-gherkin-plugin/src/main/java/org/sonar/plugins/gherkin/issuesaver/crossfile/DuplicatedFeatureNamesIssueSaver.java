@@ -39,22 +39,22 @@ public class DuplicatedFeatureNamesIssueSaver extends CrossFileCheckIssueSaver {
   }
 
   @Override
-  public void saveIssues(SensorContext sensorContext, InputFile inputFile) {
+  public void saveIssues(InputFile inputFile) {
     Optional<DuplicatedFeatureNamesCheck> check = getIssueSaver().getCheck(DuplicatedFeatureNamesCheck.class);
 
     if (check.isPresent()) {
       check.get().getNames().entrySet()
         .stream()
         .filter(entry -> isFeatureNameDuplicated(entry.getValue()))
-        .forEach(entry -> saveIssue(sensorContext, inputFile, check.get(), entry));
+        .forEach(entry -> saveIssue(inputFile, check.get(), entry));
     }
   }
 
-  private void saveIssue(SensorContext sensorContext, InputFile inputFile, DuplicatedFeatureNamesCheck check, Map.Entry<String, List<FileNameTree>> entry) {
-    getIssueSaver().saveIssues(sensorContext, inputFile,
+  private void saveIssue(InputFile inputFile, DuplicatedFeatureNamesCheck check, Map.Entry<String, List<FileNameTree>> entry) {
+    getIssueSaver().saveIssues(inputFile,
                               new PreciseIssue(
                                 check,
-                                  new IssueLocation(
+                                  new IssueLocation(entry.getValue().get(0).getInputFile().uri(),
                                    entry.getValue().get(0).getName(), 
                                    buildIssueMessage(entry))));
   }

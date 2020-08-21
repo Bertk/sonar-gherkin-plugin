@@ -19,7 +19,10 @@
  */
 package org.sonar.plugins.gherkin.api.visitors;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.gherkin.tree.impl.InternalSyntaxToken;
 import org.sonar.plugins.gherkin.api.GherkinCheck;
 import org.sonar.plugins.gherkin.api.visitors.issue.FileIssue;
@@ -27,6 +30,7 @@ import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
 import org.sonar.plugins.gherkin.api.visitors.issue.LineIssue;
 import org.sonar.plugins.gherkin.api.visitors.issue.PreciseIssue;
 
+import java.nio.file.Paths;
 import java.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -35,12 +39,21 @@ public class IssueTest {
 
   private static final GherkinCheck CHECK = new DoubleDispatchVisitorCheck() {
   };
+  
   private static final String MESSAGE = "message";
   private static final InternalSyntaxToken TOKEN = new InternalSyntaxToken(5, 1, "value", Collections.emptyList(), false, false);
+  private static InputFile inputFile;
 
+  @Before
+  public void PrepareInputFile() {
+        inputFile =    new TestInputFileBuilder("moduleKey", "relative/path/from/module/baseDir.java")
+        .setModuleBaseDir(Paths.get("."))
+        .build();
+  }
+  
   @Test
   public void test_file_issue() throws Exception {
-    FileIssue fileIssue = new FileIssue(CHECK, MESSAGE);
+    FileIssue fileIssue = new FileIssue(inputFile.uri(), CHECK, MESSAGE);
 
     assertThat(fileIssue.check()).isEqualTo(CHECK);
     assertThat(fileIssue.cost()).isEqualTo(0.0);
@@ -60,7 +73,7 @@ public class IssueTest {
 
   @Test
   public void test_line_issue() throws Exception {
-    LineIssue lineIssue = new LineIssue(CHECK, 42, MESSAGE);
+    LineIssue lineIssue = new LineIssue(inputFile.uri(), CHECK, 42, MESSAGE);
 
     assertThat(lineIssue.check()).isEqualTo(CHECK);
     assertThat(lineIssue.cost()).isEqualTo(0.0);
@@ -73,12 +86,12 @@ public class IssueTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void test_negative_line_issue() throws Exception {
-    new LineIssue(CHECK, -1, MESSAGE);
+    new LineIssue(inputFile.uri(), CHECK, -1, MESSAGE);
   }
 
   @Test
   public void test_precise_issue() throws Exception {
-    IssueLocation primaryLocation = new IssueLocation(TOKEN, MESSAGE);
+    IssueLocation primaryLocation = new IssueLocation(inputFile.uri(), TOKEN, MESSAGE);
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, primaryLocation);
 
     assertThat(preciseIssue.check()).isEqualTo(CHECK);

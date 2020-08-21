@@ -23,6 +23,7 @@ import org.sonar.plugins.gherkin.api.tree.Tree;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class TreeListUtils {
         .map(treeType::cast)
         .collect(Collectors.toList());
     } else {
-      return new ArrayList<>();
+      return Collections.emptyList();
     }
   }
 

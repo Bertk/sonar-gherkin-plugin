@@ -32,6 +32,7 @@ import org.sonar.plugins.gherkin.api.visitors.DoubleDispatchVisitor;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class FeatureTreeImpl extends GherkinTree implements FeatureTree {
     if (allScenarios != null) {
       this.allScenarios = new ArrayList<>(allScenarios);
     } else {
-      this.allScenarios = new ArrayList<>();
+      this.allScenarios = Collections.emptyList();
     }
 
     this.scenarios = TreeListUtils.allElementsOfType(allScenarios, ScenarioTree.class);

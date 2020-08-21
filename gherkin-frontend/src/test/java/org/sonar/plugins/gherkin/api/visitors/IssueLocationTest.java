@@ -19,11 +19,15 @@
  */
 package org.sonar.plugins.gherkin.api.visitors;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.gherkin.tree.impl.InternalSyntaxToken;
 import org.sonar.plugins.gherkin.api.tree.Tree;
 import org.sonar.plugins.gherkin.api.visitors.issue.IssueLocation;
 
+import java.nio.file.Paths;
 import java.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -31,12 +35,20 @@ import static org.fest.assertions.Assertions.assertThat;
 public class IssueLocationTest {
 
   private static final String MESSAGE = "message";
+  private static InputFile inputFile;
+
+  @Before
+  public void PrepareInputFile() {
+        inputFile =    new TestInputFileBuilder("moduleKey", "relative/path/from/module/baseDir.java")
+        .setModuleBaseDir(Paths.get("."))
+        .build();
+  }
 
   @Test
   public void several_lines_tokens() throws Exception {
     String tokenValue = "blabla\\\nblabla...";
 
-    IssueLocation location = new IssueLocation(createToken(3, 2, tokenValue), MESSAGE);
+    IssueLocation location = new IssueLocation(inputFile.uri(), createToken(3, 2, tokenValue), MESSAGE);
     assertThat(location.startLine()).isEqualTo(3);
     assertThat(location.endLine()).isEqualTo(4);
     assertThat(location.startLineOffset()).isEqualTo(2);
